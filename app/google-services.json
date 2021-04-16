@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "715052225201",
+    "project_id": "evergreen-aa661",
+    "storage_bucket": "evergreen-aa661.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715052225201:android:71035b39715607f427c890",
+        "android_client_info": {
+          "package_name": "com.example.evergreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "715052225201-g3i8kr13mv1ims9qsr2q0n6860trbghg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlN1l6pBDlGfwrr2hcahAEZP8wl5GuZwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "715052225201-g3i8kr13mv1ims9qsr2q0n6860trbghg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

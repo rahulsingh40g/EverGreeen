@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_everywhere"
+    android:background="@drawable/ic_background"
     android:orientation="vertical"
     tools:context=".activities.SignInActivity"
     app:layout_constraintCircleRadius="10dp">

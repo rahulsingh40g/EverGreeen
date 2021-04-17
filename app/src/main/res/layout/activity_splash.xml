@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_splash_background"
+    android:backgroundTint="#788E79"
+    android:backgroundTintMode="multiply"
     tools:context=".activities.SplashActivity">
 
     <TextView

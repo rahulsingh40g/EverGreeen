@@ -44,11 +44,11 @@
             android:textColor="@color/secondary_text_color"
             android:textSize="@dimen/authentication_description_text_size" />
 
-        <androidx.cardview.widget.CardView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/authentication_screen_marginStartEnd"
-            android:layout_marginTop="@dimen/authentication_screen_card_view_marginTop"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="@dimen/authentication_screen_marginStartEnd"
             android:elevation="@dimen/card_view_elevation"
             app:cardCornerRadius="@dimen/card_view_corner_radius">
@@ -70,7 +70,39 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name"
-                        android:inputType="textEmailAddress"
+                        android:inputType="text"
+                        android:textSize="@dimen/et_text_size" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop"
+                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd"
+                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="City"
+                        android:inputType="text"
+                        android:textSize="@dimen/et_text_size" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop"
+                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd"
+                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="State"
+                        android:inputType="text"
                         android:textSize="@dimen/et_text_size" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,6 +155,8 @@
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/btn_text_size" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+
+
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </LinearLayout>

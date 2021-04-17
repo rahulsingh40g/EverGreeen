@@ -44,7 +44,7 @@
             android:textColor="@color/secondary_text_color"
             android:textSize="@dimen/authentication_description_text_size" />
 
-        <androidx.cardview.widget.CardView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/authentication_screen_marginStartEnd"
@@ -107,6 +107,6 @@
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/btn_text_size" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </LinearLayout>

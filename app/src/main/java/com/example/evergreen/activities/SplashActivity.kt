@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
 import com.example.evergreen.R
+import com.example.evergreen.firebase.FirebaseAuthClass
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
@@ -25,19 +26,16 @@ class SplashActivity : AppCompatActivity() {
 
         Handler().postDelayed({
 
-            //TODO Firestore class for AutoLogin(Uncomment this and remove next line)
-//            val currentUserID = FirestoreClass().getCurrentUserID()
-//
-//            if (currentUserID.isNotEmpty()) {
-//                // Start the Main Activity
-//                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-//            } else {
-//                // Start the Intro Activity
-//                startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
-//            }
 
-            startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+            val currentUserID = FirebaseAuthClass().getCurrentUserID()
 
+            if (currentUserID.isNotEmpty()) {
+                // Start the Main Activity
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            } else {
+                // Start the Intro Activity
+                startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+            }
             finish()
         }, 2500)
     }

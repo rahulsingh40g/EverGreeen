@@ -1,19 +1,21 @@
 package com.example.evergreen.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.GravityCompat
 import com.example.evergreen.R
 import com.example.evergreen.firebase.FirebaseAuthClass
-import com.google.android.material.internal.NavigationMenuView
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
+
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    var isFABOpen =false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -22,6 +24,41 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
         nav_view.setNavigationItemSelectedListener(this)
+
+        //FAB listener
+        fab.setOnClickListener {
+            if(!isFABOpen){
+                showFABMenu();
+            }else{
+                closeFABMenu();
+            }
+        }
+    }
+
+    private fun showFABMenu() {
+        isFABOpen = true
+        ll_createPost.animate().translationY(-resources.getDimension(R.dimen.standard_55))
+        ll_dashboard.animate().translationY(-resources.getDimension(R.dimen.standard_105))
+        ll_donate.animate().translationY(-resources.getDimension(R.dimen.standard_155))
+        ll_shop.animate().translationY(-resources.getDimension(R.dimen.standard_205))
+
+        ll_createPost.visibility= View.VISIBLE
+        ll_dashboard.visibility= View.VISIBLE
+        ll_donate.visibility= View.VISIBLE
+        ll_shop.visibility= View.VISIBLE
+    }
+
+    private fun closeFABMenu() {
+        isFABOpen = false
+        ll_createPost.animate().translationY(0F)
+        ll_dashboard.animate().translationY(0F)
+        ll_donate.animate().translationY(0F)
+        ll_shop.animate().translationY(0F)
+
+        ll_createPost.visibility= View.GONE
+        ll_dashboard.visibility= View.GONE
+        ll_donate.visibility= View.GONE
+        ll_shop.visibility= View.GONE
     }
 
     private fun setupActionBar() {
@@ -55,7 +92,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
             R.id.nav_sign_out -> {
                 // Here sign outs the user from firebase in this device.
-                if(FirebaseAuthClass().getCurrentUserID().isNotEmpty())
+                if (FirebaseAuthClass().getCurrentUserID().isNotEmpty())
                     FirebaseAuthClass().signOut(this)
 
                 // Send the user to the intro screen of the application.

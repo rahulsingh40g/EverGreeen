@@ -1,12 +1,8 @@
 package com.example.evergreen.firebase
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
-import com.example.evergreen.activities.MainActivity
 import com.example.evergreen.activities.SignInActivity
 import com.example.evergreen.activities.SignUpActivity
 import com.example.evergreen.model.User

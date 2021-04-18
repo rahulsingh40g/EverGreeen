@@ -9,17 +9,22 @@ import android.webkit.MimeTypeMap
 object Constants {
 
 
+
     // Firebase Constants
     // This  is used for the collection name for USERS.
     const val USERS: String = "users"
 
-    // This  is used for the collection name for USERS.
     const val BOARDS: String = "boards"
 
     // Firebase database field names
     const val IMAGE: String = "image"
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
+
+    const val LOCATION: String = "location"
+
+
+
     const val ASSIGNED_TO: String = "assignedTo"
     const val DOCUMENT_ID: String = "documentId"
     const val TASK_LIST: String = "taskList"
@@ -42,6 +47,9 @@ object Constants {
     const val SPOT_BOOKED = "booked"
     const val SPOT_PLANTED_BUT_UNDER_VERIFICATION = "planted_but_under_verification"
     const val SPOT_PLANTED_AND_VERIFIED = "planted_and_verified"
+
+
+
 
     //A unique code for asking the Read Storage Permission using this we will be check and identify in the method onRequestPermissionsResult
     const val READ_STORAGE_PERMISSION_CODE = 1

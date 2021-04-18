@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat.startActivity
 import com.example.evergreen.activities.MainActivity
 import com.example.evergreen.activities.SignInActivity
 import com.example.evergreen.activities.SignUpActivity
+import com.example.evergreen.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -19,36 +20,21 @@ import com.google.firebase.ktx.Firebase
 class FirebaseAuthClass() {
     private lateinit var auth: FirebaseAuth
 
-    fun signUp(email :String, password : String,activity : SignUpActivity) {
+    fun signUp(name:String, location:String,email :String, password : String,activity : SignUpActivity){
         auth = Firebase.auth
-
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(
                 OnCompleteListener<AuthResult> { task ->
                     // If the registration is successfully done
                     if (task.isSuccessful) {
-                        // Firebase registered user
-                        val user = auth.currentUser
-                        val emailId = user?.email
-                        Toast.makeText(activity, "You signed up successfully with $emailId", Toast.LENGTH_LONG).show()
-
-                        activity.userRegisteredSuccess()
-
-                    /*
                         val firebaseUser: FirebaseUser = task.result!!.user!!
-                        // Registered Email
                         val registeredEmail = firebaseUser.email!!
 
-                        val user = User(
-                            firebaseUser.uid, name, registeredEmail
-
-
-                        )
+                        val user = User(firebaseUser.uid, name, registeredEmail,location)
 
                         // call the registerUser function of FirestoreClass to make an entry in the database.
-                        FirestoreClass().registerUser(this@SignUpActivity, user)
+                        FirestoreClass().registerUser(activity, user)
 
-                        */
 
                     } else {
                         Toast.makeText(
@@ -62,7 +48,6 @@ class FirebaseAuthClass() {
 
                 }
             )
-
         }
 
 
@@ -72,25 +57,32 @@ class FirebaseAuthClass() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    activity.signInSuccess()
                     // Calling the FirestoreClass signInUser function to get the data of user from database.
-                    //FirestoreClass().loadUserData(this@SignInActivity)
+                    FirestoreClass().loadUserData(activity)
                 } else {
                     Toast.makeText(
                         activity,
                         task.exception!!.message,
                         Toast.LENGTH_LONG
                     ).show()
-                    Log.e("signinerror" , "${task.exception!!.message}")
+                    Log.e("signinerror", "${task.exception!!.message}")
                     activity.hideProgressDialog()
                 }
             }
-
     }
+
+
+
+
+
+
+
+
     fun signOut(activity : Activity){
         auth = Firebase.auth
         auth.signOut()
     }
+
     fun getCurrentUserID(): String {
        auth = Firebase.auth
         val user = auth.currentUser

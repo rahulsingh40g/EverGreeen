@@ -19,13 +19,13 @@
         app:cardCornerRadius="@dimen/card_view_corner_radius">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_boards_list"
+            android:id="@+id/rv_posts_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/tv_no_boards_available"
+            android:id="@+id/tv_no_posts_available"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

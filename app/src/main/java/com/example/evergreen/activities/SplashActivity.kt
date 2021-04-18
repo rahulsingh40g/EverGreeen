@@ -20,13 +20,10 @@ class SplashActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        val typeface: Typeface =
-            Typeface.createFromAsset(assets, "carbon bl.ttf")
+        val typeface: Typeface = Typeface.createFromAsset(assets, "carbon bl.ttf")
         tv_app_name.typeface = typeface
 
         Handler().postDelayed({
-
-
             val currentUserID = FirebaseAuthClass().getCurrentUserID()
 
             if (currentUserID.isNotEmpty()) {

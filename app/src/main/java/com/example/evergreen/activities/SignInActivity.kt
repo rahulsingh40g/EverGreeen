@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.evergreen.R
 import com.example.evergreen.firebase.FirebaseAuthClass
+import com.example.evergreen.model.User
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
@@ -24,6 +25,10 @@ class SignInActivity : BaseActivity() {
 
         setupActionBar()
 
+        btn_sign_in.setOnClickListener{
+            signInRegisteredUser()
+        }
+
     }
 
     private fun setupActionBar() {
@@ -37,9 +42,6 @@ class SignInActivity : BaseActivity() {
         }
 
         toolbar_sign_in_activity.setNavigationOnClickListener { onBackPressed() }
-        btn_sign_in.setOnClickListener{
-            signInRegisteredUser()
-        }
     }
 
     /**
@@ -77,20 +79,9 @@ class SignInActivity : BaseActivity() {
     /**
      * A function to get the user details from the firestore database after authentication.
 //     */
-//    fun signInSuccess(user: User) {
-//
-//        hideProgressDialog()
-//
-//        startActivity(Intent(this@SignInActivity, MainActivity::class.java))
-//        this.finish()
-//    }
-
-
-
-    fun signInSuccess() {
+    fun signInSuccess(user: User) {
 
         hideProgressDialog()
-        Log.i("signsucc" , "succ")
         startActivity(Intent(this@SignInActivity, MainActivity::class.java))
         this.finish()
     }

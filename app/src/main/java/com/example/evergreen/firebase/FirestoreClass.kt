@@ -2,9 +2,8 @@ package com.example.evergreen.firebase
 
 import android.app.Activity
 import android.util.Log
-import com.example.evergreen.activities.BaseActivity
-import com.example.evergreen.activities.SignInActivity
-import com.example.evergreen.activities.SignUpActivity
+import android.widget.Toast
+import com.example.evergreen.activities.*
 import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -35,49 +34,49 @@ class FirestoreClass {
             }
     }
 
-    fun loadUserData(activity: SignInActivity, readBoardsList: Boolean = false) {
+    fun loadUserData(activity: Activity, readBoardsList: Boolean = false) {
 
         // Here we pass the collection name from which we wants the data.
         mFireStore.collection(Constants.USERS)
             // The document id to get the Fields of user.
-            .document(getCurrentUserID())
+            .document(FirebaseAuthClass().getCurrentUserID())
             .get()
             .addOnSuccessListener { document ->
-                Log.e(activity.javaClass.simpleName, document.toString())
+                Log.i(activity.javaClass.simpleName, document.toString())
 
                 // Here we have received the document snapshot which is converted into the User Data model object.
                 val loggedInUser = document.toObject(User::class.java)!!
 
                 // Here call a function of base activity for transferring the result to it.
-                activity.signInSuccess(loggedInUser)
+//                activity.signInSuccess(loggedInUser)
 
-                /* when (activity) {
+                 when (activity) {
                     is SignInActivity -> {
                         activity.signInSuccess(loggedInUser)
                     }
                     is MainActivity -> {
                         activity.updateNavigationUserDetails(loggedInUser, readBoardsList)
                     }
-                    is MyProfileActivity -> {
+                    is EditProfileActivity -> {
                         activity.setUserDataInUI(loggedInUser)
                     }
                 }
-                */
+                
             }
             .addOnFailureListener { e ->
                 // Here call a function of base activity for transferring the result to it.
-                  activity.hideProgressDialog()
-//                when (activity) {
-//                    is SignInActivity -> {
-//                        activity.hideProgressDialog()
-//                    }
-//                    is MainActivity -> {
-//                        activity.hideProgressDialog()
-//                    }
-//                    is MyProfileActivity -> {
-//                        activity.hideProgressDialog()
-//                    }
-//                }
+//                  activity.hideProgressDialog()
+                when (activity) {
+                    is SignInActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is MainActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is EditProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e(
                     activity.javaClass.simpleName,
                     "Error while getting loggedIn user details",
@@ -87,7 +86,32 @@ class FirestoreClass {
     }
 
 
-    fun getCurrentUserID(): String {
-        return FirebaseAuthClass().getCurrentUserID()
+    /**
+     * A function to update the user profile data into the database.
+     */
+    fun updateUserProfileData(activity: EditProfileActivity, userHashMap: HashMap<String, Any>) {
+        mFireStore.collection(Constants.USERS) // Collection Name
+            .document(FirebaseAuthClass().getCurrentUserID()) // Document ID
+            .update(userHashMap) // A hashmap of fields which are to be updated.
+            .addOnSuccessListener {
+                // Profile data is updated successfully.
+                Log.i(activity.javaClass.simpleName, "Profile Data updated successfully!")
+
+                Toast.makeText(activity, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+
+                // Notify the success result.
+                activity.profileUpdateSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating a board.",
+                    e
+                )
+            }
     }
+
+
+    // removed getcurrentuserid() from here
 }

@@ -104,6 +104,11 @@ class SignUpActivity : BaseActivity() {
          */
         FirebaseAuthClass().signOut(this)
 
+        //adding toast
+        Toast.makeText(this,
+                "You have successfully registered with ${FirebaseAuthClass().getCurrentUserID()}",
+                 Toast.LENGTH_LONG).show()
+
         startActivity(Intent(this,SignInActivity::class.java))
         // Finish the Sign-Up Screen
         finish()

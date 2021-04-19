@@ -2,6 +2,12 @@
 <resources>
     <dimen name="splash_screen_title_text_size">70sp</dimen>
 
+<!--    FAB menu-->
+    <dimen name="standard_55">65dp</dimen>
+    <dimen name="standard_105">125dp</dimen>
+    <dimen name="standard_155">185dp</dimen>
+    <dimen name="standard_205">245dp</dimen>
+
     <dimen name="intro_screen_title_text_size">40sp</dimen>
     <dimen name="intro_screen_title_text_marginTop">40dp</dimen>
     <dimen name="intro_screen_image_marginTop">30dp</dimen>

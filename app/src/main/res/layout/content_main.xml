@@ -28,7 +28,8 @@
             android:id="@+id/tv_no_posts_available"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="200dp"
             android:text="No Locations are available!!!"
             android:textColor="@color/secondary_text_color"
             android:textSize="@dimen/no_boards_available_text_size" />

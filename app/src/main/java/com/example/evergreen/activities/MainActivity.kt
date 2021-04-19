@@ -43,6 +43,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 closeFABMenu();
             }
         }
+
+        fab_createPost.setOnClickListener{
+            startActivity(Intent(this,CreatePostActivity::class.java))
+        }
+
     }
 
     private fun showFABMenu() {
@@ -52,10 +57,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         ll_donate.animate().translationY(-resources.getDimension(R.dimen.standard_155))
         ll_shop.animate().translationY(-resources.getDimension(R.dimen.standard_205))
 
-        ll_createPost.visibility= View.VISIBLE
-        ll_dashboard.visibility= View.VISIBLE
-        ll_donate.visibility= View.VISIBLE
-        ll_shop.visibility= View.VISIBLE
+        tv_createPost.visibility= View.VISIBLE
+        tv_dashboard.visibility= View.VISIBLE
+        tv_donate.visibility= View.VISIBLE
+        tv_shop.visibility= View.VISIBLE
     }
 
     private fun closeFABMenu() {
@@ -65,10 +70,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         ll_donate.animate().translationY(0F)
         ll_shop.animate().translationY(0F)
 
-        ll_createPost.visibility= View.GONE
-        ll_dashboard.visibility= View.GONE
-        ll_donate.visibility= View.GONE
-        ll_shop.visibility= View.GONE
+        tv_createPost.visibility= View.GONE
+        tv_dashboard.visibility= View.GONE
+        tv_donate.visibility= View.GONE
+        tv_shop.visibility= View.GONE
     }
 
     private fun setupActionBar() {

@@ -38,14 +38,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom|end">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_createPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="30dp"
-            android:text="Add Location"/>
+            android:text="Add Place"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_createPost"
@@ -64,12 +65,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:layout_gravity="bottom|end">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_dashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="30dp"
             android:text="Dashboard"/>
 
@@ -90,12 +92,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:layout_gravity="bottom|end">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_shop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="30dp"
             android:text="Shop"/>
 
@@ -116,12 +119,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="gone"
         android:layout_gravity="bottom|end">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_donate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="30dp"
             android:text="Donate"/>
 

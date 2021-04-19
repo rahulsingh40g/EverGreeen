@@ -62,8 +62,7 @@
     <string name="str_select_member">Select Member</string>
 
 
-
-
-
     <string name="location">Location</string>
+
+    <string name="google_maps_api_key">AIzaSyBvJHyRA2oeOWCYo8YNDMTaJvY6p6vu4QA</string>
 </resources>

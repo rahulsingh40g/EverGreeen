@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.example.evergreen.utils.Constants
 
-data class Post (
+data class Post(
     val docId : String ="",
     var location :String= "",
     var imageBefore : String ="",

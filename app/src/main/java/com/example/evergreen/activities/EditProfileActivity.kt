@@ -58,6 +58,10 @@ class EditProfileActivity : BaseActivity() {
             }
         }
 
+        tv_select_current_location_editProfile.setOnClickListener {
+            selectCurrentLocation(this)
+        }
+
         btn_update.setOnClickListener {
 
             // Here if the image is not selected then update the other details of user.
@@ -159,7 +163,7 @@ class EditProfileActivity : BaseActivity() {
 
         et_name.setText(user.name)
         et_email.setText(user.email)
-        et_location.setText(user.location)
+        et_location_editProfile.setText(user.location)
         if (user.mobile != 0L) {
             et_mobile.setText(user.mobile.toString())
         }
@@ -228,8 +232,8 @@ class EditProfileActivity : BaseActivity() {
         if (et_name.text.toString() != mUserDetails.name) {
             userHashMap[Constants.NAME] = et_name.text.toString()
         }
-        if (et_location.text.toString() != mUserDetails.location) {
-            userHashMap[Constants.LOCATION] = et_location.text.toString()
+        if (et_location_editProfile.text.toString() != mUserDetails.location) {
+            userHashMap[Constants.LOCATION] = et_location_editProfile.text.toString()
         }
 
         if (et_mobile.text.toString() != mUserDetails.mobile.toString()) {

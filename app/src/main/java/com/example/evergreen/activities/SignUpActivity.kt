@@ -1,8 +1,11 @@
 package com.example.evergreen.activities
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.WindowManager
@@ -11,12 +14,20 @@ import com.example.evergreen.R
 import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.User
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.activity_sign_up.tv_select_current_location
+import java.io.IOException
 
 class SignUpActivity : BaseActivity() {
+    private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
+    private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -29,6 +40,42 @@ class SignUpActivity : BaseActivity() {
         setupActionBar()
         btn_sign_up.setOnClickListener {
             registerUser()
+        }
+        tv_select_current_location.setOnClickListener {
+            selectCurrentLocation(this)
+        }
+        et_location_signUp.setOnClickListener{
+            try {
+                // These are the list of fields which we required is passed
+                val fields = listOf(
+                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG,
+                        Place.Field.ADDRESS
+                )
+                // Start the autocomplete intent with a unique request code.
+                val intent =
+                        Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                                .build(this)
+                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+
+                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+
+                et_location_signUp.setText(place.address)
+                mLatitude = place.latLng!!.latitude
+                mLongitude = place.latLng!!.longitude
+            }
+        }
+        else if (resultCode == Activity.RESULT_CANCELED) {
+            Log.e("Cancelled", "Cancelled")
         }
     }
 
@@ -52,7 +99,7 @@ class SignUpActivity : BaseActivity() {
     private fun registerUser() {
         // Here we get the text from editText and trim the space
         val name: String = et_name.text.toString().trim { it <= ' ' }
-        val location: String = et_location.text.toString().trim { it <= ' ' }
+        val location: String = et_location_signUp.text.toString().trim { it <= ' ' }
         val email: String = et_email.text.toString().trim { it <= ' ' }
         val password: String = et_password.text.toString().trim { it <= ' ' }
 
@@ -112,6 +159,10 @@ class SignUpActivity : BaseActivity() {
         startActivity(Intent(this,SignInActivity::class.java))
         // Finish the Sign-Up Screen
         finish()
+    }
+
+    companion object {
+        private const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 3
     }
 
 }

@@ -87,7 +87,7 @@
                     android:layout_marginTop="@dimen/my_profile_et_mobile_marginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_location"
+                        android:id="@+id/et_location_editProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/location"
@@ -104,6 +104,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_use_my_current_location_24"/>
                     <TextView
+                        android:id="@+id/tv_select_current_location_editProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Use my current location"

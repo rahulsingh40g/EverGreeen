@@ -1,19 +1,45 @@
 package com.example.evergreen.activities
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.location.Location
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.evergreen.R
+import com.example.evergreen.utils.GetAddressFromLatLng
+import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.android.synthetic.main.activity_create_post.*
+import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.dialog_progress.*
 
 open class BaseActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient // A fused location client variable which is further user to get the user's current location
+    private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
+    private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
+    private lateinit var currentActivity :Activity
 
     /**
      * This is a progress dialog instance which we will initialize later on.
@@ -75,5 +101,131 @@ open class BaseActivity : AppCompatActivity() {
         )
         snackBar.show()
     }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocationData() {
+
+        val mLocationRequest = LocationRequest()
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = 0
+        mLocationRequest.fastestInterval = 0
+        mLocationRequest.numUpdates = 1
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        mFusedLocationClient.requestLocationUpdates(
+            mLocationRequest, mLocationCallback,
+            Looper.myLooper()
+        )
+    }
+
+    private fun showRationalDialogForPermissions() {
+        AlertDialog.Builder(this)
+            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
+            .setPositiveButton(
+                "GO TO SETTINGS"
+            ) { _, _ ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+            .setNegativeButton("Cancel") { dialog,
+                                           _ ->
+                dialog.dismiss()
+            }.show()
+    }
+
+    private val mLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val mLastLocation: Location = locationResult.lastLocation
+            mLatitude = mLastLocation.latitude
+            Log.e("Current Latitude", "$mLatitude")
+            mLongitude = mLastLocation.longitude
+            Log.e("Current Longitude", "$mLongitude")
+
+            // TODO(Step 2: Call the AsyncTask class fot getting an address from the latitude and longitude.)
+            // START
+            val addressTask =
+                GetAddressFromLatLng(currentActivity, mLatitude, mLongitude)
+
+            addressTask.setAddressListener(object :
+                GetAddressFromLatLng.AddressListener {
+                override fun onAddressFound(address: String?) {
+                    Log.e("Address ::", "" + address)
+                    when (currentActivity) {
+                        is SignUpActivity -> {
+                            et_location_signUp.setText(address)
+                        }
+                        is EditProfileActivity -> {
+                            et_location_editProfile.setText(address) // Address is set to the edittext
+
+                        }
+                        is CreatePostActivity -> {
+                            et_location_createPost.setText(address)
+                        }
+                    }
+                }
+
+                override fun onError() {
+                    Log.e("Get Address ::", "Something is wrong...")
+                }
+            })
+
+            addressTask.getAddress()
+            // END
+        }
+    }
+
+    fun selectCurrentLocation(activity: Activity){
+        currentActivity = activity
+        if (!isLocationEnabled()) {
+            Toast.makeText(
+                this,
+                "Your location provider is turned off. Please turn it on.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            // This will redirect you to settings from where you need to turn on the location provider.
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+        } else {
+            // For Getting current location of user please have a look at below link for better understanding
+            // https://www.androdocs.com/kotlin/getting-current-location-latitude-longitude-in-android-using-kotlin.html
+            Dexter.withActivity(this)
+                .withPermissions(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        if (report!!.areAllPermissionsGranted()) {
+
+                            requestNewLocationData()
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        showRationalDialogForPermissions()
+                    }
+                }).onSameThread()
+                .check()
+        }
+    }
+
 }
 // END

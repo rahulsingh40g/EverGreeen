@@ -149,13 +149,11 @@ class SignUpActivity : BaseActivity() {
          * Here the new user registered is automatically signed-in so we just sign-out the user from firebase
          * and send him to Intro Screen for Sign-In
          */
-        FirebaseAuthClass().signOut(this)
-
         //adding toast
         Toast.makeText(this,
-                "You have successfully registered with ${FirebaseAuthClass().getCurrentUserID()}",
+                "${FirebaseAuthClass().getCurrentUserMailId()} have successfully registered with EverGreen!",
                  Toast.LENGTH_LONG).show()
-
+        FirebaseAuthClass().signOut(this)
         startActivity(Intent(this,SignInActivity::class.java))
         // Finish the Sign-Up Screen
         finish()

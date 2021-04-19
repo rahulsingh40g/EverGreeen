@@ -31,7 +31,6 @@ class FirebaseAuthClass() {
                         // call the registerUser function of FirestoreClass to make an entry in the database.
                         FirestoreClass().registerUser(activity, user)
 
-
                     } else {
                         Toast.makeText(
                             activity,
@@ -85,6 +84,12 @@ class FirebaseAuthClass() {
         if(user != null){
             return user.uid
         }
+        return ""
+    }
+    fun getCurrentUserMailId():String{
+        auth = Firebase.auth
+        var user = auth.currentUser
+        if(user != null) return user.email
         return ""
     }
 }

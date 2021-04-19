@@ -232,9 +232,9 @@ class EditProfileActivity : BaseActivity() {
             userHashMap[Constants.LOCATION] = et_location.text.toString()
         }
 
-        if (et_mobile.text.toString() != mUserDetails.mobile.toString()) {
-            userHashMap[Constants.MOBILE] = et_mobile.text.toString().toLong()
-        }
+        if (et_mobile.text.toString().isEmpty()) userHashMap[Constants.MOBILE] = 0
+        else userHashMap[Constants.MOBILE] = et_mobile.text.toString().toLong()
+
 
         // Update the data in the database.
         FirestoreClass().updateUserProfileData(this@EditProfileActivity, userHashMap)

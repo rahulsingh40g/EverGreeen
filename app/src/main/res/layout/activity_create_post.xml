@@ -71,7 +71,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:padding="5dp"
-        android:text="SELECT CURRETN LOCATION"
+        android:text="SELECT CURRENT LOCATION"
         android:backgroundTint="#1396D1"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"

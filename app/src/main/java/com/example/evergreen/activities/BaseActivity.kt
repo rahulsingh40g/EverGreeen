@@ -7,6 +7,8 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -32,6 +34,8 @@ import kotlinx.android.synthetic.main.activity_create_post.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.dialog_progress.*
+import java.util.*
+
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -78,36 +82,21 @@ open class BaseActivity : AppCompatActivity() {
             super.onBackPressed()
             return
         }
-
         this.doubleBackToExitPressedOnce = true
-        Toast.makeText(
-            this,
-            resources.getString(R.string.please_click_back_again_to_exit),
-            Toast.LENGTH_SHORT
-        ).show()
-
+        Toast.makeText(this, resources.getString(R.string.please_click_back_again_to_exit), Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
     fun showErrorSnackBar(message: String) {
-        val snackBar =
-            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+        val snackBar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
-        snackBarView.setBackgroundColor(
-            ContextCompat.getColor(
-                this@BaseActivity,
-                R.color.snackbar_error_color
-            )
-        )
+        snackBarView.setBackgroundColor(ContextCompat.getColor(this@BaseActivity, R.color.snackbar_error_color))
         snackBar.show()
     }
 
     private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
+        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
     @SuppressLint("MissingPermission")
@@ -121,16 +110,16 @@ open class BaseActivity : AppCompatActivity() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mFusedLocationClient.requestLocationUpdates(
-            mLocationRequest, mLocationCallback,
-            Looper.myLooper()
+                mLocationRequest, mLocationCallback,
+                Looper.myLooper()
         )
     }
 
     private fun showRationalDialogForPermissions() {
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(currentActivity)
             .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
             .setPositiveButton(
-                "GO TO SETTINGS"
+                    "GO TO SETTINGS"
             ) { _, _ ->
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -141,10 +130,7 @@ open class BaseActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
-            .setNegativeButton("Cancel") { dialog,
-                                           _ ->
-                dialog.dismiss()
-            }.show()
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.show()
     }
 
     private val mLocationCallback = object : LocationCallback() {
@@ -155,13 +141,10 @@ open class BaseActivity : AppCompatActivity() {
             mLongitude = mLastLocation.longitude
             Log.e("Current Longitude", "$mLongitude")
 
-            // TODO(Step 2: Call the AsyncTask class fot getting an address from the latitude and longitude.)
-            // START
-            val addressTask =
-                GetAddressFromLatLng(currentActivity, mLatitude, mLongitude)
+            //Getting an address from the latitude and longitude.
+            val addressTask = GetAddressFromLatLng(currentActivity, mLatitude, mLongitude)
 
-            addressTask.setAddressListener(object :
-                GetAddressFromLatLng.AddressListener {
+            addressTask.setAddressListener(object : GetAddressFromLatLng.AddressListener {
                 override fun onAddressFound(address: String?) {
                     Log.e("Address ::", "" + address)
                     when (currentActivity) {
@@ -170,7 +153,6 @@ open class BaseActivity : AppCompatActivity() {
                         }
                         is EditProfileActivity -> {
                             et_location_editProfile.setText(address) // Address is set to the edittext
-
                         }
                         is CreatePostActivity -> {
                             et_location_createPost.setText(address)
@@ -182,21 +164,14 @@ open class BaseActivity : AppCompatActivity() {
                     Log.e("Get Address ::", "Something is wrong...")
                 }
             })
-
             addressTask.getAddress()
-            // END
         }
     }
 
     fun selectCurrentLocation(activity: Activity){
         currentActivity = activity
         if (!isLocationEnabled()) {
-            Toast.makeText(
-                this,
-                "Your location provider is turned off. Please turn it on.",
-                Toast.LENGTH_SHORT
-            ).show()
-
+            Toast.makeText(this, "Your location provider is turned off. Please turn it on.", Toast.LENGTH_SHORT).show()
             // This will redirect you to settings from where you need to turn on the location provider.
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivity(intent)
@@ -204,28 +179,32 @@ open class BaseActivity : AppCompatActivity() {
             // For Getting current location of user please have a look at below link for better understanding
             // https://www.androdocs.com/kotlin/getting-current-location-latitude-longitude-in-android-using-kotlin.html
             Dexter.withActivity(this)
-                .withPermissions(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
+                .withPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         if (report!!.areAllPermissionsGranted()) {
-
                             requestNewLocationData()
                         }
                     }
 
-                    override fun onPermissionRationaleShouldBeShown(
-                        permissions: MutableList<PermissionRequest>?,
-                        token: PermissionToken?
-                    ) {
+                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?) {
                         showRationalDialogForPermissions()
                     }
-                }).onSameThread()
-                .check()
+                }).onSameThread().check()
         }
+        getCityStateFromLatLng()
     }
 
+    fun getCityStateFromLatLng(){
+        val gcd = Geocoder(currentActivity, Locale.getDefault())
+        val addresses: List<Address> = gcd.getFromLocation(mLatitude, mLongitude, 1)
+        if (addresses.size > 0) {
+            val city = addresses[0].locality
+            val state = addresses[0].adminArea
+            Log.i("city", city)
+            Log.i("state",state)
+        } else {
+            // do your stuff
+        }
+    }
 }
-// END

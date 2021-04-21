@@ -18,10 +18,12 @@ import androidx.appcompat.app.AlertDialog
 import com.example.evergreen.R
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -42,7 +44,8 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
     private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
     private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
 
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient // A fused location client variable which is further user to get the user's current location
+    // A fused location client variable which is further used to get the user's current location
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +66,9 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
 
 
         tv_add_image.setOnClickListener(this)
-        btn_save.setOnClickListener(this)
         et_location_createPost.setOnClickListener(this)
         tv_select_current_location.setOnClickListener(this)
+        btn_save.setOnClickListener(this)
     }
 
     private fun choosePhotoFromGallery() {
@@ -139,49 +142,76 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY) {
-                if (data != null) {
-                    val contentURI = data.data
-                    try {
-                        // Here this is used to get an bitmap from URI
-                        @Suppress("DEPRECATION")
-                        val selectedImageBitmap =
-                            MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
 
-                        saveImageToInternalStorage =
-                            saveImageToInternalStorage(selectedImageBitmap)
-                        Log.e("Saved Image : ", "Path :: $saveImageToInternalStorage")
+            Log.d("AddHappyPlace","got something ")
 
-                        iv_place_image!!.setImageBitmap(selectedImageBitmap) // Set the selected image from GALLERY to imageView.
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        Toast.makeText(this@CreatePostActivity, "Failed!", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+        when (requestCode) {
+
+            PLACE_AUTOCOMPLETE_REQUEST_CODE -> {
+                Log.d("AddHappyPlace", "onResult[PLACE]: resultCode= ${resultCode}")
+                if (resultCode == Activity.RESULT_OK) {
+                    val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+                    Log.d("AddHappyPlace", "onActivityResult: place=${place}")
+//                    et_location.setText(place.address)
+//                    if (et_title.text.isNullOrEmpty()) {
+//                        et_title.setText(place.name)
+//                    }
+                    mLatitude = place.latLng!!.latitude
+                    mLongitude = place.latLng!!.longitude
+                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    var status: Status? = Autocomplete.getStatusFromIntent(data!!)
+                    Log.d("AddHappyPlace", "onResult[PLACE] error: ${status?.statusMessage}")
                 }
-            } else if (requestCode == CAMERA) {
-
-                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap // Bitmap from camera
-
-                saveImageToInternalStorage =
-                    saveImageToInternalStorage(thumbnail)
-                Log.e("Saved Image : ", "Path :: $saveImageToInternalStorage")
-
-                iv_place_image!!.setImageBitmap(thumbnail) // Set to the imageView.
-            }
-            else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-
-                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
-
-                et_location_createPost.setText(place.address)
-                mLatitude = place.latLng!!.latitude
-                mLongitude = place.latLng!!.longitude
             }
         }
-        else if (resultCode == Activity.RESULT_CANCELED) {
-            Log.e("Cancelled", "Cancelled")
-        }
+
+
+//            if (resultCode == Activity.RESULT_OK) {
+//            Log.i("place","got something ")
+//            if (requestCode == GALLERY) {
+//                if (data != null) {
+//                    val contentURI = data.data
+//                    try {
+//                        // Here this is used to get an bitmap from URI
+//                        @Suppress("DEPRECATION")
+//                        val selectedImageBitmap =
+//                            MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
+//
+//                        saveImageToInternalStorage =
+//                            saveImageToInternalStorage(selectedImageBitmap)
+//                        Log.e("Saved Image : ", "Path :: $saveImageToInternalStorage")
+//
+//                        iv_place_image!!.setImageBitmap(selectedImageBitmap) // Set the selected image from GALLERY to imageView.
+//                    } catch (e: IOException) {
+//                        e.printStackTrace()
+//                        Toast.makeText(this@CreatePostActivity, "Failed!", Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
+//                }
+//            } else if (requestCode == CAMERA) {
+//
+//                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap // Bitmap from camera
+//
+//                saveImageToInternalStorage =
+//                    saveImageToInternalStorage(thumbnail)
+//                Log.e("Saved Image : ", "Path :: $saveImageToInternalStorage")
+//
+//                iv_place_image!!.setImageBitmap(thumbnail) // Set to the imageView.
+//            }
+//            else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+//                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+//                Log.i("place","got place as ${place.address}")
+//
+//                et_location_createPost.setText(place.address)
+//                mLatitude = place.latLng!!.latitude
+//                mLongitude = place.latLng!!.longitude
+//            }
+//        }
+//        else if (resultCode == Activity.RESULT_CANCELED) {
+//            Log.e("Cancelled", "Cancelled in create post ")
+//        }
+//
+// }
     }
 
     private fun showRationalDialogForPermissions() {
@@ -262,6 +292,8 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                     val intent =
                         Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                             .build(this@CreatePostActivity)
+
+                    Log.i("place","sending to get place from api ")
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -287,7 +319,9 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                         var post= Post()
 
                         FirestoreClass().registerPost(this,post)
-                    }
+                        Toast.makeText(this,"post is created successfully", Toast.LENGTH_LONG).show()
+                        finish()
+                  }
                 }
             }
         }

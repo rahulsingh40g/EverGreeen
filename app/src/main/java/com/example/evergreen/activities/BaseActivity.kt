@@ -170,7 +170,6 @@ open class BaseActivity : AppCompatActivity() {
                         }
                         is EditProfileActivity -> {
                             et_location_editProfile.setText(address) // Address is set to the edittext
-
                         }
                         is CreatePostActivity -> {
                             et_location_createPost.setText(address)

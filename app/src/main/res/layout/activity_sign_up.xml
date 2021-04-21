@@ -89,7 +89,11 @@
                         android:inputType="text"
                         android:textSize="@dimen/et_text_size" />
                 </com.google.android.material.textfield.TextInputLayout>
-
+<!--either use this everwhere for getting current location
+or i have already designed same ui for edit profile use that ,
+ ek baar dekh liya kar dodie, ki pehle se bana pada h to wo le
+lele, uniformity bhi rahegi and mehnat bhi kam hogi.
+-->
                 <TextView
                     android:id="@+id/tv_select_current_location"
                     android:layout_width="match_parent"

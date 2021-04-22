@@ -34,6 +34,6 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
             }
             finish()
-        }, 2500)
+        }, 500) // changed time for testing purpose
     }
 }

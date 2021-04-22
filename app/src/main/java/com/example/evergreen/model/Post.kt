@@ -5,17 +5,19 @@ import android.os.Parcelable
 import com.example.evergreen.utils.Constants
 
 data class Post(
-    val docId : String ="",
-    var location :String= "",
-    var imageBefore : String ="",
-    var imageAfter : String = "",
-    val postedBy: String ="",
-    var bookedBy: String="",
-    var status : String = Constants.SPOT_UNDER_REVIEW
+        val postId : String ="",
+        var location :String= "",
+        var city :String = "",
+        var imageBefore : String ="",
+        var imageAfter : String = "",
+        var postedBy: String ="",
+        var bookedBy: String="",
+        var status : String = Constants.SPOT_UNDER_REVIEW
 ) :Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
+            parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -24,8 +26,9 @@ data class Post(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) =with(parcel) {
-        parcel.writeString(docId)
+        parcel.writeString(postId)
         parcel.writeString(location)
+        parcel.writeString(city)
         parcel.writeString(imageBefore)
         parcel.writeString(imageAfter)
         parcel.writeString(postedBy)

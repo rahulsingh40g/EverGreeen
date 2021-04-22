@@ -21,7 +21,6 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.activity_sign_up.tv_select_current_location
 import java.io.IOException
 
 class SignUpActivity : BaseActivity() {
@@ -41,7 +40,7 @@ class SignUpActivity : BaseActivity() {
         btn_sign_up.setOnClickListener {
             registerUser()
         }
-        tv_select_current_location.setOnClickListener {
+        tv_select_current_location_signUp.setOnClickListener {
             selectCurrentLocation(this)
         }
         et_location_signUp.setOnClickListener{

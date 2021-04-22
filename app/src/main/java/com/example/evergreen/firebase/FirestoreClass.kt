@@ -7,6 +7,7 @@ import com.example.evergreen.activities.*
 import com.example.evergreen.model.Post
 import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
@@ -32,26 +33,6 @@ class FirestoreClass {
                     e
                 )
             }
-    }
-
-    fun registerPost(activity : CreatePostActivity, postInfo: Post) {
-//        mFireStore.collection(Constants.USERS)
-//            // Document ID for users fields. Here the document it is the User ID.
-//            .document(userInfo.uid)
-//            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
-//            .set(userInfo, SetOptions.merge())
-//            .addOnSuccessListener {
-//                // Here call a function of base activity for transferring the result to it.
-//                activity.userRegisteredSuccess()
-//            }
-//            .addOnFailureListener { e ->
-//                activity.hideProgressDialog()
-//                Log.e(
-//                    activity.javaClass.simpleName,
-//                    "Error writing document",
-//                    e
-//                )
-//            }
     }
 
     fun loadUserData(activity: Activity, readBoardsList: Boolean = false) {
@@ -132,6 +113,70 @@ class FirestoreClass {
             }
     }
 
+    fun test(cityOfUser:String,newPost : Post, activity : Activity,createdByUserId : String) {
 
-    // removed getcurrentuserid() from here
+        //add document(post) to collection(auto generated Id)
+        mFireStore.collection(Constants.USERS)
+                .add(newPost)
+                .addOnSuccessListener { documentReference ->
+                    //auto generated ID
+                    val autoId = documentReference.id
+                    Log.d("doc id", "DocumentSnapshot written with ID: ${autoId}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("doc id", "Error adding document", e)
+                }
+    }
+
+
+
+        //retrieval using city name
+//        mFireStore.collection(Constants.USERS)
+        // A where array query as we want the list of the boa…
+
+        fun createPost(activity : CreatePostActivity, post: Post) {
+            mFireStore.collection(Constants.POSTS)
+                    .add(post)
+                    .addOnSuccessListener { documentReference ->
+                        //auto generated ID
+                        val myPostId = documentReference.id
+                        Log.i("postfire", "DocumentSnapshot written with ID: ${myPostId}")
+                        Log.i("postfire", post.toString())
+
+                        val currentUserId = FirebaseAuthClass().getCurrentUserID()
+
+                        //retrieve postId array already posted
+                        var alreadyPosted : ArrayList<String> = ArrayList()
+
+                        mFireStore.collection(Constants.POSTS)
+                                .document(myPostId)
+                                .update(Constants.POSTID, myPostId)
+                                .addOnSuccessListener {
+                                    Log.i("postfire","post added successfully in user database + ${it}")
+                                }
+                                .addOnFailureListener{  e->
+                                    Log.e("postfire", e.message!!)
+                                }
+
+                        mFireStore.collection(Constants.USERS)
+                                .document(currentUserId)
+                                .update(Constants.MYPOSTIDS,FieldValue.arrayUnion(myPostId))
+                                .addOnSuccessListener {
+                                    Log.i("postfire","post added successfully in user database + ${it}")
+                                }
+                                .addOnFailureListener{  e->
+                                    Log.e("postfire", e.message!!)
+                                }
+                        activity.onPostCreatedSuccess()
+                    }
+                    .addOnFailureListener { e->
+                        Log.w("postfire", "Error adding document", e)
+                        activity.hideProgressDialog()
+                        activity.showErrorSnackBar("Tackled some error while posting, Please try again!!")
+                    }
+
+        }
+
+
+
 }

@@ -3,8 +3,6 @@ package com.example.evergreen.activities
 import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.icu.text.SimpleDateFormat
@@ -21,31 +19,37 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import com.example.evergreen.R
+import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
+import com.example.evergreen.utils.Constants
 import com.google.android.gms.location.*
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_create_post.*
+import kotlinx.android.synthetic.main.activity_edit_profile.*
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
 import java.util.*
 
 class CreatePostActivity : BaseActivity(), View.OnClickListener{
 
     private lateinit var selectedImage : Bitmap
-    lateinit var currentPhotoPath: String
-    private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
+    lateinit var mCurrentPhotoPath: String
+    private var mLatitude: Double = 0.0 // A variable which will hold the latitude value. will be used in places api
     private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
+    private var mCity : String = ""
+    private var mImageBeforeURL :String = ""
+    // Add a global variable for URI of a selected image from phone storage.
+    private var mSelectedImageFileUri: Uri? = null
+
+    // A global variable for user details.
+    private var mPostDetails: Post = Post()
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient // A fused location client variable which is further user to get the user's current location
 
@@ -59,17 +63,35 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
         /**
          * Initialize the places sdk if it is not initialized earlier using the api key.
          */
-        if (!Places.isInitialized()) {
-            Places.initialize(
-                this@CreatePostActivity,
-                resources.getString(R.string.google_maps_api_key)
-            )
+//        if (!Places.isInitialized()) {
+//            Places.initialize(
+//                this@CreatePostActivity,
+//                resources.getString(R.string.google_maps_api_key)
+//            )
+//        }
+        setupActionBar()
+        tv_add_image.setOnClickListener(this)
+        et_location.setOnClickListener(this)
+        tv_select_current_location_createPost.setOnClickListener(this)
+        btn_save.setOnClickListener(this)
+//        later on for places api, edit location
+    }
+
+    /**
+     * A function to setup action bar
+     */
+    private fun setupActionBar() {
+
+        setSupportActionBar(toolbar_create_post_activity)
+
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            actionBar.title = resources.getString(R.string.create_post)
         }
 
-        tv_add_image.setOnClickListener(this)
-        btn_save.setOnClickListener(this)
-        et_location_createPost.setOnClickListener(this)
-        tv_select_current_location.setOnClickListener(this)
+        toolbar_create_post_activity.setNavigationOnClickListener { onBackPressed() }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -88,39 +110,57 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                 }
                 pictureDialog.show()
             }
+// for future use
+//            R.id.et_location_createPost -> {
+//                try {
+//                    // These are the list of fields which we required is passed
+//                    val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS)
+//                    // Start the autocomplete intent with a unique request code.
+//                    val intent =Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this@CreatePostActivity)
+//                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//            }
 
-            R.id.et_location_createPost -> {
-                try {
-                    // These are the list of fields which we required is passed
-                    val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS)
-                    // Start the autocomplete intent with a unique request code.
-                    val intent =Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this@CreatePostActivity)
-                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            R.id.tv_select_current_location -> {
+            R.id.tv_select_current_location_createPost -> {
                 selectCurrentLocation(this)
+                mCity = getCityFromBase()
+                mPostDetails.city = mCity
             }
 
             R.id.btn_save -> {
                 when {
-                    et_location_createPost.text.isNullOrEmpty() -> {
-                        Toast.makeText(this, "Please select location", Toast.LENGTH_SHORT).show()
+                    et_location.text.isNullOrEmpty() -> {
+                        showErrorSnackBar("Please enter a location!!")
                     }
-                    selectedImage == null -> {
-                        Toast.makeText(this, "Please add image", Toast.LENGTH_SHORT).show()
+                    mSelectedImageFileUri == null -> {
+                        showErrorSnackBar("Please choose an image!!")
                     }
                     else -> {
-                        //TODO save post to database
-                        var post= Post()
-                        FirestoreClass().registerPost(this,post)
+                        uploadPostImageBefore()
                     }
                 }
             }
         }
+    }
+
+    private fun fillPostDetails() {
+        mPostDetails.imageBefore = mImageBeforeURL
+        Log.i("postcreate", " my post url is ${mPostDetails.imageBefore}")
+
+        if(mCity.isEmpty()) {
+            setLatLangFromAddress(et_location.text.toString())
+            mCity = getCityFromBase()
+        }
+        mPostDetails.location = et_location.text.toString()
+        mPostDetails.city = mCity
+        mPostDetails.postedBy = FirebaseAuthClass().getCurrentUserID()
+        mPostDetails.status = Constants.SPOT_UNDER_REVIEW
+
+        Log.e("postcreate", mPostDetails.toString())
+
+        FirestoreClass().createPost(this,mPostDetails)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -135,7 +175,8 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                 storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
+            mCurrentPhotoPath = absolutePath
+            mSelectedImageFileUri = Uri.fromFile(File(mCurrentPhotoPath))
         }
     }
 
@@ -170,6 +211,8 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                         if (report!!.areAllPermissionsGranted()) {
                             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                             startActivityForResult(galleryIntent, GALLERY)
+                        }else{
+                            showRationalDialogForPermissions()
                         }
                     }
 
@@ -180,6 +223,50 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                 }).onSameThread().check()
     }
 
+    private fun uploadPostImageBefore() {
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        if (mSelectedImageFileUri != null) {
+
+            //getting the storage reference
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                    "POST_IMAGE_BEFORE" + System.currentTimeMillis() + "."
+                            + Constants.getFileExtension(this, mSelectedImageFileUri)
+            )
+
+            //adding the file to reference
+            sRef.putFile(mSelectedImageFileUri!!)
+                    .addOnSuccessListener { taskSnapshot ->
+                        // The image upload is success
+                        Log.e(
+                                "Firebase Image URL",
+                                taskSnapshot.metadata!!.reference!!.downloadUrl.toString()
+                        )
+
+                        // Get the downloadable url from the task snapshot
+                        taskSnapshot.metadata!!.reference!!.downloadUrl
+                                .addOnSuccessListener { uri ->
+                                    Log.e("Downloadable Image URL", uri.toString())
+
+                                    // assign the image url to the variable.
+                                    mImageBeforeURL = uri.toString()
+                                    fillPostDetails()
+                                }
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(
+                                this,
+                                exception.message,
+                                Toast.LENGTH_LONG
+                        ).show()
+
+                        hideProgressDialog()
+                    }
+        }
+    }
+
+
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -187,6 +274,8 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
             if (requestCode == GALLERY) {
                 if (data != null) {
                     val contentURI = data.data
+                    mSelectedImageFileUri = contentURI
+
                     try {
                         // Here this is used to get an bitmap from URI
                         @Suppress("DEPRECATION")
@@ -199,18 +288,20 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                     }
                 }
             }else if (requestCode == CAMERA) {
-                var filePath=File(currentPhotoPath)
+                val filePath=File(mCurrentPhotoPath)
                 iv_place_image.setImageURI(Uri.fromFile(filePath))
-//                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap // Bitmap from camera
+                mSelectedImageFileUri = Uri.fromFile(filePath)
+
+            //                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap // Bitmap from camera
 //                selectedImage = thumbnail
 //                iv_place_image!!.setImageBitmap(thumbnail) // Set to the imageView.
             }
-            else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
-                et_location_createPost.setText(place.address)
-                mLatitude = place.latLng!!.latitude
-                mLongitude = place.latLng!!.longitude
-            }
+//            else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+//                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+//                et_location_createPost.setText(place.address)
+//                mLatitude = place.latLng!!.latitude
+//                mLongitude = place.latLng!!.longitude
+//            }
         }
         else if (resultCode == Activity.RESULT_CANCELED) {
             Log.e("Cancelled", "Cancelled")
@@ -233,6 +324,13 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }.show()
+    }
+
+     fun onPostCreatedSuccess(){
+        hideProgressDialog()
+        Toast.makeText(this, "Post Created Successfully! Other Users will be able to see it in their feed" +
+                " after your post gets approved!!", Toast.LENGTH_LONG).show()
+        finish()
     }
 
     companion object {

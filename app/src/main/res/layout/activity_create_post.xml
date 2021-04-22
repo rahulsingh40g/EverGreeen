@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.CreatePostActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_create_post_activity"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_place_image"
@@ -44,12 +56,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_date">
 
+<!--        to make as edit text -->
+<!--        android:focusable="false"-->
+<!--        android:focusableInTouchMode="false"-->
+
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_location_createPost"
+            android:id="@+id/et_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:hint="Location"
             android:inputType="text"
             android:layout_marginLeft="5dp"
@@ -60,24 +74,23 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_select_current_location"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/shape_image_view_border"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:padding="5dp"
-        android:text="SELECT CURRENT LOCATION"
-        android:backgroundTint="#1396D1"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_location" />
+        android:orientation="horizontal"
+        android:background="#3360DA1E">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_use_my_current_location_24"/>
+        <TextView
+            android:id="@+id/tv_select_current_location_createPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use my current location"
+            android:textAllCaps="true"/>
+    </LinearLayout>
+
 
 
     <Button

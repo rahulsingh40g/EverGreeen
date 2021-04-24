@@ -34,25 +34,6 @@ class FirestoreClass {
             }
     }
 
-    fun registerPost(activity : CreatePostActivity, postInfo: Post) {
-//        mFireStore.collection(Constants.USERS)
-//            // Document ID for users fields. Here the document it is the User ID.
-//            .document(userInfo.uid)
-//            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
-//            .set(userInfo, SetOptions.merge())
-//            .addOnSuccessListener {
-//                // Here call a function of base activity for transferring the result to it.
-//                activity.userRegisteredSuccess()
-//            }
-//            .addOnFailureListener { e ->
-//                activity.hideProgressDialog()
-//                Log.e(
-//                    activity.javaClass.simpleName,
-//                    "Error writing document",
-//                    e
-//                )
-//            }
-    }
 
     fun loadUserData(activity: Activity, readBoardsList: Boolean = false) {
 
@@ -132,6 +113,59 @@ class FirestoreClass {
             }
     }
 
+    fun test(cityOfUser:String,newPost : Post, activity : Activity,createdByUserId : String){
 
-    // removed getcurrentuserid() from here
+        //add document(post) to collection(auto generated Id)
+        mFireStore.collection(Constants.USERS)
+                .add(newPost)
+                .addOnSuccessListener { documentReference ->
+                    //auto generated ID
+                    val autoId = documentReference.id
+                    Log.d("doc id", "DocumentSnapshot written with ID: ${autoId}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("doc id", "Error adding document", e)
+                }
+
+
+
+        //retrieval using city name
+        mFireStore.collection(Constants.USERS)
+                // A where array query as we want the list of the board in which the user is assigned. So here you can pass the current user id.
+                .whereEqualTo("name", cityOfUser)
+                .get()
+                .addOnSuccessListener { document ->
+                    Log.e(activity.javaClass.simpleName, document.documents.toString())
+                    var userArrayWithGivenCity : ArrayList<User> = ArrayList()
+                    if (document.documents.size > 0) {
+
+                        for (user in document.documents) {
+                            val user = document.documents[0].toObject(User::class.java)!!
+                            userArrayWithGivenCity.add(user)
+                            Log.i("details",user.toString())
+                        }
+
+                    } else {
+
+                    }
+
+                }
+                .addOnFailureListener { e ->
+                    Log.e(
+                            activity.javaClass.simpleName,
+                            "Error while getting user details",
+                            e
+                    )
+                }
+
+
+
+        //retrieval using Doc Id (for updating purposes)
+        mFireStore.collection(Constants.USERS)
+                .document(createdByUserId)
+                .update("city",cityOfUser)
+    }
+
+
+
 }

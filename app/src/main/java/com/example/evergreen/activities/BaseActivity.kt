@@ -192,7 +192,6 @@ open class BaseActivity : AppCompatActivity() {
                     }
                 }).onSameThread().check()
         }
-        getCityStateFromLatLng()
     }
 
     fun getCityStateFromLatLng(){
@@ -207,4 +206,5 @@ open class BaseActivity : AppCompatActivity() {
             // do your stuff
         }
     }
+
 }

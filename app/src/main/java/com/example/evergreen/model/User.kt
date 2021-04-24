@@ -4,10 +4,11 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class User (
-    val uid : String ="",
+    var uid : String ="",
     var name : String = "",
-    val email : String ="",
+    var email : String ="",
     var location : String="",
+    var city :String = "",
     var image :String = "",
     var mobile : Long = 0,
     var myPostIds : ArrayList<String> = ArrayList(),
@@ -21,6 +22,8 @@ data class User (
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+            parcel.readString()!!,
+
         parcel.readLong(),
         parcel.createStringArrayList()!!,
         parcel.createStringArrayList()!!,
@@ -33,6 +36,8 @@ data class User (
         parcel.writeString(name)
         parcel.writeString(email)
         parcel.writeString(location)
+        parcel.writeString(city)
+
         parcel.writeString(image)
         parcel.writeLong(mobile)
         parcel.writeStringList(myPostIds)

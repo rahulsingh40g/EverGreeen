@@ -234,6 +234,8 @@ class EditProfileActivity : BaseActivity() {
         }
         if (et_location_editProfile.text.toString() != mUserDetails.location) {
             userHashMap[Constants.LOCATION] = et_location_editProfile.text.toString()
+            setLatLangFromAddress(et_location_editProfile.text.toString())
+            userHashMap[Constants.CITY] = getCityFromBase()
         }
 
         if (et_mobile.text.toString().isEmpty()) userHashMap[Constants.MOBILE] = 0

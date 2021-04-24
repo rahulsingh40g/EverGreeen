@@ -22,6 +22,7 @@ import com.example.evergreen.R
 import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
+import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
 import com.google.android.gms.location.*
 import com.google.firebase.storage.FirebaseStorage
@@ -39,6 +40,8 @@ import java.util.*
 
 class CreatePostActivity : BaseActivity(), View.OnClickListener{
 
+    private lateinit var mUser : User
+
     private lateinit var selectedImage : Bitmap
     lateinit var mCurrentPhotoPath: String
     private var mLatitude: Double = 0.0 // A variable which will hold the latitude value. will be used in places api
@@ -51,7 +54,8 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
     // A global variable for user details.
     private var mPostDetails: Post = Post()
 
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient // A fused location client variable which is further user to get the user's current location
+    // A fused location client variable which is further user to get the user's current location
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +73,9 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
 //                resources.getString(R.string.google_maps_api_key)
 //            )
 //        }
+        if(intent.hasExtra(Constants.USER_DETAIL)){
+            mUser = intent.getParcelableExtra<User>(Constants.USER_DETAIL)!!
+        }
         setupActionBar()
         tv_add_image.setOnClickListener(this)
         et_location.setOnClickListener(this)
@@ -153,10 +160,14 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
             setLatLangFromAddress(et_location.text.toString())
             mCity = getCityFromBase()
         }
+
+        mPostDetails.state = getStateFromBase()
         mPostDetails.location = et_location.text.toString()
         mPostDetails.city = mCity
         mPostDetails.postedBy = FirebaseAuthClass().getCurrentUserID()
+        mPostDetails.postedByName = mUser.name
         mPostDetails.status = Constants.SPOT_UNDER_REVIEW
+        mPostDetails.descriptionByCreator = et_description_create_post.text.toString()
 
         Log.e("postcreate", mPostDetails.toString())
 
@@ -176,30 +187,47 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
             mCurrentPhotoPath = absolutePath
-            mSelectedImageFileUri = Uri.fromFile(File(mCurrentPhotoPath))
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.evergreen.fileprovider", it)
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, CAMERA)
-                }
-            }
-        }
+        Dexter.withActivity(this)
+                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        // Here after all the permission are granted launch the gallery to select an image.
+                        if (report!!.areAllPermissionsGranted()) {
+                            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                                // Ensure that there's a camera activity to handle the intent
+                                takePictureIntent.resolveActivity(packageManager)?.also {
+                                    // Create the File where the photo should go
+                                    val photoFile: File? = try {
+                                        createImageFile()
+                                    } catch (ex: IOException) {
+                                        Log.e("camera",ex.message!!)
+                                        // Error occurred while creating the File
+                                        null
+                                    }
+                                    // Continue only if the File was successfully created
+                                    photoFile?.also {
+                                        val photoURI: Uri = FileProvider.getUriForFile(this@CreatePostActivity, "com.example.evergreen.fileprovider", it)
+                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                                        startActivityForResult(takePictureIntent, CAMERA)
+                                    }
+                                }
+                            }
+                        }else{
+                            showRationalDialogForPermissions()
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
+                    {
+                        showRationalDialogForPermissions()
+                    }
+                }).onSameThread().check()
     }
 
     private fun choosePhotoFromGallery() {
@@ -277,6 +305,7 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                     mSelectedImageFileUri = contentURI
 
                     try {
+                        // could be done with glide too. or // could directly set uri as done with camera below
                         // Here this is used to get an bitmap from URI
                         @Suppress("DEPRECATION")
                         val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
@@ -288,7 +317,7 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                     }
                 }
             }else if (requestCode == CAMERA) {
-                val filePath=File(mCurrentPhotoPath)
+                val filePath = File(mCurrentPhotoPath)
                 iv_place_image.setImageURI(Uri.fromFile(filePath))
                 mSelectedImageFileUri = Uri.fromFile(filePath)
 
@@ -328,6 +357,7 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
 
      fun onPostCreatedSuccess(){
         hideProgressDialog()
+        setResult(Activity.RESULT_OK)
         Toast.makeText(this, "Post Created Successfully! Other Users will be able to see it in their feed" +
                 " after your post gets approved!!", Toast.LENGTH_LONG).show()
         finish()

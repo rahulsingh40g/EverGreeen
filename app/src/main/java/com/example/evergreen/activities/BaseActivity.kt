@@ -138,16 +138,16 @@ open class BaseActivity : AppCompatActivity() {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
             mLatitude = mLastLocation.latitude
-            Log.e("Current Latitude", "$mLatitude")
+            Log.i("Current Latitude", "$mLatitude")
             mLongitude = mLastLocation.longitude
-            Log.e("Current Longitude", "$mLongitude")
+            Log.i("Current Longitude", "$mLongitude")
 
             //Getting an address from the latitude and longitude.
             val addressTask = GetAddressFromLatLng(currentActivity, mLatitude, mLongitude)
 
             addressTask.setAddressListener(object : GetAddressFromLatLng.AddressListener {
                 override fun onAddressFound(address: String?) {
-                    Log.e("Address ::", "" + address)
+                    Log.i("Address ::", "" + address)
                     when (currentActivity) {
                         is SignUpActivity -> {
                             et_location_signUp.setText(address)
@@ -201,23 +201,37 @@ open class BaseActivity : AppCompatActivity() {
         if(addresses.isNotEmpty()) {
             val city = addresses[0].locality
             val state = addresses[0].adminArea
+            if(city.isNullOrEmpty()) return ""
             Log.i("city", city)
             Log.i("state",state)
-
             return city
         } else {
             Log.e("post","returning empty ")
             return ""
         }
     }
-      fun setLatLangFromAddress(strAddress : String) : Boolean{
+    fun getStateFromBase() : String{
+        val gcd = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = gcd.getFromLocation(mLatitude, mLongitude, 1)
+        if(addresses.isNotEmpty()) {
+            val city = addresses[0].locality
+            val state = addresses[0].adminArea
+            if(state.isNullOrEmpty()) return ""
+            Log.i("state",state)
 
-         val coder = Geocoder(this);
-        val address : List<Address>
+            return state
+        } else {
+            Log.e("post","returning empty ")
+            return ""
+        }
+    }
+      fun setLatLangFromAddress(strAddress : String) : Boolean{
+          val coder = Geocoder(this);
+          val address : List<Address>
 
         try {
             address = coder.getFromLocationName(strAddress,1);
-            if (address == null || address.size < 1) {
+            if (address == null || address.isEmpty()) {
                 return false
             }
             val location : Address = address[0];
@@ -229,6 +243,5 @@ open class BaseActivity : AppCompatActivity() {
             ex.printStackTrace()
             return false
         }
-
-    }
+      }
 }

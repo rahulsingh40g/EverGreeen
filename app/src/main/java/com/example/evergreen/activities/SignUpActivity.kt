@@ -43,22 +43,22 @@ class SignUpActivity : BaseActivity() {
         tv_select_current_location_signUp.setOnClickListener {
             selectCurrentLocation(this)
         }
-        et_location_signUp.setOnClickListener{
-            try {
-                // These are the list of fields which we required is passed
-                val fields = listOf(
-                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG,
-                        Place.Field.ADDRESS
-                )
-                // Start the autocomplete intent with a unique request code.
-                val intent =
-                        Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
-                                .build(this)
-                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+//        et_location_signUp.setOnClickListener{
+//            try {
+//                // These are the list of fields which we required is passed
+//                val fields = listOf(
+//                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG,
+//                        Place.Field.ADDRESS
+//                )
+//                // Start the autocomplete intent with a unique request code.
+//                val intent =
+//                        Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+//                                .build(this)
+//                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -103,9 +103,15 @@ class SignUpActivity : BaseActivity() {
         val password: String = et_password.text.toString().trim { it <= ' ' }
 
         if (validateForm(name, location,email, password)) {
+            val city : String = getCityFromBase()
+            val user : User = User()
+            user.email = email
+            user.name = name
+            user.location = location
+            user.city = city
             // Show the progress dialog.
             showProgressDialog(resources.getString(R.string.please_wait))
-            FirebaseAuthClass().signUp(name,location,email ,password,this)
+            FirebaseAuthClass().signUp(user ,password,this)
         }
 
     }

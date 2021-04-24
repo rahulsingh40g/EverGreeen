@@ -91,6 +91,27 @@
             android:textAllCaps="true"/>
     </LinearLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/add_screen_til_marginTop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_date">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_description_create_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description (Optional)"
+            android:inputType="text"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/primary_text_color"
+            android:textColorHint="@color/secondary_text_color"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <Button
@@ -103,7 +124,7 @@
         android:gravity="center"
         android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
         android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-        android:text="ADD PLACE"
+        android:text="ADD A SPOT"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:textColor="@color/white"

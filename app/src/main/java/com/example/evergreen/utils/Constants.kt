@@ -9,6 +9,7 @@ import android.webkit.MimeTypeMap
 object Constants {
 
 
+    const val USER_DETAIL: String = "user_detail"
 
     // Firebase Constants
     // This  is used for the collection name for USERS.
@@ -16,9 +17,9 @@ object Constants {
 
     const val POSTS: String = "posts"
 
-    const val BOARDS: String = "boards"
 
     // Firebase database field names
+    const val UID  = "uid"
     const val IMAGE: String = "image"
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
@@ -30,6 +31,11 @@ object Constants {
 
     // for post
     const val POSTID  = "postId"
+    const val FALSE = "false"
+    const val TRUE = "true"
+
+    const val CITY = "city"
+    const val STATE = "state"
 
 
 

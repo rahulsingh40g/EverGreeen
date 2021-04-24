@@ -16,7 +16,8 @@ import com.google.firebase.ktx.Firebase
 class FirebaseAuthClass() {
     private lateinit var auth: FirebaseAuth
 
-    fun signUp(name:String, location:String,email :String, password : String,activity : SignUpActivity){
+    fun signUp(user : User, password: String, activity : SignUpActivity){
+        val email = user.email
         auth = Firebase.auth
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(
@@ -25,9 +26,7 @@ class FirebaseAuthClass() {
                     if (task.isSuccessful) {
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         val registeredEmail = firebaseUser.email!!
-
-                        val user = User(firebaseUser.uid, name, registeredEmail,location)
-
+                        user.uid = firebaseUser.uid
                         // call the registerUser function of FirestoreClass to make an entry in the database.
                         FirestoreClass().registerUser(activity, user)
 

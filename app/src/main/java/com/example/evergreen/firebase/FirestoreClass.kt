@@ -1,6 +1,7 @@
 package com.example.evergreen.firebase
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.evergreen.activities.*
@@ -35,7 +36,7 @@ class FirestoreClass {
             }
     }
 
-    fun loadUserData(activity: Activity, readBoardsList: Boolean = false) {
+    fun loadUserData(activity: Activity) {
 
         // Here we pass the collection name from which we wants the data.
         mFireStore.collection(Constants.USERS)
@@ -56,7 +57,7 @@ class FirestoreClass {
                         activity.signInSuccess(loggedInUser)
                     }
                     is MainActivity -> {
-                        activity.updateNavigationUserDetails(loggedInUser, readBoardsList)
+                        activity.updateNavigationUserDetails(loggedInUser)
                     }
                     is EditProfileActivity -> {
                         activity.setUserDataInUI(loggedInUser)
@@ -177,6 +178,76 @@ class FirestoreClass {
 
         }
 
+    fun getEmailFromUid(context: Context, postedBy: String): String? {
+        var email = ""
+        mFireStore.collection(Constants.USERS)
+                .whereEqualTo(Constants.UID, postedBy)
+                .get()
+                .addOnSuccessListener {
+                    var user : User = User()
+                    for(document in it){ // only one user
+                        user = document.toObject(User::class.java)
+                    }
+                    Log.i("email",user.toString())
+                    email = user.email
+                }
+                .addOnFailureListener{
+                    Log.e("email", it.message!!)
+                }
+        return email
+    }
+
+    fun getPostsFromLocality(activity: Activity, locality: String, isState : Boolean): ArrayList<Post> {
+        val posts = ArrayList<Post>()
+        val attr = if(isState) Constants.STATE
+                    else Constants.CITY
+        mFireStore.collection(Constants.POSTS)
+                .whereEqualTo(attr , locality)
+                .get()
+                .addOnSuccessListener { it ->
+                    for(eachPost in it){
+                        val post = eachPost.toObject(Post::class.java)
+                        Log.i("posts", "post is ${post.toString()}")
+                        posts.add(post)
+                    }
+                    Log.i("posts",posts.toString())
+                    Log.i("posts", posts.size.toString())
+                    when(activity){
+                        is MainActivity -> {
+                            activity.updatePostDetails(posts)
+                        }
+                    }                }
+                .addOnFailureListener{
+                    Log.e("posts",it.message!!)
+                }
+        return posts
+    }
+
+//
+//    private fun getNameFromUids(activity: Activity, posts : ArrayList<Post>){
+//        val creators = ArrayList<String>()
+//        for(post in posts){
+//            mFireStore.collection(Constants.USERS)
+//                    .whereEqualTo(Constants.UID, post.postedBy)
+//                    .get()
+//                    .addOnSuccessListener { users ->
+//                        for (user in users){
+//                            Log.i("posts","user is ${user.toObject(User::class.java).email}")
+//                            creators.add(user.toObject(User::class.java).name)
+//                        }
+//                    }
+//                    .addOnFailureListener{
+//                        Log.e("posts","error in getting user + ${it.message!!}")
+//                    }
+//        }
+//        var n = 1
+//        while(creators.size < posts.size){
+//            // wait
+//            n += 1
+//            Log.d("count", n.toString())
+//        }
+//
+//    }
 
 
 }

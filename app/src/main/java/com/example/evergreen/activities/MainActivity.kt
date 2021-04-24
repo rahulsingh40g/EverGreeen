@@ -9,14 +9,19 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.evergreen.R
+import com.example.evergreen.adapters.PostItemsAdapter
 import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.firebase.FirestoreClass
+import com.example.evergreen.model.Post
 import com.example.evergreen.model.User
+import com.example.evergreen.utils.Constants
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import java.io.IOException
 
 
@@ -26,6 +31,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     // A global variable for User Name
     private lateinit var mUserName: String
+    private var mUser = User()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +41,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         // Show the progress dialog.
         showProgressDialog(resources.getString(R.string.please_wait))
-        FirestoreClass().loadUserData(this@MainActivity, true)
+        FirestoreClass().loadUserData(this@MainActivity)
 
         // Assign the NavigationView.OnNavigationItemSelectedListener to navigation view.
         nav_view.setNavigationItemSelectedListener(this)
@@ -50,9 +56,41 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
 
         fab_createPost.setOnClickListener{
-            startActivity(Intent(this,CreatePostActivity::class.java))
+            val intent = Intent(this, CreatePostActivity::class.java)
+            intent.putExtra(Constants.USER_DETAIL, mUser)
+            startActivityForResult(
+                    intent,
+                    EDIT_PROFILE_REQUEST_CODE)
+            closeFABMenu()
         }
 
+    }
+
+    private fun getPosts(locality : String){
+        val posts : ArrayList<Post> = FirestoreClass().getPostsFromLocality(this,locality, false)
+        Log.i("posts","displaying post before but serial thing + ${posts.size} ")
+    }
+    fun updatePostDetails(postsList : ArrayList<Post>) {
+        hideProgressDialog()
+        if (postsList.size > 0) {
+            Log.i("posts","displaying posts for rv  ")
+            rv_posts_list.visibility = View.VISIBLE
+            tv_no_posts_available.visibility = View.GONE
+
+            rv_posts_list.layoutManager = LinearLayoutManager(this@MainActivity)
+            rv_posts_list.setHasFixedSize(true)
+
+            val adapter = PostItemsAdapter(this, postsList)
+            rv_posts_list.adapter = adapter
+            adapter.setOnClickListener(object : PostItemsAdapter.OnClickListener{
+                override fun onClick(position: Int, model: Post) {
+                    //TODO("Not yet implemented")
+                }
+            })
+        } else {
+            rv_posts_list.visibility = View.GONE
+            tv_no_posts_available.visibility = View.VISIBLE
+        }
     }
 
     private fun showFABMenu() {
@@ -103,9 +141,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
-
                 startActivityForResult(
-                        Intent(this@MainActivity, EditProfileActivity::class.java),
+                        Intent(
+                                this@MainActivity, EditProfileActivity::class.java),
                         EDIT_PROFILE_REQUEST_CODE
                 )
             }
@@ -113,6 +151,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.nav_sign_out -> {
                 // Here sign outs the user from firebase in this device.
                 if (FirebaseAuthClass().getCurrentUserID().isNotEmpty())
+                    // need to add one alert dialog
                     FirebaseAuthClass().signOut(this)
 
                 // Send the user to the intro screen of the application.
@@ -137,23 +176,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             Log.i("main", "call for load")
             FirestoreClass().loadUserData(this@MainActivity)
         }
-//        else if (resultCode == Activity.RESULT_OK
-//            && requestCode == CREATE_BOARD_REQUEST_CODE
-//        )
-//        {
-//            // Get the latest boards list.
-//            FirestoreClass().getBoardsList(this@MainActivity)
-//        }
+        else if (resultCode == Activity.RESULT_OK
+            && requestCode == CREATE_POST_REQUEST_CODE
+        ) {
+            // Get the latest posts list.
+                Log.i("city","muser city is ${mUser.city}")
+            getPosts(mUser.city)
+        }
         else {
             Log.e("Cancelled", "Cancelled")
         }
     }
 
-    fun updateNavigationUserDetails(user: User, readBoardsList: Boolean) {
+    fun updateNavigationUserDetails(user: User) {
 
-        hideProgressDialog()
 
         mUserName = user.name
+        mUser = user
 
         // The instance of the header view of the navigation view.
         val headerView = nav_view.getHeaderView(0)
@@ -179,18 +218,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Set the user name
         navUsername.text = user.name
 
-//        if (readBoardsList) {
-//            // Show the progress dialog.
-//            showProgressDialog(resources.getString(R.string.please_wait))
-//            FirestoreClass().getBoardsList(this@MainActivity)
-//        }
+        getPosts(user.city)
     }
 
     companion object {
         //A unique code for starting the activity for result
         const val EDIT_PROFILE_REQUEST_CODE: Int = 11
 
-        const val CREATE_BOARD_REQUEST_CODE: Int = 12
+        const val CREATE_POST_REQUEST_CODE: Int = 12
     }
 
 }

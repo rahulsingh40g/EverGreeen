@@ -9,19 +9,35 @@ import android.webkit.MimeTypeMap
 object Constants {
 
 
+    const val USER_DETAIL: String = "user_detail"
 
     // Firebase Constants
     // This  is used for the collection name for USERS.
     const val USERS: String = "users"
 
-    const val BOARDS: String = "boards"
+    const val POSTS: String = "posts"
+
 
     // Firebase database field names
+    const val UID  = "uid"
     const val IMAGE: String = "image"
     const val NAME: String = "name"
     const val MOBILE: String = "mobile"
 
     const val LOCATION: String = "location"
+    const val MYPOSTIDS = "myPostIds"
+
+
+
+    // for post
+    const val POSTID  = "postId"
+    const val FALSE = "false"
+    const val TRUE = "true"
+
+    const val CITY = "city"
+    const val STATE = "state"
+
+
 
 
 

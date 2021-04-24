@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_create_post.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.dialog_progress.*
+import java.io.IOException
 import java.util.*
 
 
@@ -137,16 +138,16 @@ open class BaseActivity : AppCompatActivity() {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
             mLatitude = mLastLocation.latitude
-            Log.e("Current Latitude", "$mLatitude")
+            Log.i("Current Latitude", "$mLatitude")
             mLongitude = mLastLocation.longitude
-            Log.e("Current Longitude", "$mLongitude")
+            Log.i("Current Longitude", "$mLongitude")
 
             //Getting an address from the latitude and longitude.
             val addressTask = GetAddressFromLatLng(currentActivity, mLatitude, mLongitude)
 
             addressTask.setAddressListener(object : GetAddressFromLatLng.AddressListener {
                 override fun onAddressFound(address: String?) {
-                    Log.e("Address ::", "" + address)
+                    Log.i("Address ::", "" + address)
                     when (currentActivity) {
                         is SignUpActivity -> {
                             et_location_signUp.setText(address)
@@ -155,7 +156,7 @@ open class BaseActivity : AppCompatActivity() {
                             et_location_editProfile.setText(address) // Address is set to the edittext
                         }
                         is CreatePostActivity -> {
-                            et_location_createPost.setText(address)
+                            et_location.setText(address)
                         }
                     }
                 }
@@ -194,17 +195,55 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun getCityStateFromLatLng(){
-        val gcd = Geocoder(currentActivity, Locale.getDefault())
+    fun getCityFromBase() : String{
+        val gcd = Geocoder(this, Locale.getDefault())
         val addresses: List<Address> = gcd.getFromLocation(mLatitude, mLongitude, 1)
-        if (addresses.size > 0) {
+        if(addresses.isNotEmpty()) {
             val city = addresses[0].locality
             val state = addresses[0].adminArea
+            if(city.isNullOrEmpty()) return ""
             Log.i("city", city)
             Log.i("state",state)
+            return city
         } else {
-            // do your stuff
+            Log.e("post","returning empty ")
+            return ""
         }
+    }
+    fun getStateFromBase() : String{
+        val gcd = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = gcd.getFromLocation(mLatitude, mLongitude, 1)
+        if(addresses.isNotEmpty()) {
+            val city = addresses[0].locality
+            val state = addresses[0].adminArea
+            if(state.isNullOrEmpty()) return ""
+            Log.i("state",state)
+
+            return state
+        } else {
+            Log.e("post","returning empty ")
+            return ""
+        }
+    }
+      fun setLatLangFromAddress(strAddress : String) : Boolean{
+          val coder = Geocoder(this);
+          val address : List<Address>
+
+        try {
+            address = coder.getFromLocationName(strAddress,1);
+            if (address == null || address.isEmpty()) {
+                return false
+            }
+            val location : Address = address[0];
+            mLatitude =  location.latitude
+            mLongitude = location.longitude
+            return true
+
+        }catch (ex : IOException) {
+            ex.printStackTrace()
+            return false
+        }
+      }
     }
 
 }

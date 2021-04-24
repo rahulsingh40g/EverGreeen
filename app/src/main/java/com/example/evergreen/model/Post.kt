@@ -5,32 +5,58 @@ import android.os.Parcelable
 import com.example.evergreen.utils.Constants
 
 data class Post(
-    val docId : String ="",
-    var location :String= "",
-    var imageBefore : String ="",
-    var imageAfter : String = "",
-    val postedBy: String ="",
-    var bookedBy: String="",
-    var status : String = Constants.SPOT_UNDER_REVIEW
+        val postId : String ="",
+        var location :String= "",
+        var city :String = "",
+        var state : String = "", // bigger locality
+        var imageBefore : String ="",
+        var imageAfter : String = "",
+        var postedBy: String ="",
+        var bookedBy: String="",
+        var postedByName: String ="",
+        var bookedByName: String="",
+        var status : String = Constants.SPOT_UNDER_REVIEW,
+        var isrejected : String = "false", // rejected during approval of post
+        var descriptionByCreator : String = "description",
+        var descriptionByAdmin : String = "description", // for rejection during approval of post
+        var descriptionByPlanter : String = "description" //
+
 ) :Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
+            parcel.readString()!!,
+        parcel.readString()!!,     // state
+        parcel.readString()!!,
+        parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!, // booked by
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!
+            parcel.readString()!!,
+            parcel.readString()!!,
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) =with(parcel) {
-        parcel.writeString(docId)
+        parcel.writeString(postId)
         parcel.writeString(location)
+        parcel.writeString(city)
+        parcel.writeString(state)
         parcel.writeString(imageBefore)
         parcel.writeString(imageAfter)
         parcel.writeString(postedBy)
         parcel.writeString(bookedBy)
+        parcel.writeString(postedByName)
+        parcel.writeString(bookedByName)
         parcel.writeString(status)
+        parcel.writeString(isrejected)
+        parcel.writeString(descriptionByCreator)
+        parcel.writeString(descriptionByAdmin)
+        parcel.writeString(descriptionByPlanter)
+
     }
 
     override fun describeContents(): Int {

@@ -64,5 +64,6 @@
 
     <string name="location">Location</string>
 
-    <string name="google_maps_api_key">***</string>
+    <string name="google_maps_api_key">AIzaSyAUf9oMjfTHp7FYxTQoJK7NauS3AWfF4Hk</string>
+    <string name="create_post">Create Post</string>
 </resources>

@@ -89,26 +89,27 @@
                         android:inputType="text"
                         android:textSize="@dimen/et_text_size" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tv_select_current_location"
+<!--either use this everwhere for getting current location
+or i have already designed same ui for edit profile use that ,
+ ek baar dekh liya kar dodie, ki pehle se bana pada h to wo le
+lele, uniformity bhi rahegi and mehnat bhi kam hogi.
+-->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/shape_image_view_border"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:padding="5dp"
-                    android:text="SELECT CURRENT LOCATION"
-                    android:backgroundTint="#1396D1"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_location" />
-
+                    android:orientation="horizontal"
+                    android:background="#3360DA1E">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_use_my_current_location_24"/>
+                    <TextView
+                        android:id="@+id/tv_select_current_location_signUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Use my current location"
+                        android:textAllCaps="true"/>
+                </LinearLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

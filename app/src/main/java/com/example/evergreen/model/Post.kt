@@ -13,14 +13,11 @@ data class Post(
         var imageAfter : String = "",
         var postedBy: String ="",
         var bookedBy: String="",
-        var postedByName: String ="",
-        var bookedByName: String="",
         var status : String = Constants.SPOT_UNDER_REVIEW,
         var isrejected : String = "false", // rejected during approval of post
-        var descriptionByCreator : String = "description",
-        var descriptionByAdmin : String = "description", // for rejection during approval of post
-        var descriptionByPlanter : String = "description" //
-
+        var descriptionByCreator : String = "",
+        var descriptionByAdmin : String = "", // for rejection during approval of post
+        var descriptionByPlanter : String = "" //
 ) :Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -36,8 +33,6 @@ data class Post(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-            parcel.readString()!!,
-            parcel.readString()!!,
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) =with(parcel) {
@@ -49,8 +44,6 @@ data class Post(
         parcel.writeString(imageAfter)
         parcel.writeString(postedBy)
         parcel.writeString(bookedBy)
-        parcel.writeString(postedByName)
-        parcel.writeString(bookedByName)
         parcel.writeString(status)
         parcel.writeString(isrejected)
         parcel.writeString(descriptionByCreator)

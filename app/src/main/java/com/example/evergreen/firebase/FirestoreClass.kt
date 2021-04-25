@@ -139,9 +139,7 @@ class FirestoreClass {
             .addOnSuccessListener {
                 // Profile data is updated successfully.
                 Log.i(activity.javaClass.simpleName, "Profile Data updated successfully!")
-
                 Toast.makeText(activity, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-
                 // Notify the success result.
                 activity.profileUpdateSuccess()
             }
@@ -187,14 +185,12 @@ class FirestoreClass {
 
                         val currentUserId = FirebaseAuthClass().getCurrentUserID()
 
-                        //retrieve postId array already posted
-                        var alreadyPosted : ArrayList<String> = ArrayList()
 
                         mFireStore.collection(Constants.POSTS)
                                 .document(myPostId)
                                 .update(Constants.POSTID, myPostId)
                                 .addOnSuccessListener {
-                                    Log.i("postfire","post added successfully in user database + ${it}")
+                                    Log.i("postfire","post added successfully in post database with postid + ${it}")
                                 }
                                 .addOnFailureListener{  e->
                                     Log.e("postfire", e.message!!)
@@ -238,57 +234,92 @@ class FirestoreClass {
         return email
     }
 
+
     fun getPostsFromLocality(activity: Activity, locality: String, isState : Boolean): ArrayList<Post> {
         val posts = ArrayList<Post>()
         val attr = if(isState) Constants.STATE
                     else Constants.CITY
-        mFireStore.collection(Constants.POSTS)
-                .whereEqualTo(attr , locality)
-                .get()
-                .addOnSuccessListener { it ->
-                    for(eachPost in it){
-                        val post = eachPost.toObject(Post::class.java)
-                        Log.i("posts", "post is ${post.toString()}")
-                        posts.add(post)
-                    }
-                    Log.i("posts",posts.toString())
-                    Log.i("posts", posts.size.toString())
-                    when(activity){
-                        is MainActivity -> {
-                            activity.updatePostDetails(posts)
+
+        if(attr == Constants.STATE)
+        Log.i("stposts", "st post ")
+        when(activity){
+            is MainActivity ->{
+                mFireStore.collection(Constants.POSTS)
+                    .whereEqualTo(attr , locality)
+                    .whereEqualTo(Constants.STATUS , Constants.SPOT_UNDER_REVIEW) // just for testing purpose
+                    .get()
+                    .addOnSuccessListener { it ->
+                        for(eachPost in it){
+                            val post = eachPost.toObject(Post::class.java)
+                            Log.i("posts", "post is ${post.toString()}")
+                            posts.add(post)
                         }
-                    }                }
-                .addOnFailureListener{
-                    Log.e("posts",it.message!!)
-                }
+                        Log.i("posts",posts.toString())
+                        if(attr == Constants.STATE)
+                            Log.i("stposts", posts.size.toString())
+                        getNameFromUids(activity, posts)
+                    }
+                    .addOnFailureListener{
+                        Log.e("posts",it.message!!)
+                        getNameFromUids(activity, posts)
+                    }
+            }
+        }
         return posts
     }
 
-//
-//    private fun getNameFromUids(activity: Activity, posts : ArrayList<Post>){
-//        val creators = ArrayList<String>()
-//        for(post in posts){
-//            mFireStore.collection(Constants.USERS)
-//                    .whereEqualTo(Constants.UID, post.postedBy)
-//                    .get()
-//                    .addOnSuccessListener { users ->
-//                        for (user in users){
-//                            Log.i("posts","user is ${user.toObject(User::class.java).email}")
-//                            creators.add(user.toObject(User::class.java).name)
-//                        }
-//                    }
-//                    .addOnFailureListener{
-//                        Log.e("posts","error in getting user + ${it.message!!}")
-//                    }
-//        }
-//        var n = 1
-//        while(creators.size < posts.size){
-//            // wait
-//            n += 1
-//            Log.d("count", n.toString())
-//        }
-//
-//    }
+
+    private fun getNameFromUids(activity: Activity, posts : ArrayList<Post>){
+        val creators = ArrayList<String>()
+        if(posts.isEmpty()){
+            when(activity){
+                is MainActivity -> {
+                    activity.updatePostDetails(posts, creators)
+                }
+            }
+        }
+        for(post in posts){
+            mFireStore.collection(Constants.USERS)
+                    .whereEqualTo(Constants.UID, post.postedBy)
+                    .get()
+                    .addOnSuccessListener { users ->
+                        for (user in users){
+                            Log.i("posts","user is ${user.toObject(User::class.java).name}")
+                            creators.add(user.toObject(User::class.java).name)
+                            if(creators.size == posts.size){
+                                when(activity){
+                                    is MainActivity -> {
+                                        activity.updatePostDetails(posts, creators)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .addOnFailureListener{
+                        Log.e("posts","error in getting user + ${it.message!!}")
+                        when(activity){
+                            is MainActivity -> {
+                                activity.updatePostDetails(posts, creators)
+                            }
+                        }
+                    }
+        }
+    }
+
+    fun updatePostDetails(activity: Activity, mPostDetails: Post) {
+        mFireStore.collection(Constants.POSTS)
+            .document(mPostDetails.postId)
+            .set(mPostDetails) //over write the old post
+            .addOnSuccessListener {
+                Log.i("update","post updated successfully")
+                when(activity){
+                    is BookSpotActivity -> activity.onUpdateSuccess()
+                }
+            }
+            .addOnFailureListener {
+                Log.e("update", it.message!!)
+            }
+    }
 
 
     fun getApprovedPosts(statusValue : String,activity: Activity) : ArrayList<Post>{

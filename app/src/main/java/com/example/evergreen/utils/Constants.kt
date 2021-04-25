@@ -8,7 +8,6 @@ import android.webkit.MimeTypeMap
 
 object Constants {
 
-
     const val USER_DETAIL: String = "user_detail"
 
     // Firebase Constants
@@ -37,6 +36,7 @@ object Constants {
     const val CITY = "city"
     const val STATE = "state"
 
+    const val STATUS="status"
 
 
 
@@ -60,11 +60,11 @@ object Constants {
     // Constants for status of post
     const val SPOT_UNDER_REVIEW = "under_review"
     const val SPOT_OPEN_FOR_BOOKING = "open_for_booking"
+    const val SPOT_REJECTED = "rejected"
     const val SPOT_BOOKED = "booked"
     const val SPOT_PLANTED_BUT_UNDER_VERIFICATION = "planted_but_under_verification"
     const val SPOT_PLANTED_AND_VERIFIED = "planted_and_verified"
-
-
+    const val SPOT_PLANTED = "planted"
 
 
     //A unique code for asking the Read Storage Permission using this we will be check and identify in the method onRequestPermissionsResult

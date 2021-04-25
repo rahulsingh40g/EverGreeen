@@ -66,4 +66,10 @@
 
     <string name="google_maps_api_key">AIzaSyAUf9oMjfTHp7FYxTQoJK7NauS3AWfF4Hk</string>
     <string name="create_post">Create Post</string>
+    <string name="title_activity_approval_status">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

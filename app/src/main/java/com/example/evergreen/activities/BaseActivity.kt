@@ -244,6 +244,6 @@ open class BaseActivity : AppCompatActivity() {
             return false
         }
       }
-    }
 
 }
+

@@ -242,9 +242,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                         }else{
                             showRationalDialogForPermissions()
                         }
-                        else{
-                            showRationalDialogForPermissions()
-                        }
                     }
 
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)

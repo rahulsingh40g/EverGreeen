@@ -64,12 +64,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             closeFABMenu()
         }
 
+        fab_dashboard.setOnClickListener{
+            val intent = Intent(this, DashboardActivity::class.java)
+            startActivity(intent)
+            closeFABMenu()
+        }
     }
 
     private fun getPosts(locality : String){
         val posts : ArrayList<Post> = FirestoreClass().getPostsFromLocality(this,locality, false)
         Log.i("posts","displaying post before but serial thing + ${posts.size} ")
     }
+
     fun updatePostDetails(postsList : ArrayList<Post>) {
         hideProgressDialog()
         if (postsList.size > 0) {
@@ -189,8 +195,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User) {
-
-
         mUserName = user.name
         mUser = user
 

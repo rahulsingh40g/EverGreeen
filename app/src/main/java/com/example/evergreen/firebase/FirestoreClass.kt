@@ -250,4 +250,38 @@ class FirestoreClass {
 //    }
 
 
+    fun getApprovedPosts(statusValue : String,activity: Activity) : ArrayList<Post>{
+        var postList : ArrayList<Post> = ArrayList()
+        Log.i("1posts","hwy")
+        mFireStore.collection(Constants.POSTS)
+                .whereEqualTo(Constants.STATUS, statusValue)
+                    .get()
+                    .addOnSuccessListener { posts ->
+                        for (post in posts){
+                            Log.i("1posts","${post.toObject(Post::class.java)}")
+                            postList.add(post.toObject(Post::class.java))
+                        }
+                        when(activity){
+                            is ApprovalStatusActivity -> {
+                                activity.populateRV(postList)
+                            }
+                            is PlantedStatusActivity->{
+                                if(statusValue == Constants.SPOT_PLANTED){
+                                    activity.populateRvPlanted(postList)
+                                }
+                                else{
+                                    activity.populateRV(postList)
+                                }
+                            }
+                            is BookedSpotsActivity ->{
+                                activity.populateRV(postList)
+                            }
+                        }
+                    }
+                    .addOnFailureListener{
+                        Log.e("1posts","error in getting post + ${it.message!!}")
+                    }
+        return postList
+    }
+
 }

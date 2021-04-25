@@ -37,7 +37,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private lateinit var mUserName: String
     private var mUser = User()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -70,6 +69,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             closeFABMenu()
         }
 
+        fab_dashboard.setOnClickListener{
+            val intent = Intent(this, DashboardActivity::class.java)
+            startActivity(intent)
+            closeFABMenu()
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
@@ -237,8 +241,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User) {
-
-
         mUserName = user.name
         mUser = user
 

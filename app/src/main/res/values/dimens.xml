@@ -2,13 +2,13 @@
 <resources>
     <dimen name="splash_screen_title_text_size">70sp</dimen>
 
-<!--    FAB menu-->
+    <!--    FAB menu-->
     <dimen name="standard_55">65dp</dimen>
     <dimen name="standard_105">125dp</dimen>
     <dimen name="standard_155">185dp</dimen>
     <dimen name="standard_205">245dp</dimen>
 
-<!--    Add Post -->
+    <!--    Add Post -->
     <dimen name="add_screen_til_marginTop">5dp</dimen>
     <dimen name="add_screen_place_image_size">200dp</dimen>
     <dimen name="add_screen_place_image_marginTop">15dp</dimen>
@@ -162,5 +162,8 @@
     <dimen name="dialog_list_marginTopBottom">3dp</dimen>
 
     <dimen name="item_selected_member_image_size">45dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 
 </resources>

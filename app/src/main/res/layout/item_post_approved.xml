@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/item_board_content_marginBottom"
+    android:padding="5dp"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_post_image_before_approved"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/shape_image_view_border"
+        android:padding="@dimen/add_screen_place_image_padding"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_post_image_150"
+        android:layout_marginTop="5dp" />
+    <TextView
+        android:id="@+id/tv_location_approved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:gravity="center"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tv_description_approved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textSize="18sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_board_divider_height"
+        android:layout_marginTop="@dimen/item_board_divider_marginTop"
+        android:background="@color/divider_color" />
+
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bn_open_for_booking"
+        android:title="Open for booking"
+        android:icon="@drawable/ic_under_review"/>
+    <item
+        android:id="@+id/bn_booked"
+        android:title="Booked"
+        android:icon="@drawable/ic_check"/>
+    <item
+        android:id="@+id/bn_planted"
+        android:title="Planted"
+        android:icon="@drawable/ic_wrong"/>
+</menu>

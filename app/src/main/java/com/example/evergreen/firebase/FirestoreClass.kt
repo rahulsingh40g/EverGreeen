@@ -62,6 +62,13 @@ class FirestoreClass {
                     is EditProfileActivity -> {
                         activity.setUserDataInUI(loggedInUser)
                     }
+                     is PlantedMyMeActivity ->{
+                         val myPostsList : ArrayList<String> = loggedInUser.myPostIds
+                         for(post in myPostsList){
+                             Log.i("myPosts","${post.toString()}")
+                         }
+                         getPostFromIdArray(myPostsList,activity)
+                     }
                 }
                 
             }
@@ -87,6 +94,40 @@ class FirestoreClass {
             }
     }
 
+
+    private fun getPostFromIdArray(idArray : ArrayList<String>, activity : Activity){
+        mFireStore.collection(Constants.POSTS)
+            .whereIn(
+                Constants.POSTID,
+                idArray
+            )
+            .get()
+            .addOnSuccessListener { posts ->
+                //Log.e(activity.javaClass.simpleName, document.documents.toString())
+
+                var postsList : ArrayList<Post> = ArrayList()
+                for (post in posts.documents) {
+                    // Convert all the document snapshot to the object using the data model class.
+                    val curPost = post.toObject(Post::class.java)!!
+                    postsList.add(curPost)
+                    Log.i("myPosts","${curPost.toString()}")
+                }
+                if(activity is PlantedMyMeActivity){
+                    activity.populateRV(postsList)
+                }
+
+            }
+            .addOnFailureListener { e ->
+                if(activity is PlantedMyMeActivity){
+                    activity.hideProgressDialog()
+                }
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating a board.",
+                    e
+                )
+            }
+    }
 
     /**
      * A function to update the user profile data into the database.
@@ -279,6 +320,17 @@ class FirestoreClass {
                         }
                     }
                     .addOnFailureListener{
+                        when(activity){
+                            is ApprovalStatusActivity -> {
+                                activity.hideProgressDialog()
+                            }
+                            is PlantedStatusActivity->{
+                                activity.hideProgressDialog()
+                            }
+                            is BookedSpotsActivity ->{
+                                activity.hideProgressDialog()
+                            }
+                        }
                         Log.e("1posts","error in getting post + ${it.message!!}")
                     }
         return postList

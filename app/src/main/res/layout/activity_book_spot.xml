@@ -6,21 +6,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.CreatePostActivity">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_create_post_activity"
+            android:id="@+id/toolbar_bookspot_activity"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/tv_posted_by_bookspot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="5dp"
+        android:text="Posted By"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"/>
+
+
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_place_image"
+        android:id="@+id/iv_place_image_bookspot"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_margin="15dp"
@@ -28,65 +41,40 @@
         android:padding="@dimen/add_screen_place_image_padding"
         android:scaleType="centerCrop"
         android:src="@drawable/add_screen_image_placeholder"
-         />
-
-    <TextView
-        android:id="@+id/tv_add_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="?attr/selectableItemBackground"
-        android:layout_gravity="center"
-        android:padding="@dimen/add_screen_text_add_image_padding"
-        android:text="Choose Image"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/add_screen_text_add_image_textSize"
-        android:textStyle="bold"
         />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/add_screen_til_marginTop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_date">
-
-<!--        to make as edit text -->
-<!--        android:focusable="false"-->
-<!--        android:focusableInTouchMode="false"-->
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Location"
-            android:inputType="text"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/primary_text_color"
-            android:textColorHint="@color/secondary_text_color"
-            android:textSize="20sp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="@dimen/add_screen_text_add_image_padding"
         android:orientation="horizontal"
-        android:background="#3360DA1E">
+        >
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_use_my_current_location_24"/>
-        <TextView
-            android:id="@+id/tv_select_current_location_createPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Use my current location"
-            android:textAllCaps="true"/>
+            android:src="@drawable/ic_location_on_blue_24"
+            />
+        <TextView
+            android:id="@+id/tv_location_bookspot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Location"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/add_screen_text_add_image_textSize"
+            android:textStyle="bold"
+            />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_description_byCreator_bookspot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="@dimen/add_screen_text_add_image_padding"
+        android:text="Description of spot"
+        android:textSize="16sp"
+        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -95,9 +83,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_date">
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_description_create_post"
+    <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_description_byPlanter_bookspot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description (Optional)"
@@ -106,13 +93,12 @@
             android:layout_marginRight="5dp"
             android:textColor="@color/primary_text_color"
             android:textColorHint="@color/secondary_text_color"
-            android:textSize="20sp" />
-
+            android:textSize="16sp"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <Button
-        android:id="@+id/btn_save"
+        android:id="@+id/btn_book_this_spot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -121,7 +107,7 @@
         android:gravity="center"
         android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
         android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-        android:text="ADD A SPOT"
+        android:text="BOOK THIS SPOT"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:textColor="@color/white"

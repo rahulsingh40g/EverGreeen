@@ -1,12 +1,16 @@
 package com.example.evergreen.activities
 
 import android.app.Activity
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,11 +37,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private lateinit var mUserName: String
     private var mUser = User()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setupActionBar()
+        handleIntent(intent)
 
         // Show the progress dialog.
         showProgressDialog(resources.getString(R.string.please_wait))
@@ -65,26 +71,65 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
 
     }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.options_menu, menu)
 
-    private fun getPosts(locality : String){
-        val posts : ArrayList<Post> = FirestoreClass().getPostsFromLocality(this,locality, false)
-        Log.i("posts","displaying post before but serial thing + ${posts.size} ")
+        // Associate searchable configuration with the SearchView
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        }
+        return true
     }
-    fun updatePostDetails(postsList : ArrayList<Post>) {
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.refresh ->{
+                showProgressDialog(resources.getString(R.string.please_wait))
+                getPosts(mUser.city)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+    override fun onNewIntent(intent: Intent) {
+        setIntent(intent)
+        handleIntent(intent)
+        super.onNewIntent(intent)
+    }
+    private fun handleIntent(intent: Intent) {
+
+        if (Intent.ACTION_SEARCH == intent.action) {
+            val query = intent.getStringExtra(SearchManager.QUERY)
+            //use the query to search your data somehow
+            Log.i("search",query!!)
+            showProgressDialog(resources.getString(R.string.please_wait))
+            getPosts(query!!, true)
+        }
+    }
+    fun getPosts(locality: String, isState : Boolean = false){
+        val posts : java.util.ArrayList<Post> = FirestoreClass().getPostsFromLocality(this, locality, isState)
+        Log.i("posts", "displaying post before but serial thing + ${posts.size} ")
+    }
+
+    fun updatePostDetails(postsList: ArrayList<Post>, creators: ArrayList<String>) {
         hideProgressDialog()
         if (postsList.size > 0) {
-            Log.i("posts","displaying posts for rv  ")
+            Log.i("posts", "displaying posts for rv  ")
             rv_posts_list.visibility = View.VISIBLE
             tv_no_posts_available.visibility = View.GONE
 
             rv_posts_list.layoutManager = LinearLayoutManager(this@MainActivity)
             rv_posts_list.setHasFixedSize(true)
 
-            val adapter = PostItemsAdapter(this, postsList)
+            val adapter = PostItemsAdapter(this, postsList, creators)
             rv_posts_list.adapter = adapter
-            adapter.setOnClickListener(object : PostItemsAdapter.OnClickListener{
-                override fun onClick(position: Int, model: Post) {
-                    //TODO("Not yet implemented")
+            adapter.setOnClickListener(object : PostItemsAdapter.OnClickListener {
+                override fun onClick(position: Int, model: Post, postedByName : String) {
+                    val intent = Intent(this@MainActivity, BookSpotActivity::class.java)
+                    intent.putExtra(Constants.POST_DETAIL, model)
+                    intent.putExtra(Constants.POSTEDBYNAME, postedByName)
+                    startActivityForResult(intent, BOOK_SPOT_REQUEST_CODE)
                 }
             })
         } else {
@@ -123,7 +168,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         setSupportActionBar(toolbar_main_activity)
         toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
-
         toolbar_main_activity.setNavigationOnClickListener {
             toggleDrawer()
         }
@@ -151,7 +195,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.nav_sign_out -> {
                 // Here sign outs the user from firebase in this device.
                 if (FirebaseAuthClass().getCurrentUserID().isNotEmpty())
-                    // need to add one alert dialog
+                // need to add one alert dialog
                     FirebaseAuthClass().signOut(this)
 
                 // Send the user to the intro screen of the application.
@@ -175,12 +219,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 showProgressDialog(resources.getString(R.string.please_wait))
             Log.i("main", "call for load")
             FirestoreClass().loadUserData(this@MainActivity)
-        }
-        else if (resultCode == Activity.RESULT_OK
+        } else if (resultCode == Activity.RESULT_OK
             && requestCode == CREATE_POST_REQUEST_CODE
         ) {
             // Get the latest posts list.
-                Log.i("city","muser city is ${mUser.city}")
+                showProgressDialog(resources.getString(R.string.please_wait))
+                Log.i("city", "muser city is ${mUser.city}")
+                getPosts(mUser.city)
+        } else if(resultCode == Activity.RESULT_OK
+            && requestCode == BOOK_SPOT_REQUEST_CODE){
+            showProgressDialog(resources.getString(R.string.please_wait))
             getPosts(mUser.city)
         }
         else {
@@ -209,8 +257,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     .placeholder(R.drawable.ic_user_place_holder) // A default place holder
                     .into(navUserImage) // the view in which the image will be loaded.
             Log.i("main", " done with glide in nav with ${user.image}")
-        }catch(e : IOException){
-            Log.e("exc" , "${e.printStackTrace()}")
+        }catch (e: IOException){
+            Log.e("exc", "${e.printStackTrace()}")
         }
 
         // The instance of the user name TextView of the navigation view.
@@ -224,8 +272,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     companion object {
         //A unique code for starting the activity for result
         const val EDIT_PROFILE_REQUEST_CODE: Int = 11
-
         const val CREATE_POST_REQUEST_CODE: Int = 12
+        const val BOOK_SPOT_REQUEST_CODE : Int = 13
     }
 
 }

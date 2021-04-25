@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.icu.text.CaseMap
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -22,8 +23,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.evergreen.R
+import com.example.evergreen.firebase.FirestoreClass
+import com.example.evergreen.model.Post
 import com.example.evergreen.utils.GetAddressFromLatLng
 import com.google.android.gms.location.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -55,6 +59,31 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
+
+
+    fun showAlertDialog(activity: Activity, text: String)  {
+        AlertDialog.Builder(this)
+            .setMessage(text)
+            .setTitle("Are you Sure?")
+            .setPositiveButton(
+                "YES"
+            ) { _, _ ->
+                when(activity){
+                    is BookSpotActivity ->{
+                        activity.onYesAlert()
+                    }
+                }
+            }.setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+                when(activity){
+                    is BookSpotActivity ->{
+                        Toast.makeText(this, "No worries, you can book some other spot.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .show()
+    }
+
     /**
      * This function is used to show the progress dialog with the title and message to user.
      */
@@ -64,6 +93,8 @@ open class BaseActivity : AppCompatActivity() {
         /*Set the screen content from a layout resource.
         The resource will be inflated, adding all top-level views to the screen.*/
         mProgressDialog.setContentView(R.layout.dialog_progress)
+        mProgressDialog.setCancelable(false)
+
 
         mProgressDialog.tv_progress_text.text = text
 

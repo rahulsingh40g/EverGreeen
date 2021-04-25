@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.item_post.view.*
 import java.security.PrivateKey
 
 open class PostItemsAdapter(private val context: Context,
-    private var list: ArrayList<Post>
+    private var list: ArrayList<Post>,
+    private var creatorsList : ArrayList<String>
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
@@ -57,13 +58,13 @@ open class PostItemsAdapter(private val context: Context,
                     .placeholder(R.drawable.ic_post_image_150)
                     .into(holder.itemView.iv_post_image_before)
 
-            holder.itemView.tv_posted_by.text = model.postedByName
+            holder.itemView.tv_posted_by.text = creatorsList[position]
             holder.itemView.tv_location.text = model.location
 
             holder.itemView.setOnClickListener {
 
                 if (onClickListener != null) {
-                    onClickListener!!.onClick(position, model)
+                    onClickListener!!.onClick(position, model, creatorsList[position])
                 }
             }
         }
@@ -73,7 +74,8 @@ open class PostItemsAdapter(private val context: Context,
      * Gets the number of items in the list
      */
     override fun getItemCount(): Int {
-        return list.size
+        return  if(list.size < creatorsList.size) list.size
+                else creatorsList.size
     }
 
     /**
@@ -87,7 +89,7 @@ open class PostItemsAdapter(private val context: Context,
      * An interface for onclick items.
      */
     interface OnClickListener {
-        fun onClick(position: Int, model: Post)
+        fun onClick(position: Int, model: Post, postedByName : String)
     }
 
     /**

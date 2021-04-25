@@ -165,7 +165,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
         mPostDetails.location = et_location.text.toString()
         mPostDetails.city = mCity
         mPostDetails.postedBy = FirebaseAuthClass().getCurrentUserID()
-        mPostDetails.postedByName = mUser.name
         mPostDetails.status = Constants.SPOT_UNDER_REVIEW
         mPostDetails.descriptionByCreator = et_description_create_post.text.toString()
 

@@ -14,6 +14,7 @@ object Constants {
     const val POSTEDBYNAME: String = "posted_by_name"
     const val USER_DETAIL: String = "user_detail"
     const val POST_DETAIL : String = "post_detail"
+    const val NO_DESCRIPTION_AVAILABLE ="No description available"
 
     // Firebase Constants
     // This  is used for the collection name for USERS.
@@ -31,7 +32,7 @@ object Constants {
 
     const val LOCATION: String = "location"
     const val MYPOSTIDS = "myPostIds"
-
+    const val BOOKED_POST_IDS="bookedPostIds"
 
 
     // for post
@@ -41,7 +42,13 @@ object Constants {
     const val STATUS = "status"
 
     const val CITY = "city" // for admin as well
+    const val POSTED_BY = "postedBy"
     const val STATE = "state"
+
+    const val IMAGE_AFTER_URL = "imageAfter"
+
+
+
 
     const val ASSIGNED_TO: String = "assignedTo"
     const val DOCUMENT_ID: String = "documentId"
@@ -66,9 +73,6 @@ object Constants {
     const val SPOT_BOOKED = "booked"
     const val SPOT_PLANTED = "planted"
 
-
-    // Arraylist of admins
-    val ADMIN_MAIL_LIST  = arrayListOf<String>("admin@gmail.com")
 
     //A unique code for asking the Read Storage Permission using this we will be check and identify in the method onRequestPermissionsResult
     const val READ_STORAGE_PERMISSION_CODE = 1

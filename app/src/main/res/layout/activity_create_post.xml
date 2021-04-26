@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.CreatePostActivity">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,112 +20,111 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_place_image"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="15dp"
-        android:background="@drawable/shape_image_view_border"
-        android:padding="@dimen/add_screen_place_image_padding"
-        android:scaleType="centerCrop"
-        android:src="@drawable/add_screen_image_placeholder"
-         />
-
-    <TextView
-        android:id="@+id/tv_add_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="?attr/selectableItemBackground"
-        android:layout_gravity="center"
-        android:padding="@dimen/add_screen_text_add_image_padding"
-        android:text="Choose Image"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/add_screen_text_add_image_textSize"
-        android:textStyle="bold"
-        />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/add_screen_til_marginTop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_date">
-
-<!--        to make as edit text -->
-<!--        android:focusable="false"-->
-<!--        android:focusableInTouchMode="false"-->
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_location"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_place_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Location"
-            android:inputType="text"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/primary_text_color"
-            android:textColorHint="@color/secondary_text_color"
-            android:textSize="20sp" />
+            android:layout_height="300dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/shape_image_view_border"
+            android:padding="@dimen/add_screen_place_image_padding"
+            android:scaleType="centerCrop"
+            android:src="@drawable/add_screen_image_placeholder" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#3360DA1E">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_use_my_current_location_24"/>
         <TextView
-            android:id="@+id/tv_select_current_location_createPost"
+            android:id="@+id/tv_add_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Use my current location"
-            android:textAllCaps="true"/>
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:layout_gravity="center"
+            android:padding="@dimen/add_screen_text_add_image_padding"
+            android:text="Choose Image"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/add_screen_text_add_image_textSize"
+            android:textStyle="bold" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/add_screen_til_marginTop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_date">
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_description_create_post"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description (Optional)"
-            android:inputType="text"
+            android:layout_marginTop="@dimen/add_screen_til_marginTop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_date">
+
+            <!--        to make as edit text -->
+            <!--        android:focusable="false"-->
+            <!--        android:focusableInTouchMode="false"-->
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Location"
+                android:inputType="text"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/primary_text_color"
+                android:textColorHint="@color/secondary_text_color"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#3360DA1E">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_use_my_current_location_24"/>
+            <TextView
+                android:id="@+id/tv_select_current_location_createPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Use my current location"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/add_screen_til_marginTop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_date">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_description_create_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description (Optional)"
+                android:inputType="text"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/primary_text_color"
+                android:textColorHint="@color/secondary_text_color"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
+            android:background="@drawable/shape_button_rounded"
+            android:gravity="center"
+            android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+            android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+            android:text="ADD A SPOT"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:textColor="@color/primary_text_color"
-            android:textColorHint="@color/secondary_text_color"
-            android:textSize="20sp" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn_text_size"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
-        android:background="@drawable/shape_button_rounded_green"
-        android:gravity="center"
-        android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
-        android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-        android:text="ADD A SPOT"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/btn_text_size"/>
 
 </LinearLayout>

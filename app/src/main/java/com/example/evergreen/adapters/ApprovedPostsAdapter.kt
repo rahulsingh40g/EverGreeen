@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.evergreen.R
 import com.example.evergreen.model.Post
+import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.item_post.view.*
 import kotlinx.android.synthetic.main.item_post.view.tv_location
 import kotlinx.android.synthetic.main.item_post_approved.view.*
@@ -37,8 +38,11 @@ class ApprovedPostsAdapter(private val context: Context,
 
 
             holder.itemView.tv_location_approved.text = model.location
-            holder.itemView.tv_description_approved.text = model.descriptionByCreator
 
+            if(model.descriptionByCreator.isNotEmpty())
+            holder.itemView.tv_description_approved.text = model.descriptionByCreator
+            else
+                holder.itemView.tv_description_approved.text = Constants.NO_DESCRIPTION_AVAILABLE
 //            holder.itemView.setOnClickListener {
 //
 //                if (onClickListener != null) {

@@ -31,6 +31,10 @@ class DashboardActivity : AppCompatActivity() {
             val intent = Intent(this, BookedSpotsActivity::class.java)
             startActivity(intent)
         }
+        cv_plantedByMe.setOnClickListener {
+            val intent = Intent(this, PlantedMyMeActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupActionBar() {

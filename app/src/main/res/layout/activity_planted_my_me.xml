@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_booked_spots_activity"
+            android:id="@+id/toolbar_planted_by_me_activity"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -21,20 +21,20 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/ll_booked_spots_list"
+        android:id="@+id/ll_planted_by_me_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_bubble"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_booked_spots_list"
+            android:id="@+id/rv_planted_by_me_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/tv_no_posts_available_booked_spots"
+            android:id="@+id/tv_no_posts_available_planted_by_me"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"

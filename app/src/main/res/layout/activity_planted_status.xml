@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,7 +26,10 @@
         android:id="@+id/ll_planted_post_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/bg_bubble"
         android:orientation="vertical">
+        
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_planted_posts_list"
             android:layout_width="match_parent"
@@ -43,17 +46,13 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView_planted_status"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="bottom">
+        android:layout_height="75dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:menu="@menu/bottom_nav_menu_planted_status"/>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView_planted_status"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            app:menu="@menu/bottom_nav_menu_planted_status"/>
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,79 +9,107 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="vertical">
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:orientation="horizontal">
-
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_weight="1"
-           android:orientation="vertical">
-
-           <androidx.appcompat.widget.AppCompatImageView
-               android:id="@+id/iv_post_image_before_planted"
-               android:layout_width="match_parent"
-               android:layout_height="300dp"
-               android:layout_margin="15dp"
-               android:background="@drawable/shape_image_view_border"
-               android:padding="@dimen/add_screen_place_image_padding"
-               android:scaleType="centerCrop"
-               android:src="@drawable/ic_post_image_150"
-               android:layout_marginTop="5dp" />
-
-           <TextView
-               android:id="@+id/tv_description_before_planted"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:text="Description"
-               android:layout_marginTop="10dp"
-               android:gravity="center"
-               android:textSize="18sp"/>
-       </LinearLayout>
-
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_weight="1"
-           android:orientation="vertical">
-
-           <androidx.appcompat.widget.AppCompatImageView
-               android:id="@+id/iv_post_image_after_planted"
-               android:layout_width="match_parent"
-               android:layout_height="300dp"
-               android:layout_margin="15dp"
-               android:background="@drawable/shape_image_view_border"
-               android:padding="@dimen/add_screen_place_image_padding"
-               android:scaleType="centerCrop"
-               android:src="@drawable/ic_post_image_150"
-               android:layout_marginTop="5dp" />
-
-           <TextView
-               android:id="@+id/tv_description_after_planted"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:text="Description"
-               android:layout_marginTop="10dp"
-               android:gravity="center"
-               android:textSize="18sp"/>
-       </LinearLayout>
-   </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_location_planted"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Location"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:textSize="18sp"/>
+        app:cardCornerRadius="10dp"
+        android:layout_margin="5dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_board_divider_height"
-        android:layout_marginTop="@dimen/item_board_divider_marginTop"
-        android:background="@color/divider_color" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_post_image_planted"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_margin="15dp"
+                        android:background="@drawable/shape_image_view_border"
+                        android:padding="@dimen/add_screen_place_image_padding"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_post_image_150"
+                        android:layout_marginTop="5dp" />
+
+                    <TextView
+                        android:id="@+id/tv_description_planted"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_switch_image_planted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_button_rounded"
+                android:gravity="center"
+                android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:text="SEE CURRENT IMAGE"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/btn_text_size"/>
+
+            <TextView
+                android:id="@+id/isCurrentImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="@dimen/add_screen_text_add_image_padding"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_location_on_blue_24"
+                    />
+                <TextView
+                    android:id="@+id/tv_location_planted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Location"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/add_screen_text_add_image_textSize"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_board_divider_height"
+                android:layout_marginTop="@dimen/item_board_divider_marginTop"
+                android:background="@color/divider_color" />
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

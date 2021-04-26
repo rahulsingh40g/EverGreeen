@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.CreatePostActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_upload_image_after_activity"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_place_image_upload_image_after"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/shape_image_view_border"
+        android:padding="@dimen/add_screen_place_image_padding"
+        android:scaleType="centerCrop"
+        android:src="@drawable/add_screen_image_placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_add_image_upload_image_after"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?attr/selectableItemBackground"
+        android:layout_gravity="center"
+        android:padding="@dimen/add_screen_text_add_image_padding"
+        android:text="Choose Image"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/add_screen_text_add_image_textSize"
+        android:textStyle="bold"
+        />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/add_screen_til_marginTop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_date">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_description_upload_image_after"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Comments (Optional)"
+            android:inputType="text"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/primary_text_color"
+            android:textColorHint="@color/secondary_text_color"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/btn_save_upload_image_after"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
+        android:background="@drawable/shape_button_rounded"
+        android:gravity="center"
+        android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+        android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+        android:text="UPLOAD"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/btn_text_size"/>
+
+</LinearLayout>

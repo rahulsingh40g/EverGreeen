@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,11 +26,14 @@
         android:id="@+id/ll_approved_post_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/bg_bubble"
         android:orientation="vertical">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_approved_posts_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:visibility="gone"/>
 
         <TextView
@@ -39,21 +42,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
             android:gravity="center_horizontal"
-            android:text="No posts available"/>
-
+            android:text="No posts available" />
     </LinearLayout>
 
-    <LinearLayout
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="bottom">
+        android:layout_height="75dp"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        android:background="@color/white"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_nav_menu"/>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            app:menu="@menu/bottom_nav_menu"/>
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

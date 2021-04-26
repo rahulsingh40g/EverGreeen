@@ -12,6 +12,7 @@ object Constants {
     const val POSTEDBYNAME: String = "posted_by_name"
     const val USER_DETAIL: String = "user_detail"
     const val POST_DETAIL : String = "post_detail"
+    const val NO_DESCRIPTION_AVAILABLE ="No description available"
 
     // Firebase Constants
     // This  is used for the collection name for USERS.
@@ -28,7 +29,7 @@ object Constants {
 
     const val LOCATION: String = "location"
     const val MYPOSTIDS = "myPostIds"
-
+    const val BOOKED_POST_IDS="bookedPostIds"
 
 
     // for post
@@ -36,10 +37,10 @@ object Constants {
     const val FALSE = "false"
     const val TRUE = "true"
     const val STATUS = "status"
-
+    const val POSTED_BY = "postedBy"
     const val CITY = "city"
     const val STATE = "state"
-
+    const val IMAGE_AFTER_URL = "imageAfter"
 
 
 

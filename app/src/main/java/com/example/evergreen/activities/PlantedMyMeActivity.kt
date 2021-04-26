@@ -1,18 +1,15 @@
 package com.example.evergreen.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.evergreen.R
-import com.example.evergreen.adapters.BookedSpotsAdapter
 import com.example.evergreen.adapters.PlantedPostsAdapter
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
-import com.example.evergreen.model.User
-import com.example.evergreen.utils.Constants
-import kotlinx.android.synthetic.main.activity_booked_spots.*
 import kotlinx.android.synthetic.main.activity_planted_my_me.*
 
 class PlantedMyMeActivity : BaseActivity() {
@@ -21,8 +18,24 @@ class PlantedMyMeActivity : BaseActivity() {
         setContentView(R.layout.activity_planted_my_me)
 
         setupActionBar()
-        showProgressDialog("Please wait...")
+        showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().loadUserData(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.reload_option, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.refresh ->{
+                showProgressDialog(resources.getString(R.string.please_wait))
+                FirestoreClass().loadUserData(this)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupActionBar() {
@@ -33,6 +46,7 @@ class PlantedMyMeActivity : BaseActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            actionBar.title = "Your achievements"
         }
 
         toolbar_planted_by_me_activity.setNavigationOnClickListener { onBackPressed() }

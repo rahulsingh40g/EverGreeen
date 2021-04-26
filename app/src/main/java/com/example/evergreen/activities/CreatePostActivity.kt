@@ -43,7 +43,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
     private lateinit var mUser : User
 
     private lateinit var selectedImage : Bitmap
-    lateinit var mCurrentPhotoPath: String
     private var mLatitude: Double = 0.0 // A variable which will hold the latitude value. will be used in places api
     private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
     private var mCity : String = ""
@@ -111,8 +110,8 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                 pictureDialog.setItems(pictureDialogItems){ dialog, which ->
                     when (which) {
                         // Here we have createD the methods for image selection from GALLERY
-                        0 -> choosePhotoFromGallery()
-                        1 -> dispatchTakePictureIntent()//takePhotoFromCamera()
+                        0 -> choosePhotoFromGallery(this)
+                        1 -> dispatchTakePictureIntent(this)//takePhotoFromCamera()
                     }
                 }
                 pictureDialog.show()
@@ -173,83 +172,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
         FirestoreClass().createPost(this,mPostDetails)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            mCurrentPhotoPath = absolutePath
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun dispatchTakePictureIntent() {
-        Dexter.withActivity(this)
-                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        // Here after all the permission are granted launch the gallery to select an image.
-                        if (report!!.areAllPermissionsGranted()) {
-                            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                                // Ensure that there's a camera activity to handle the intent
-                                takePictureIntent.resolveActivity(packageManager)?.also {
-                                    // Create the File where the photo should go
-                                    val photoFile: File? = try {
-                                        createImageFile()
-                                    } catch (ex: IOException) {
-                                        Log.e("camera",ex.message!!)
-                                        // Error occurred while creating the File
-                                        null
-                                    }
-                                    // Continue only if the File was successfully created
-                                    photoFile?.also {
-                                        val photoURI: Uri = FileProvider.getUriForFile(this@CreatePostActivity, "com.example.evergreen.fileprovider", it)
-                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                                        startActivityForResult(takePictureIntent, CAMERA)
-                                    }
-                                }
-                            }
-                        }else{
-                            showRationalDialogForPermissions()
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
-                    {
-                        showRationalDialogForPermissions()
-                    }
-                }).onSameThread().check()
-    }
-
-    private fun choosePhotoFromGallery() {
-        Dexter.withActivity(this)
-                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        // Here after all the permission are granted launch the gallery to select an image.
-                        if (report!!.areAllPermissionsGranted()) {
-                            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                            startActivityForResult(galleryIntent, GALLERY)
-                        }else{
-                            showRationalDialogForPermissions()
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
-                    {
-                        showRationalDialogForPermissions()
-                    }
-                }).onSameThread().check()
-    }
-
     private fun uploadPostImageBefore() {
 
         showProgressDialog(resources.getString(R.string.please_wait))
@@ -293,7 +215,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
         }
     }
 
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -334,24 +255,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
         else if (resultCode == Activity.RESULT_CANCELED) {
             Log.e("Cancelled", "Cancelled")
         }
-    }
-
-    private fun showRationalDialogForPermissions() {
-        AlertDialog.Builder(this)
-            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-            .setPositiveButton("GO TO SETTINGS") { _, _ ->
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
     }
 
      fun onPostCreatedSuccess(){

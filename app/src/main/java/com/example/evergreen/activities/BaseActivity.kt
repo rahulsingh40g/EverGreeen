@@ -8,20 +8,22 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.icu.text.CaseMap
+import android.icu.text.SimpleDateFormat
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.example.evergreen.R
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
@@ -38,6 +40,7 @@ import kotlinx.android.synthetic.main.activity_create_post.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.dialog_progress.*
+import java.io.File
 import java.io.IOException
 import java.util.*
 
@@ -49,6 +52,7 @@ open class BaseActivity : AppCompatActivity() {
     private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
     private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
     private lateinit var currentActivity :Activity
+    lateinit var mCurrentPhotoPath: String
 
     /**
      * This is a progress dialog instance which we will initialize later on.
@@ -119,7 +123,7 @@ open class BaseActivity : AppCompatActivity() {
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
-    fun showErrorSnackBar(message: String) {
+    fun showErrorSnackBar(message: String, ) {
         val snackBar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this@BaseActivity, R.color.snackbar_error_color))
@@ -275,6 +279,109 @@ open class BaseActivity : AppCompatActivity() {
             return false
         }
       }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun dispatchTakePictureIntent(activity: Activity) {
+        Dexter.withActivity(activity)
+                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        // Here after all the permission are granted launch the gallery to select an image.
+                        if (report!!.areAllPermissionsGranted()) {
+                            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                                // Ensure that there's a camera activity to handle the intent
+                                takePictureIntent.resolveActivity(packageManager)?.also {
+                                    // Create the File where the photo should go
+                                    val photoFile: File? = try {
+                                        createImageFile()
+                                    } catch (ex: IOException) {
+                                        Log.e("camera",ex.message!!)
+                                        // Error occurred while creating the File
+                                        null
+                                    }
+                                    // Continue only if the File was successfully created
+                                    photoFile?.also {
+                                        val photoURI: Uri = FileProvider.getUriForFile(activity, "com.example.evergreen.fileprovider", it)
+                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                                        startActivityForResult(takePictureIntent, CAMERA)
+                                    }
+                                }
+                            }
+                        }else{
+                            showRationalDialogForPermissions()
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
+                    {
+                        showRationalDialogForPermissions()
+                    }
+                }).onSameThread().check()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+                "JPEG_${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            mCurrentPhotoPath = absolutePath
+        }
+    }
+
+
+    fun choosePhotoFromGallery(activity: Activity) {
+        Dexter.withActivity(activity)
+                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        // Here after all the permission are granted launch the gallery to select an image.
+                        if (report!!.areAllPermissionsGranted()) {
+                            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                            startActivityForResult(galleryIntent, GALLERY)
+                        }else{
+                            showRationalDialogForPermissions(activity)
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
+                    {
+                        showRationalDialogForPermissions(activity)
+                    }
+                }).onSameThread().check()
+    }
+
+    private fun showRationalDialogForPermissions(activity: Activity) {
+        AlertDialog.Builder(activity)
+                .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
+                .setPositiveButton("GO TO SETTINGS") { _, _ ->
+                    try {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri = Uri.fromParts("package", packageName, null)
+                        intent.data = uri
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        e.printStackTrace()
+                    }
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }.show()
+    }
+
+    companion object {
+        private const val GALLERY = 1
+        private const val CAMERA = 2
+        // A constant variable for place picker
+        private const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 3
+    }
 
 }
 

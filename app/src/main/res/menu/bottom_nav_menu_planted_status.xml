@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/bn_open_for_booking"
-        android:title="Open for booking"
-        android:icon="@drawable/ic_under_review"/>
+        android:title="Not booked"
+        android:icon="@drawable/ic_open_for_booking"/>
     <item
         android:id="@+id/bn_booked"
         android:title="Booked"
@@ -11,5 +11,5 @@
     <item
         android:id="@+id/bn_planted"
         android:title="Planted"
-        android:icon="@drawable/ic_wrong"/>
+        android:icon="@drawable/ic_fab"/>
 </menu>

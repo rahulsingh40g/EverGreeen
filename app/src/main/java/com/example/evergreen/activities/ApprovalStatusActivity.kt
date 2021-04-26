@@ -1,26 +1,17 @@
 package com.example.evergreen.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.evergreen.R
 import com.example.evergreen.adapters.ApprovedPostsAdapter
-import com.example.evergreen.adapters.PostItemsAdapter
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
 import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.activity_approval_status.*
-import kotlinx.android.synthetic.main.activity_create_post.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class ApprovalStatusActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,25 +20,26 @@ class ApprovalStatusActivity : BaseActivity() {
         setContentView(R.layout.activity_approval_status)
 
         setupActionBar()
-        showProgressDialog("Please wait...")
-        FirestoreClass().getApprovedPosts(Constants.SPOT_UNDER_REVIEW,this)
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getPostsFromStatusValue(Constants.SPOT_UNDER_REVIEW,this)
         //Log.i("1posts","displaying post before but serial thing + ${posts.size} ")
 //        Log.i("1posts","hello")
 //        getPosts(Constants.SPOT_OPEN_FOR_BOOKING)
 //        Log.i("1posts","hello2")
+
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.bn_under_review->{
-                    showProgressDialog("Please wait...")
-                    FirestoreClass().getApprovedPosts(Constants.SPOT_UNDER_REVIEW,this)
+                    showProgressDialog(resources.getString(R.string.please_wait))
+                    FirestoreClass().getPostsFromStatusValue(Constants.SPOT_UNDER_REVIEW,this)
                 }
                 R.id.bn_approved->{
-                    showProgressDialog("Please wait...")
-                    FirestoreClass().getApprovedPosts(Constants.SPOT_OPEN_FOR_BOOKING,this)
+                    showProgressDialog(resources.getString(R.string.please_wait))
+                    FirestoreClass().getapprovedPosts(this)
                 }
                 R.id.bn_rejected->{
-                    showProgressDialog("Please wait...")
-                    FirestoreClass().getApprovedPosts(Constants.SPOT_REJECTED,this)
+                    showProgressDialog(resources.getString(R.string.please_wait))
+                    FirestoreClass().getPostsFromStatusValue(Constants.SPOT_REJECTED,this)
                 }
             }
             true
@@ -67,6 +59,36 @@ class ApprovalStatusActivity : BaseActivity() {
 
         toolbar_approval_status_activity.setNavigationOnClickListener { onBackPressed() }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.reload_option, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.refresh ->{
+                val selectedItem = bottomNavigationView.menu.findItem(bottomNavigationView.selectedItemId)
+                when(selectedItem.itemId){
+                    R.id.bn_under_review->{
+                        showProgressDialog(resources.getString(R.string.please_wait))
+                        FirestoreClass().getPostsFromStatusValue(Constants.SPOT_UNDER_REVIEW,this)
+                    }
+                    R.id.bn_approved->{
+                        showProgressDialog(resources.getString(R.string.please_wait))
+                        FirestoreClass().getapprovedPosts(this)
+                    }
+                    R.id.bn_rejected->{
+                        showProgressDialog(resources.getString(R.string.please_wait))
+                        FirestoreClass().getPostsFromStatusValue(Constants.SPOT_REJECTED,this)
+                    }
+                }
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     fun populateRV(postsList: ArrayList<Post>) {
         hideProgressDialog()

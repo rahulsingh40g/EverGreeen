@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.CreatePostActivity">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,7 +73,7 @@
 
 
     <Button
-        android:id="@+id/btn_upload_upload_image_after"
+        android:id="@+id/btn_save_upload_image_after"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

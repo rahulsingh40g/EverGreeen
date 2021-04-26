@@ -24,7 +24,9 @@
         android:id="@+id/ll_booked_spots_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_bubble"
         android:orientation="vertical">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_booked_spots_list"
             android:layout_width="match_parent"

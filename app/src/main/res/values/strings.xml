@@ -69,4 +69,7 @@
     <string name="search_title">Title</string>
     <string name="search_hint">Haryana</string>
     <string name="title_activity_approval_status">MainActivity</string>
+    <string name="under_review">Under review</string>
+    <string name="approved">Approved</string>
+    <string name="rejected">Rejected</string>
 </resources>

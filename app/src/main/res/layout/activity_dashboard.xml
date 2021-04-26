@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_bubble"
     android:orientation="vertical"
     tools:context=".activities.DashboardActivity">
 
@@ -71,13 +72,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="YOUR ACCOMPLISHMENTS"
+                android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textColor="@color/greendark"/>
 
             <ImageView
-                android:layout_width="200sp"
-                android:layout_height="200sp"
+                android:layout_width="match_parent"
+                android:layout_height="180sp"
                 android:src="@drawable/happy_earth"/>
         </LinearLayout>
 
@@ -103,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/greenlight"
+            android:backgroundTint="@color/greendark"
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="5dp">
 
@@ -119,6 +121,7 @@
                     android:layout_gravity="center_horizontal"
                     android:text="APPROVAL"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     android:textColor="@color/white"/>
 
                 <TextView
@@ -126,6 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="STATUS"
+                    android:textStyle="bold"
                     android:textSize="18sp"
                     android:textColor="@color/white"/>
 
@@ -137,7 +141,7 @@
             android:id="@+id/cv_plantedStatus"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/greenlight"
+            android:backgroundTint="@color/greendark"
             android:layout_margin="20dp"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"
@@ -153,6 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="PLANTED"
+                    android:textStyle="bold"
                     android:layout_gravity="center_horizontal"
                     android:textSize="18sp"
                     android:textColor="@color/white"/>
@@ -161,6 +166,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="STATUS"
+                    android:textStyle="bold"
                     android:layout_gravity="center_horizontal"
                     android:textSize="18sp"
                     android:textColor="@color/white"/>

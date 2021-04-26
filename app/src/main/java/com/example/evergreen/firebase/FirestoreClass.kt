@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.evergreen.activities.*
+import com.example.evergreen.model.Admin
 import com.example.evergreen.model.Post
 import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
@@ -54,7 +55,7 @@ class FirestoreClass {
 
                  when (activity) {
                     is SignInActivity -> {
-                        activity.signInSuccess(loggedInUser)
+                        activity.signInSuccessUser(loggedInUser)
                     }
                     is MainActivity -> {
                         activity.updateNavigationUserDetails(loggedInUser)
@@ -62,6 +63,9 @@ class FirestoreClass {
                     is EditProfileActivity -> {
                         activity.setUserDataInUI(loggedInUser)
                     }
+                     is SplashActivity ->{
+                         activity.signInSuccessUser(loggedInUser)
+                     }
                 }
                 
             }
@@ -76,6 +80,9 @@ class FirestoreClass {
                         activity.hideProgressDialog()
                     }
                     is EditProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is SplashActivity ->{
                         activity.hideProgressDialog()
                     }
                 }
@@ -194,7 +201,7 @@ class FirestoreClass {
     }
 
 
-    fun getPostsFromLocality(activity: Activity, locality: String, isState : Boolean): ArrayList<Post> {
+    fun getPostsFromLocality(activity: Activity, locality: String, isState : Boolean, status : String): ArrayList<Post> {
         val posts = ArrayList<Post>()
         val attr = if(isState) Constants.STATE
                     else Constants.CITY
@@ -205,7 +212,7 @@ class FirestoreClass {
             is MainActivity ->{
                 mFireStore.collection(Constants.POSTS)
                     .whereEqualTo(attr , locality)
-                    .whereEqualTo(Constants.STATUS , Constants.SPOT_UNDER_REVIEW) // just for testing purpose
+                    .whereEqualTo(Constants.STATUS , status)
                     .get()
                     .addOnSuccessListener { it ->
                         for(eachPost in it){
@@ -272,7 +279,7 @@ class FirestoreClass {
             .addOnSuccessListener {
                 Log.i("update","post updated successfully")
                 when(activity){
-                    is BookSpotActivity -> activity.onUpdateSuccess()
+                    is BookCumApproveSpotActivity -> activity.onUpdateSuccess()
                 }
             }
             .addOnFailureListener {
@@ -315,4 +322,41 @@ class FirestoreClass {
         return postList
     }
 
+    fun loadAdminOrUserData(activity: Activity) {
+        mFireStore.collection(Constants.ADMINS)
+                // The document id to get the Fields of user.
+                .document(FirebaseAuthClass().getCurrentUserID())
+                .get()
+                .addOnSuccessListener { document ->
+                    if(document.exists()){
+                        val loggedInAdmin : Admin = document.toObject(Admin::class.java)!!
+                        when(activity){
+                            is SplashActivity ->{
+                                activity.signInSuccessByAdmin(loggedInAdmin)
+                            }
+                            is SignInActivity ->{
+                                activity.signInSuccessByAdmin(loggedInAdmin)
+                            }
+                        }
+                    }else{
+                        loadUserData(activity)
+                    }
+
+                }
+                .addOnFailureListener { e ->
+                    // Here call a function of base activity for transferring the result to it.
+                 when(activity){
+                            is SplashActivity ->{
+                                activity.hideProgressDialog()
+                            }
+                            is SignInActivity ->{
+                                activity.hideProgressDialog()                            }
+                        }
+                    Log.e(
+                            activity.javaClass.simpleName,
+                            "Error while getting loggedIn user or admin details",
+                            e
+                    )
+                }
+    }
 }

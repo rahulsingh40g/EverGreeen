@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.CreatePostActivity">
+    tools:context=".activities.BookCumApproveSpotActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -83,8 +83,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_date">
-    <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_description_byPlanter_bookspot"
+    <EditText
+            android:id="@+id/et_description_byPlanter_cum_admin_bookspot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description (Optional)"
@@ -96,6 +96,45 @@
             android:textSize="16sp"
             />
     </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:id="@+id/ll_btns_for_approve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/add_screen_btn_save_marginTop">
+        <Button
+            android:id="@+id/btn_reject_this_spot"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_button_rounded_red"
+            android:gravity="center"
+            android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+            android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+            android:text="REJECT"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn_text_size"/>
+        <Button
+            android:id="@+id/btn_approve_this_spot"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_button_rounded_green"
+            android:gravity="center"
+            android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+            android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+            android:text="APPROVE"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn_text_size"/>
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btn_book_this_spot"
@@ -103,11 +142,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
-        android:background="@drawable/shape_button_rounded"
+        android:background="@drawable/shape_button_rounded_green"
         android:gravity="center"
         android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
         android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
         android:text="BOOK THIS SPOT"
+        tools:visibility="gone"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:textColor="@color/white"

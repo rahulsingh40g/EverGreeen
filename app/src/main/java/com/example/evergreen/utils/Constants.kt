@@ -9,6 +9,8 @@ import android.webkit.MimeTypeMap
 object Constants {
 
 
+    const val BYADMIN: String = "byadmin"
+    const val ADMIN_DETAIL: String = "admin_detail"
     const val POSTEDBYNAME: String = "posted_by_name"
     const val USER_DETAIL: String = "user_detail"
     const val POST_DETAIL : String = "post_detail"
@@ -18,6 +20,7 @@ object Constants {
     const val USERS: String = "users"
 
     const val POSTS: String = "posts"
+    const val ADMINS : String = "admins"
 
 
     // Firebase database field names
@@ -37,12 +40,8 @@ object Constants {
     const val TRUE = "true"
     const val STATUS = "status"
 
-    const val CITY = "city"
+    const val CITY = "city" // for admin as well
     const val STATE = "state"
-
-
-
-
 
     const val ASSIGNED_TO: String = "assignedTo"
     const val DOCUMENT_ID: String = "documentId"
@@ -67,6 +66,9 @@ object Constants {
     const val SPOT_BOOKED = "booked"
     const val SPOT_PLANTED = "planted"
 
+
+    // Arraylist of admins
+    val ADMIN_MAIL_LIST  = arrayListOf<String>("admin@gmail.com")
 
     //A unique code for asking the Read Storage Permission using this we will be check and identify in the method onRequestPermissionsResult
     const val READ_STORAGE_PERMISSION_CODE = 1

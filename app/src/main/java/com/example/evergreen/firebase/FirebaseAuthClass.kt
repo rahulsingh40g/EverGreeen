@@ -52,7 +52,7 @@ class FirebaseAuthClass() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Calling the FirestoreClass signInUser function to get the data of user from database.
-                    FirestoreClass().loadUserData(activity)
+                        FirestoreClass().loadAdminOrUserData(activity)
                 } else {
                     Toast.makeText(
                         activity,

@@ -7,7 +7,6 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.icu.text.CaseMap
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -23,11 +22,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.evergreen.R
-import com.example.evergreen.firebase.FirestoreClass
-import com.example.evergreen.model.Post
+import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.utils.GetAddressFromLatLng
 import com.google.android.gms.location.*
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -69,15 +66,27 @@ open class BaseActivity : AppCompatActivity() {
                 "YES"
             ) { _, _ ->
                 when(activity){
-                    is BookSpotActivity ->{
+                    is BookCumApproveSpotActivity ->{
                         activity.onYesAlert()
+                    }
+                    is MainActivity ->{
+                        if (FirebaseAuthClass().getCurrentUserID().isNotEmpty())
+                            FirebaseAuthClass().signOut(this)
+
+                        val intent = Intent(activity, IntroActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        activity.finish()
                     }
                 }
             }.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
                 when(activity){
-                    is BookSpotActivity ->{
-                        Toast.makeText(this, "No worries, you can book some other spot.", Toast.LENGTH_SHORT).show()
+                    is BookCumApproveSpotActivity ->{
+                        Toast.makeText(this, "No worries, You can take your time to make a decision.", Toast.LENGTH_SHORT).show()
+                    }
+                    is MainActivity ->{
+                        dialog.dismiss()
                     }
                 }
             }

@@ -9,7 +9,9 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.evergreen.R
 import com.example.evergreen.firebase.FirebaseAuthClass
+import com.example.evergreen.model.Admin
 import com.example.evergreen.model.User
+import com.example.evergreen.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
@@ -78,12 +80,23 @@ class SignInActivity : BaseActivity() {
 
     /**
      * A function to get the user details from the firestore database after authentication.
-//     */
-    fun signInSuccess(user: User) {
-
+     */
+    fun signInSuccessUser(user: User) {
         hideProgressDialog()
         Toast.makeText(this, "${user.name} signed in successfully.", Toast.LENGTH_LONG).show()
-        startActivity(Intent(this@SignInActivity, MainActivity::class.java))
+        intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(Constants.USER_DETAIL, user)
+        startActivity(intent)
+        this.finish()
+    }
+
+    fun signInSuccessByAdmin(loggedInAdmin: Admin) {
+        hideProgressDialog()
+        Toast.makeText(this, "${loggedInAdmin.email} signed in successfully.", Toast.LENGTH_SHORT).show()
+        intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(Constants.ADMIN_DETAIL, loggedInAdmin)
+        Log.i("admin","sending to main")
+        startActivity(intent)
         this.finish()
     }
 }

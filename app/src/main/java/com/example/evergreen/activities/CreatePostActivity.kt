@@ -1,23 +1,17 @@
 package com.example.evergreen.activities
 
-import android.Manifest
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
-import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.FileProvider
 import com.example.evergreen.R
 import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.firebase.FirestoreClass
@@ -27,13 +21,7 @@ import com.example.evergreen.utils.Constants
 import com.google.android.gms.location.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_create_post.*
-import kotlinx.android.synthetic.main.activity_edit_profile.*
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -41,13 +29,12 @@ import java.util.*
 class CreatePostActivity : BaseActivity(), View.OnClickListener{
 
     private lateinit var mUser : User
-
     private lateinit var selectedImage : Bitmap
     private var mLatitude: Double = 0.0 // A variable which will hold the latitude value. will be used in places api
-    private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
+    private var mLongitude: Double = 0.0 // A variable which will hold the longitude value
     private var mCity : String = ""
     private var mImageBeforeURL :String = ""
-    // Add a global variable for URI of a selected image from phone storage.
+    // Add a global variable for URI of a selected image from phone storage
     private var mSelectedImageFileUri: Uri? = null
 
     // A global variable for user details.
@@ -231,6 +218,7 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                         val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
                         selectedImage = selectedImageBitmap
                         iv_place_image!!.setImageBitmap(selectedImageBitmap) // Set the selected image from GALLERY to imageView.
+                        tv_add_image.text = "Change image"
                     } catch (e: IOException) {
                         e.printStackTrace()
                         Toast.makeText(this@CreatePostActivity, "Please try again !!", Toast.LENGTH_SHORT).show()

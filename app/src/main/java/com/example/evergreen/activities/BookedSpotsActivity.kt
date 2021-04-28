@@ -1,6 +1,5 @@
 package com.example.evergreen.activities
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -84,8 +83,12 @@ class BookedSpotsActivity : BaseActivity() {
     fun unBookSpotSuccess(){
         hideProgressDialog()
         Toast.makeText(this,"Spot Unbooked !!",Toast.LENGTH_LONG).show()
-//        showProgressDialog(resources.getString(R.string.please_wait))
-//        FirestoreClass().loadUserData(this)
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().loadUserData(this)
+    }
+
+    fun onYesAlert(){
+
     }
 
 }

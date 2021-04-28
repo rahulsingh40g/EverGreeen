@@ -7,9 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.evergreen.R
+import com.example.evergreen.activities.BaseActivity
+import com.example.evergreen.activities.BookSpotActivity
 import com.example.evergreen.activities.BookedSpotsActivity
 import com.example.evergreen.activities.UploadImageAfterActivity
 import com.example.evergreen.firebase.FirestoreClass
@@ -90,10 +94,19 @@ class BookedSpotsAdapter(private val context: Context,
                     v.context.startActivity(intent)
                 }
                 R.id.btn_unbook_spot ->{
-                    var activity = context as Activity
-                    //activity.showProgressDialog()
-                    Log.i("unbook","${activity.toString()}")
-                   FirestoreClass().unBookSpot(activity,post)
+                    AlertDialog.Builder(context)
+                        .setMessage("Click YES to unbook the spot.")
+                        .setTitle("Are you Sure ?")
+                        .setPositiveButton(
+                            "YES"
+                        ) { _, _ ->
+                            var activity = context as Activity
+                            FirestoreClass().unBookSpot(activity,post)
+
+                        }.setNegativeButton("Cancel") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
                 }
             }
         }

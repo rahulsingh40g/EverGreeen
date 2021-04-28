@@ -20,15 +20,16 @@
         android:textSize="60sp"
         android:textAllCaps="false"
         android:textStyle="bold" />
+
     <androidx.cardview.widget.CardView
         android:layout_width="354dp"
-        android:layout_height="311dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="10dp">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
+            android:layout_height="300dp"
             android:contentDescription="@string/image_contentDescription"
+            android:requiresFadingEdge="vertical"
             android:src="@drawable/intro_image"
             />
     </androidx.cardview.widget.CardView>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,24 +33,14 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/authentication_screen_content_marginTop"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/authentication_screen_marginStartEnd"
-            android:layout_marginEnd="@dimen/authentication_screen_marginStartEnd"
-            android:gravity="center"
-            android:text="@string/sign_up_description_text"
-            android:textColor="@color/secondary_text_color"
-            android:textSize="@dimen/authentication_description_text_size" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/authentication_screen_marginStartEnd"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="@dimen/authentication_screen_marginStartEnd"
             android:elevation="@dimen/card_view_elevation"
             app:cardCornerRadius="@dimen/card_view_corner_radius">
 
@@ -57,13 +48,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/card_view_layout_content_padding">
+                android:layout_margin="@dimen/card_view_layout_content_padding">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/sign_up_description_text"
+                    android:textColor="@color/secondary_text_color"
+                    android:textSize="@dimen/authentication_description_text_size" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd"
-                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd">
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_name"
@@ -77,9 +75,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop"
-                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd"
-                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd">
+                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_location_signUp"
@@ -94,11 +90,13 @@ or i have already designed same ui for edit profile use that ,
  ek baar dekh liya kar dodie, ki pehle se bana pada h to wo le
 lele, uniformity bhi rahegi and mehnat bhi kam hogi.
 -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal"
-                    android:background="#3360DA1E">
+                    android:background="#8BED8F">
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
@@ -107,15 +105,17 @@ lele, uniformity bhi rahegi and mehnat bhi kam hogi.
                         android:id="@+id/tv_select_current_location_signUp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
                         android:text="Use my current location"
                         android:textAllCaps="true"/>
                 </LinearLayout>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd"
-                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop"
-                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd">
+                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_email"
@@ -129,9 +129,7 @@ lele, uniformity bhi rahegi and mehnat bhi kam hogi.
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authentication_screen_til_marginStartEnd"
-                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop"
-                    android:layout_marginEnd="@dimen/authentication_screen_til_marginStartEnd">
+                    android:layout_marginTop="@dimen/authentication_screen_til_marginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_password"
@@ -147,9 +145,7 @@ lele, uniformity bhi rahegi and mehnat bhi kam hogi.
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/btn_marginStartEnd"
                     android:layout_marginTop="@dimen/sign_up_screen_btn_marginTop"
-                    android:layout_marginEnd="@dimen/btn_marginStartEnd"
                     android:background="@drawable/shape_button_rounded"
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"

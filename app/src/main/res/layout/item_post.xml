@@ -9,34 +9,68 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_posted_by"
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Posted By"
-        android:textColor="@color/primary_text_color"
-        android:textSize="16sp"/>
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_post_image_before"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="15dp"
-        android:background="@drawable/shape_image_view_border"
-        android:padding="@dimen/add_screen_place_image_padding"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_post_image_150"
-        android:layout_marginTop="5dp" />
-    <TextView
-        android:id="@+id/tv_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Location"
-        android:gravity="center"
-        android:textSize="18sp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_board_divider_height"
-        android:layout_marginTop="@dimen/item_board_divider_marginTop"
-        android:background="@color/divider_color" />
+        app:cardCornerRadius="10dp"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_posted_by"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Posted By"
+                android:textColor="@color/primary_text_color"
+                android:textSize="16sp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_post_image_before"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/shape_image_view_border"
+                android:padding="@dimen/add_screen_place_image_padding"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_post_image_150"
+                android:layout_marginTop="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="@dimen/add_screen_text_add_image_padding"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_location_on_blue_24"
+                    />
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Location"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/add_screen_text_add_image_textSize"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_board_divider_height"
+                android:layout_marginTop="@dimen/item_board_divider_marginTop"
+                android:background="@color/divider_color" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

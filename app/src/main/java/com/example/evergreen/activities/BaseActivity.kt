@@ -25,11 +25,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.evergreen.R
-import com.example.evergreen.firebase.FirestoreClass
-import com.example.evergreen.model.Post
 import com.example.evergreen.utils.GetAddressFromLatLng
 import com.google.android.gms.location.*
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -43,7 +40,6 @@ import kotlinx.android.synthetic.main.dialog_progress.*
 import java.io.File
 import java.io.IOException
 import java.util.*
-
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -76,12 +72,18 @@ open class BaseActivity : AppCompatActivity() {
                     is BookSpotActivity ->{
                         activity.onYesAlert()
                     }
+                    is BookedSpotsActivity ->{
+                        activity.onYesAlert()
+                    }
                 }
             }.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
                 when(activity){
                     is BookSpotActivity ->{
                         Toast.makeText(this, "No worries, you can book some other spot.", Toast.LENGTH_SHORT).show()
+                    }
+                    is BookedSpotsActivity ->{
+
                     }
                 }
             }
@@ -123,7 +125,7 @@ open class BaseActivity : AppCompatActivity() {
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
-    fun showErrorSnackBar(message: String, ) {
+    fun showErrorSnackBar(message: String) {
         val snackBar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this@BaseActivity, R.color.snackbar_error_color))

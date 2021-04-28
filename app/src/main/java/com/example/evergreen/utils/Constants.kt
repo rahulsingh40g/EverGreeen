@@ -9,6 +9,11 @@ import android.webkit.MimeTypeMap
 object Constants {
 
 
+
+    const val AMOUNT: String = "amount"
+    const val DONATION_DOC: String = "donations_doc"
+    const val DONATION: String = "donations"
+    const val FEEDBACK: String = "feedbacks"
     const val BYADMIN: String = "byadmin"
     const val ADMIN_DETAIL: String = "admin_detail"
     const val POSTEDBYNAME: String = "posted_by_name"
@@ -33,6 +38,8 @@ object Constants {
     const val LOCATION: String = "location"
     const val MYPOSTIDS = "myPostIds"
     const val BOOKED_POST_IDS="bookedPostIds"
+    const val PLANTS_BOUGHT: String = "plantsBought"
+    const val AMOUNT_DONATED : String = "amountDonated"
 
 
     // for post

@@ -33,14 +33,10 @@ class SplashActivity : BaseActivity() {
             val currentUserID = FirebaseAuthClass().getCurrentUserID()
 
             if (currentUserID.isNotEmpty()) {
-                // Start the Main Activity
-//                    showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().loadAdminOrUserData(this)
             } else {
-                // Start the Intro Activity
                 startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
             }
-            finish()
         }, 500) // changed time for testing purpose
     }
 

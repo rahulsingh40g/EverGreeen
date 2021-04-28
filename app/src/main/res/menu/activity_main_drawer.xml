@@ -9,7 +9,10 @@
             android:id="@+id/nav_donation"
             android:icon="@drawable/ic_donate_hand"
             android:title="Donation"/>
-
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="Feedback"/>
         <item
             android:id="@+id/nav_sign_out"
             android:icon="@drawable/ic_nav_sign_out"

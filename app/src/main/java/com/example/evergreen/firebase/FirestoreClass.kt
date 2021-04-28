@@ -4,17 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.example.evergreen.R
 import com.example.evergreen.activities.*
-import com.example.evergreen.model.Admin
-import com.example.evergreen.model.Post
-import com.example.evergreen.model.User
+import com.example.evergreen.model.*
 import com.example.evergreen.utils.Constants
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import kotlinx.android.synthetic.main.item_booked_spot.*
-import kotlin.math.hypot
 
 class FirestoreClass {
 
@@ -39,7 +34,6 @@ class FirestoreClass {
                 )
             }
     }
-
     fun loadUserData(activity: Activity) {
 
         // Here we pass the collection name from which we wants the data.
@@ -228,10 +222,7 @@ class FirestoreClass {
                         //auto generated ID
                         val myPostId = documentReference.id
                         Log.i("postfire", "DocumentSnapshot written with ID: ${myPostId}")
-                        Log.i("postfire", post.toString())
-
                         val currentUserId = FirebaseAuthClass().getCurrentUserID()
-
 
                         mFireStore.collection(Constants.POSTS)
                                 .document(myPostId)
@@ -288,7 +279,6 @@ class FirestoreClass {
                     else Constants.CITY
 
         if(attr == Constants.STATE)
-        Log.i("stposts", "st post ")
         when(activity){
             is MainActivity ->{
                 mFireStore.collection(Constants.POSTS)
@@ -303,7 +293,6 @@ class FirestoreClass {
                         }
                         Log.i("posts",posts.toString())
                         if(attr == Constants.STATE)
-                            Log.i("stposts", posts.size.toString())
                         getNameFromUids(activity, posts)
                     }
                     .addOnFailureListener{
@@ -362,19 +351,45 @@ class FirestoreClass {
         }
     }
 
-    fun updatePostDetails(activity: Activity, mPostDetails: Post) {
+    fun updatePostDetails(activity: Activity, mPostDetails: Post, byAdmin : Boolean = false) {
         mFireStore.collection(Constants.POSTS)
             .document(mPostDetails.postId)
             .set(mPostDetails) //over write the old post
             .addOnSuccessListener {
-                Log.i("update","post updated successfully")
-                when(activity){
-                    is BookCumApproveSpotActivity -> activity.onUpdateSuccess()
-                    is BookSpotActivity -> activity.onUpdateSuccess()
+                Log.i("update", "post updated successfully")
+                when (activity) {
+                    is BookCumApproveSpotActivity -> {
+                        Log.i("postfire" , " admi is $byAdmin")
+                        if (!byAdmin) {
+                            mFireStore.collection(Constants.USERS)
+                                .document(mPostDetails.bookedBy)
+                                .update(
+                                    Constants.BOOKED_POST_IDS,
+                                    FieldValue.arrayUnion(mPostDetails.postId)
+                                )
+                                .addOnSuccessListener {
+                                    Log.i(
+                                        "postfire",
+                                        "post added successfully in user database after booking + ${it}"
+                                    )
+                                    activity.onUpdateSuccess()
+                                }
+                                .addOnFailureListener { e ->
+                                    activity.hideProgressDialog()
+                                    Log.e("postfire", e.message!!)
+                                }
+                        } else {
+                            activity.onUpdateSuccess()
+                        }
+                    }
                     is UploadImageAfterActivity -> activity.uploadImageSuccess()
                 }
             }
             .addOnFailureListener {
+                when(activity){
+                    is BookCumApproveSpotActivity -> activity.hideProgressDialog()
+                    is UploadImageAfterActivity -> activity.hideProgressDialog()
+                }
                 Log.e("update", it.message!!)
             }
     }
@@ -401,7 +416,6 @@ class FirestoreClass {
 
     fun getPostsFromStatusValue(statusValue : String,activity: Activity){
         var postList : ArrayList<Post> = ArrayList()
-        Log.i("1posts","hwy")
         mFireStore.collection(Constants.POSTS)
                 .whereEqualTo(Constants.STATUS, statusValue)
                 .whereEqualTo(Constants.POSTED_BY,FirebaseAuthClass().getCurrentUserID())
@@ -531,5 +545,81 @@ class FirestoreClass {
                             e
                     )
                 }
+    }
+
+    fun submitFeedback(activity: FeedbackActivity,feedback: Feedback) {
+        mFireStore.collection(Constants.FEEDBACK)
+                .add(feedback)
+                .addOnSuccessListener {
+                    Log.i("feedback", "feedback submitted successfully")
+                    activity.feedbackSuccess()
+                }
+                .addOnFailureListener{
+                    activity.hideProgressDialog()
+                    Log.e("feedback", it.message!!)
+                }
+    }
+
+    fun donate(activity: MainActivity, amount: Long, user : User) {
+        mFireStore.collection(Constants.DONATION)
+                .document(Constants.DONATION_DOC)
+                .update(Constants.AMOUNT , FieldValue.increment(amount))
+                .addOnSuccessListener {
+                    Log.i("donation", "success")
+                    mFireStore.collection(Constants.USERS)
+                            .document(user.uid)
+                            .update(Constants.AMOUNT_DONATED, FieldValue.increment(amount))
+                            .addOnSuccessListener {
+                                Log.i("donation", "user donation success")
+                                activity.donationSuccess()
+                            }
+                            .addOnFailureListener{
+                                Log.e("donation", it.message!!)
+                                activity.hideProgressDialog()
+                            }
+                }
+                .addOnFailureListener{
+                    Log.e("donation", it.message!!)
+                    Toast.makeText(activity, "Something went wrong, please try again later.", Toast.LENGTH_SHORT).show()
+                    activity.hideProgressDialog()
+                }
+    }
+
+    fun getDonationAmount(activity: MainActivity) {
+        var amount = ""
+        mFireStore.collection(Constants.DONATION)
+                .document(Constants.DONATION_DOC)
+                .get()
+                .addOnSuccessListener {
+                    val donation = it.toObject(Donation::class.java)
+                    if (donation != null) {
+                        amount = donation.amount.toString()
+                    }
+                    activity.getDonateSuccess(amount)
+                }
+                .addOnFailureListener{
+                    Log.e("donation", it.message!!)
+                    activity.hideProgressDialog()
+                }
+    }
+
+    fun updateUserPlantsData(activity : FreeShopActivity ,userHashMap: HashMap<String, Any>) {
+        mFireStore.collection(Constants.USERS) // Collection Name
+            .document(FirebaseAuthClass().getCurrentUserID()) // Document ID
+            .update(userHashMap) // A hashmap of fields which are to be updated.
+            .addOnSuccessListener {
+                // Profile data is updated successfully.
+                Log.i(activity.javaClass.simpleName, "plants bought database done!")
+                // Notify the success result.
+                activity.plantsBoughtSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while creating a board.",
+                    e
+                )
+            }
     }
 }

@@ -1,17 +1,18 @@
 package com.example.evergreen.activities
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.SearchView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,7 +43,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.i(TAG, "AA GYA M")
         handleIntent(intent)
     }
 
@@ -55,7 +55,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun handleIntent(intent: Intent) {
         when {
             intent.hasExtra(Constants.ADMIN_DETAIL) -> {
-                Log.i(TAG, " handling  ")
                 isAdminHere = true
                 mAdmin = intent.getParcelableExtra<Admin>(Constants.ADMIN_DETAIL)!!
                 setForAdmin()
@@ -68,14 +67,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             Intent.ACTION_SEARCH == intent.action -> {
                 val query = intent.getStringExtra(SearchManager.QUERY)
                 //use the query to search your data somehow
-                Log.i("search",query!!)
+                Log.i("search", query!!)
                 getPosts(query!!, true)
             }
         }
     }
 
     private fun setForAdmin(){
-        Log.i(TAG, " i am in admin")
         setSupportActionBar(toolbar_main_activity)
         toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
         toolbar_main_activity.setNavigationOnClickListener {
@@ -94,7 +92,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun setForUser(){
-        Log.i(TAG, " i am in user ")
         setSupportActionBar(toolbar_main_activity)
         toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
         toolbar_main_activity.setNavigationOnClickListener {
@@ -130,6 +127,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             startActivity(intent)
             closeFABMenu()
         }
+        fab_donate.setOnClickListener{
+            alertDialogDonation()
+        }
+        fab_shop.setOnClickListener{
+            val intent = Intent(this@MainActivity, FreeShopActivity::class.java)
+            intent.putExtra(Constants.USER_DETAIL, mUser)
+            startActivityForResult(intent, FREE_SHOP_REQUEST_CODE)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -144,9 +149,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.refresh ->{
-                if(isAdminHere) getPosts(mAdmin.city)
-                    else getPosts(mUser.city)
+            R.id.refresh -> {
+                if (isAdminHere) getPosts(mAdmin.city)
+                else getPosts(mUser.city)
                 return true
             }
         }
@@ -156,7 +161,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
-                if(!isAdminHere){
+                if (!isAdminHere) {
                     startActivityForResult(
                             Intent(
                                     this@MainActivity, EditProfileActivity::class.java),
@@ -164,30 +169,31 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     )
                 }
             }
-            R.id.nav_donation ->{
-                // what to show for donation
+            R.id.nav_donation -> {
+                FirestoreClass().getDonationAmount(this)
             }
             R.id.nav_sign_out -> {
                 // Here sign outs the user from firebase in this device.
-                showAlertDialog(this@MainActivity , "You will be signed out and" +
+                showAlertDialog(this@MainActivity, "You will be signed out and" +
                         " you won't be able to sign in automatically in future unless you sign in once again.")
+            }
+            R.id.nav_feedback -> {
+                startActivity(Intent(this, FeedbackActivity::class.java))
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun getPosts(locality: String, isState : Boolean = false){
+    private fun getPosts(locality: String, isState: Boolean = false){
         showProgressDialog(resources.getString(R.string.please_wait))
-        Log.i("admin", "is adnin is $isAdminHere")
         if(isAdminHere) FirestoreClass().getPostsFromLocality(this, locality, isState, Constants.SPOT_UNDER_REVIEW)
-            else FirestoreClass().getPostsFromLocality(this, locality, isState, Constants.SPOT_OPEN_FOR_BOOKING )
+            else FirestoreClass().getPostsFromLocality(this, locality, isState, Constants.SPOT_OPEN_FOR_BOOKING)
     }
 
     fun updatePostDetails(postsList: ArrayList<Post>, creators: ArrayList<String>) {
         hideProgressDialog()
         if (postsList.size > 0) {
-            Log.i("posts", "displaying posts for rv  ")
             rv_posts_list.visibility = View.VISIBLE
             tv_no_posts_available.visibility = View.GONE
 
@@ -197,13 +203,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             val adapter = PostItemsAdapter(this, postsList, creators)
             rv_posts_list.adapter = adapter
             adapter.setOnClickListener(object : PostItemsAdapter.OnClickListener {
-                override fun onClick(position: Int, model: Post, postedByName : String) {
+                override fun onClick(position: Int, model: Post, postedByName: String) {
                     val intent = Intent(this@MainActivity, BookCumApproveSpotActivity::class.java)
                     intent.putExtra(Constants.POST_DETAIL, model)
                     intent.putExtra(Constants.POSTEDBYNAME, postedByName)
                     intent.putExtra(Constants.BYADMIN, isAdminHere)
 
-                    if(isAdminHere) startActivityForResult(intent, APPROVE_SPOT_REQUEST_CODE)
+                    if (isAdminHere) startActivityForResult(intent, APPROVE_SPOT_REQUEST_CODE)
                         else startActivityForResult(intent, BOOK_SPOT_REQUEST_CODE)
                 }
             })
@@ -237,6 +243,51 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         tv_dashboard.visibility= View.GONE
         tv_donate.visibility= View.GONE
         tv_shop.visibility= View.GONE
+    }
+
+    private fun alertDialogDonation() {
+        val li = LayoutInflater.from(this)
+        val promptsView: View = li.inflate(R.layout.alert_dialog_donation, null)
+        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(
+                this, R.style.CustomAlertDialog)
+
+        // set alert_dialog.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView)
+        val userInput = promptsView.findViewById<View>(R.id.etUserInputDonation) as EditText
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Donate", DialogInterface.OnClickListener { dialog, id -> // get user input and set it to result
+                    // edit text
+                    val input = userInput.text.toString()
+                    if(input.isNotEmpty()) {
+                        val amount = input.toInt()
+                        if (amount < 1 || amount > 10000) {
+                            showErrorSnackBar(
+                                "We don't accept that much money, " +
+                                        "Kindly post your queries in feedback section."
+                            )
+                        } else {
+                            FirestoreClass().donate(this, amount.toLong(), mUser)
+                        }
+                    }else{
+                        showErrorSnackBar("Please enter some amount.")
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+
+        // create alert dialog
+        val alertDialog: AlertDialog = alertDialogBuilder.create()
+
+        // show it
+        alertDialog.show()
+    }
+
+    fun donationSuccess() {
+        hideProgressDialog()
+        Toast.makeText(this, "Thanks for donating, We really appreciate this :)", Toast.LENGTH_LONG).show()
     }
 
 
@@ -283,7 +334,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if (resultCode == Activity.RESULT_OK
             && requestCode == EDIT_PROFILE_REQUEST_CODE
         ) {
-            // Get the user updated details.
                 showProgressDialog(resources.getString(R.string.please_wait))
             Log.i("main", "call for load")
             FirestoreClass().loadUserData(this@MainActivity)
@@ -291,7 +341,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             && requestCode == CREATE_POST_REQUEST_CODE
         ) {
             // Get the latest posts list.
-
                 Log.i("city", "muser city is ${mUser.city}")
                 getPosts(mUser.city)
         } else if(resultCode == Activity.RESULT_OK
@@ -300,11 +349,31 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }else if(resultCode == Activity.RESULT_OK &&
                 requestCode == APPROVE_SPOT_REQUEST_CODE){
             getPosts(mAdmin.city)
+        }else if (resultCode == Activity.RESULT_OK
+            && requestCode == FREE_SHOP_REQUEST_CODE
+        ) {
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().loadUserData(this@MainActivity)
         }
         else {
             Log.e("Cancelled", "Cancelled")
         }
     }
+
+    fun getDonateSuccess(amount: String) {
+        AlertDialog.Builder(this)
+                .setTitle("Donation Amount")
+                .setMessage("Donation amount collected till date is Rs. $amount.")
+                .setPositiveButton("OK"){ dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel"){dialog , _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+    }
+
 
     companion object {
         //A unique code for starting the activity for result
@@ -312,6 +381,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         const val CREATE_POST_REQUEST_CODE: Int = 12
         const val BOOK_SPOT_REQUEST_CODE : Int = 13
         const val APPROVE_SPOT_REQUEST_CODE : Int = 14
+        const val FREE_SHOP_REQUEST_CODE : Int = 15
     }
 
 }

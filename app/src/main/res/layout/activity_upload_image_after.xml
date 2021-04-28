@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
-        android:background="@drawable/shape_button_rounded"
+        android:background="@drawable/shape_button_rounded_green"
         android:gravity="center"
         android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
         android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"

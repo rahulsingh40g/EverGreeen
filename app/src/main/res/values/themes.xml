@@ -29,6 +29,11 @@
 <!--        <item name="colorAccent">@color/colorPrimary</item>-->
 <!--    </style>-->
 
+
+    <style name="CustomAlertDialog" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/white_border_shape_button_rounded</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

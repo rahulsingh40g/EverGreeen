@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.FreeShopActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_free_shop"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <GridLayout
+    android:id="@+id/GridLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:orientation="horizontal"
+    android:rowCount="3"
+    android:background="@drawable/ic_background"
+    tools:context=".GridXMLActivity"
+    tools:layout_editor_absoluteX="56dp"
+    tools:layout_editor_absoluteY="0dp">
+
+        <ImageButton
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:onClick="onPlantClicked"
+            android:src="@drawable/plant1" />
+
+        <ImageButton
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:onClick="onPlantClicked"
+            android:src="@drawable/plant2" />
+
+        <ImageButton
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:onClick="onPlantClicked"
+            android:src="@drawable/plant3" />
+
+        <ImageButton
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:onClick="onPlantClicked"
+            android:src="@drawable/plant4" />
+
+        <ImageButton
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:onClick="onPlantClicked"
+            android:src="@drawable/plant5" />
+
+        <ImageButton
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:onClick="onPlantClicked"
+            android:src="@drawable/plant6" />
+
+</GridLayout>
+    </LinearLayout>

@@ -67,7 +67,6 @@ class BookCumApproveSpotActivity : BaseActivity() {
             }
             displayPostDetails()
         }else{
-            Log.i("admin", "book karne aaya hu")
             btn_book_this_spot.visibility = View.VISIBLE
             ll_btns_for_approve.visibility = View.GONE
             et_description_byPlanter_cum_admin_bookspot.hint = "Description (Optional)"
@@ -90,7 +89,8 @@ class BookCumApproveSpotActivity : BaseActivity() {
         if(isApprove)  mPostDetails.descriptionByAdmin = et_description_byPlanter_cum_admin_bookspot.text.toString()
             else mPostDetails.descriptionByPlanter = et_description_byPlanter_cum_admin_bookspot.text.toString()
         showProgressDialog(resources.getString(R.string.please_wait))
-        FirestoreClass().updatePostDetails(this, mPostDetails)
+        if(isApprove) FirestoreClass().updatePostDetails(this, mPostDetails, true)
+            else FirestoreClass().updatePostDetails(this, mPostDetails, false)
      }
 
     private fun displayPostDetails() {
@@ -114,8 +114,8 @@ class BookCumApproveSpotActivity : BaseActivity() {
 
     fun onUpdateSuccess() {
         hideProgressDialog()
-        if(isApprove) Toast.makeText(this,"Spot Booked Successfully!", Toast.LENGTH_SHORT).show()
-        Toast.makeText(this,"Spot Booked Successfully!", Toast.LENGTH_SHORT).show()
+        if(isApprove) Toast.makeText(this,"Spot status changed successfully!", Toast.LENGTH_SHORT).show()
+            else Toast.makeText(this,"Spot Booked Successfully!", Toast.LENGTH_SHORT).show()
         setResult(RESULT_OK)
         finish()
     }

@@ -44,15 +44,13 @@ class FirebaseAuthClass() {
             )
         }
 
-
-
     fun signIn(email: String, password: String, activity : SignInActivity) {
         auth = Firebase.auth
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Calling the FirestoreClass signInUser function to get the data of user from database.
-                    FirestoreClass().loadUserData(activity)
+                        FirestoreClass().loadAdminOrUserData(activity)
                 } else {
                     Toast.makeText(
                         activity,
@@ -64,13 +62,6 @@ class FirebaseAuthClass() {
                 }
             }
     }
-
-
-
-
-
-
-
 
     fun signOut(activity : Activity){
         auth = Firebase.auth
@@ -85,6 +76,7 @@ class FirebaseAuthClass() {
         }
         return ""
     }
+
     fun getCurrentUserMailId():String{
         auth = Firebase.auth
         var user = auth.currentUser

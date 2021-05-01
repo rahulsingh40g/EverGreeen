@@ -35,7 +35,7 @@ class ApprovalStatusActivity : BaseActivity() {
                 }
                 R.id.bn_approved->{
                     showProgressDialog(resources.getString(R.string.please_wait))
-                    FirestoreClass().getapprovedPosts(this)
+                    FirestoreClass().getApprovedPosts(this)
                 }
                 R.id.bn_rejected->{
                     showProgressDialog(resources.getString(R.string.please_wait))
@@ -76,7 +76,7 @@ class ApprovalStatusActivity : BaseActivity() {
                     }
                     R.id.bn_approved->{
                         showProgressDialog(resources.getString(R.string.please_wait))
-                        FirestoreClass().getapprovedPosts(this)
+                        FirestoreClass().getApprovedPosts(this)
                     }
                     R.id.bn_rejected->{
                         showProgressDialog(resources.getString(R.string.please_wait))

@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.evergreen.R
+import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.utils.GetAddressFromLatLng
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -40,6 +41,7 @@ import kotlinx.android.synthetic.main.dialog_progress.*
 import java.io.File
 import java.io.IOException
 import java.util.*
+
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -69,21 +71,27 @@ open class BaseActivity : AppCompatActivity() {
                 "YES"
             ) { _, _ ->
                 when(activity){
-                    is BookSpotActivity ->{
+                    is BookCumApproveSpotActivity ->{
                         activity.onYesAlert()
                     }
-                    is BookedSpotsActivity ->{
-                        activity.onYesAlert()
+                    is MainActivity ->{
+                        if (FirebaseAuthClass().getCurrentUserID().isNotEmpty())
+                            FirebaseAuthClass().signOut(this)
+
+                        val intent = Intent(activity, IntroActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        activity.finish()
                     }
                 }
             }.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
                 when(activity){
-                    is BookSpotActivity ->{
-                        Toast.makeText(this, "No worries, you can book some other spot.", Toast.LENGTH_SHORT).show()
+                    is BookCumApproveSpotActivity ->{
+                        Toast.makeText(this, "No worries, You can take your time to make a decision.", Toast.LENGTH_SHORT).show()
                     }
-                    is BookedSpotsActivity ->{
-
+                    is MainActivity ->{
+                        dialog.dismiss()
                     }
                 }
             }

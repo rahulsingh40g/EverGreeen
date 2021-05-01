@@ -150,6 +150,7 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this@UploadImageAfterActivity, R.color.greenlight))
         snackBar.show()
+        // TODO: 29-04-2021 should return with result.ok , and change prev ui accordingly
 
         btn_save_upload_image_after.text = " UPDATE POST"
     }

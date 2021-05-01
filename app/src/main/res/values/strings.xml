@@ -7,7 +7,7 @@
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
 
-    <string name="sign_up_description_text">Enter your name, email id and password, to register with us.</string>
+    <string name="sign_up_description_text">Enter your name, email id and password to register with us.</string>
     <string name="name">Name</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
@@ -72,4 +72,8 @@
     <string name="under_review">Under review</string>
     <string name="approved">Approved</string>
     <string name="rejected">Rejected</string>
+    <string name="feedback_text">You can write your feedback, queries or anything else that you want to share with us.</string>
+    <string name="fast_replt">For faster reply, consider to mail us at evergreenapp0@gmail.com</string>
+    <string name="feedback_queries">"Feedback "</string>
+    <string name="free_shop">Free Shop</string>
 </resources>

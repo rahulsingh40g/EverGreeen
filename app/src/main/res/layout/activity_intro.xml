@@ -20,16 +20,14 @@
         android:textSize="60sp"
         android:textAllCaps="false"
         android:textStyle="bold" />
-
     <androidx.cardview.widget.CardView
         android:layout_width="354dp"
-        android:layout_height="wrap_content"
+        android:layout_height="311dp"
         app:cardCornerRadius="10dp">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             android:contentDescription="@string/image_contentDescription"
-            android:requiresFadingEdge="vertical"
             android:src="@drawable/intro_image"
             />
     </androidx.cardview.widget.CardView>
@@ -64,7 +62,7 @@
         android:layout_marginStart="@dimen/btn_marginStartEnd"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="@dimen/btn_marginStartEnd"
-        android:background="@drawable/shape_button_rounded"
+        android:background="@drawable/shape_button_rounded_green"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:paddingTop="@dimen/btn_paddingTopBottom"

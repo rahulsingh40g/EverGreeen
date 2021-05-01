@@ -14,7 +14,7 @@ data class User (
     var myPostIds : ArrayList<String> = ArrayList(),
     var bookedPostIds : ArrayList<String> = ArrayList(),
     var plantsBought : Int =0,
-    var donationAmount : Int =0
+    var amountDonated : Long = 0
 ) :Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -28,7 +28,7 @@ data class User (
         parcel.createStringArrayList()!!,
         parcel.createStringArrayList()!!,
         parcel.readInt(),
-        parcel.readInt()
+        parcel.readLong()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) = with(parcel){
@@ -43,7 +43,7 @@ data class User (
         parcel.writeStringList(myPostIds)
         parcel.writeStringList(bookedPostIds)
         parcel.writeInt(plantsBought)
-        parcel.writeInt(donationAmount)
+        parcel.writeLong(amountDonated)
     }
 
     override fun describeContents() = 0

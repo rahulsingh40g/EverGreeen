@@ -63,6 +63,7 @@ class PlantedPostsAdapter(private val context: Context,
 
         override fun onClick(v: View?) {
             val model= itemView.tag as Post
+            // TODO: 29-04-2021 instead of 0 1, try to user proper names :)
             if(itemView.isCurrentImage.text.toString() == "0"){
                 Glide
                         .with(context)

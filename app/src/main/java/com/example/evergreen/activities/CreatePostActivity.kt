@@ -184,7 +184,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                         taskSnapshot.metadata!!.reference!!.downloadUrl
                                 .addOnSuccessListener { uri ->
                                     Log.e("Downloadable Image URL", uri.toString())
-
                                     // assign the image url to the variable.
                                     mImageBeforeURL = uri.toString()
                                     fillPostDetails()

@@ -74,6 +74,7 @@ open class PostItemsAdapter(private val context: Context,
      * Gets the number of items in the list
      */
     override fun getItemCount(): Int {
+        // if else to avoid index out of bound
         return  if(list.size < creatorsList.size) list.size
                 else creatorsList.size
     }

@@ -19,6 +19,7 @@ class BookCumApproveSpotActivity : BaseActivity() {
 
     private lateinit var mPostDetails : Post
     private lateinit var mPostedByName : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_cum_approve_spot)
@@ -32,7 +33,6 @@ class BookCumApproveSpotActivity : BaseActivity() {
             isApprove = intent.getBooleanExtra(Constants.BYADMIN, false)
             setupUI()
         }
-
     }
 
     private fun setupUI() {
@@ -80,7 +80,6 @@ class BookCumApproveSpotActivity : BaseActivity() {
             }
             displayPostDetails()
         }
-
     }
 
     private fun updatePostDetails(status : String) {

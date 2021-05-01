@@ -1,7 +1,6 @@
 package com.example.evergreen.firebase
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.evergreen.activities.*
@@ -34,6 +33,7 @@ class FirestoreClass {
                 )
             }
     }
+
     fun loadUserData(activity: Activity) {
 
         // Here we pass the collection name from which we wants the data.
@@ -105,6 +105,7 @@ class FirestoreClass {
             }
     }
 
+    //remove from booked
     private fun updateUserBookedPostIds(activity: Activity,postId :String) {
         mFireStore.collection(Constants.USERS)
                 .document(FirebaseAuthClass().getCurrentUserID())
@@ -194,91 +195,48 @@ class FirestoreClass {
             }
     }
 
-    fun test(cityOfUser:String,newPost : Post, activity : Activity,createdByUserId : String) {
-
-        //add document(post) to collection(auto generated Id)
-        mFireStore.collection(Constants.USERS)
-                .add(newPost)
+    fun createPost(activity : CreatePostActivity, post: Post) {
+        mFireStore.collection(Constants.POSTS)
+                .add(post)
                 .addOnSuccessListener { documentReference ->
                     //auto generated ID
-                    val autoId = documentReference.id
-                    Log.d("doc id", "DocumentSnapshot written with ID: ${autoId}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w("doc id", "Error adding document", e)
-                }
+                    val myPostId = documentReference.id
+                    Log.i("postfire", "DocumentSnapshot written with ID: ${myPostId}")
+                    val currentUserId = FirebaseAuthClass().getCurrentUserID()
+
+                mFireStore.collection(Constants.POSTS)
+                        .document(myPostId)
+                        .update(Constants.POSTID, myPostId)
+                        .addOnSuccessListener {
+                            Log.i("postfire","post added successfully in post database with postid + ${it}")
+                        }
+                        .addOnFailureListener{  e->
+                            Log.e("postfire", e.message!!)
+                        }
+
+                mFireStore.collection(Constants.USERS)
+                        .document(currentUserId)
+                        .update(Constants.MYPOSTIDS,FieldValue.arrayUnion(myPostId))
+                        .addOnSuccessListener {
+                            Log.i("postfire","post added successfully in user database + ${it}")
+                        }
+                        .addOnFailureListener{  e->
+                            Log.e("postfire", e.message!!)
+                        }
+                activity.onPostCreatedSuccess()
+            }
+            .addOnFailureListener { e->
+                Log.w("postfire", "Error adding document", e)
+                activity.hideProgressDialog()
+                activity.showErrorSnackBar("Tackled some error while posting, Please try again!!")
+            }
     }
-
-
-
-        //retrieval using city name
-//        mFireStore.collection(Constants.USERS)
-        // A where array query as we want the list of the boa…
-
-        fun createPost(activity : CreatePostActivity, post: Post) {
-            mFireStore.collection(Constants.POSTS)
-                    .add(post)
-                    .addOnSuccessListener { documentReference ->
-                        //auto generated ID
-                        val myPostId = documentReference.id
-                        Log.i("postfire", "DocumentSnapshot written with ID: ${myPostId}")
-                        val currentUserId = FirebaseAuthClass().getCurrentUserID()
-
-                        mFireStore.collection(Constants.POSTS)
-                                .document(myPostId)
-                                .update(Constants.POSTID, myPostId)
-                                .addOnSuccessListener {
-                                    Log.i("postfire","post added successfully in post database with postid + ${it}")
-                                }
-                                .addOnFailureListener{  e->
-                                    Log.e("postfire", e.message!!)
-                                }
-
-                        mFireStore.collection(Constants.USERS)
-                                .document(currentUserId)
-                                .update(Constants.MYPOSTIDS,FieldValue.arrayUnion(myPostId))
-                                .addOnSuccessListener {
-                                    Log.i("postfire","post added successfully in user database + ${it}")
-                                }
-                                .addOnFailureListener{  e->
-                                    Log.e("postfire", e.message!!)
-                                }
-                        activity.onPostCreatedSuccess()
-                    }
-                    .addOnFailureListener { e->
-                        Log.w("postfire", "Error adding document", e)
-                        activity.hideProgressDialog()
-                        activity.showErrorSnackBar("Tackled some error while posting, Please try again!!")
-                    }
-
-        }
-
-    fun getEmailFromUid(context: Context, postedBy: String): String? {
-        var email = ""
-        mFireStore.collection(Constants.USERS)
-                .whereEqualTo(Constants.UID, postedBy)
-                .get()
-                .addOnSuccessListener {
-                    var user : User = User()
-                    for(document in it){ // only one user
-                        user = document.toObject(User::class.java)
-                    }
-                    Log.i("email",user.toString())
-                    email = user.email
-                }
-                .addOnFailureListener{
-                    Log.e("email", it.message!!)
-                }
-        return email
-    }
-
 
     fun getPostsFromLocality(activity: Activity, locality: String, isState : Boolean, status : String): ArrayList<Post> {
         val posts = ArrayList<Post>()
         val attr = if(isState) Constants.STATE
                     else Constants.CITY
 
-        if(attr == Constants.STATE)
         when(activity){
             is MainActivity ->{
                 mFireStore.collection(Constants.POSTS)
@@ -304,13 +262,12 @@ class FirestoreClass {
         return posts
     }
 
-
     private fun getNameFromUids(activity: Activity, posts : ArrayList<Post>){
         val creators = ArrayList<String>()
         if(posts.isEmpty()){
             when(activity){
                 is MainActivity -> {
-                    activity.updatePostDetails(posts, creators)
+                    activity.displayPostsInUI(posts, creators)
                 }
                 is BookedSpotsActivity ->{
                     activity.populateRV(posts,creators)
@@ -328,7 +285,7 @@ class FirestoreClass {
                             if(creators.size == posts.size){
                                 when(activity){
                                     is MainActivity -> {
-                                        activity.updatePostDetails(posts, creators)
+                                        activity.displayPostsInUI(posts, creators)
                                     }
                                     is BookedSpotsActivity ->{
                                         activity.populateRV(posts,creators)
@@ -341,7 +298,7 @@ class FirestoreClass {
                         Log.e("posts","error in getting user + ${it.message!!}")
                         when(activity){
                             is MainActivity -> {
-                                activity.updatePostDetails(posts, creators)
+                                activity.displayPostsInUI(posts, creators)
                             }
                             is BookedSpotsActivity ->{
                                 activity.populateRV(posts,creators)
@@ -394,12 +351,13 @@ class FirestoreClass {
             }
     }
 
-
-    fun getapprovedPosts(activity: ApprovalStatusActivity){
+    //renamed the fun from approve to Approve
+    fun getApprovedPosts(activity: ApprovalStatusActivity){
         var postList : ArrayList<Post> = ArrayList()
         Log.i("1posts","hwy")
         mFireStore.collection(Constants.POSTS)
                 .whereEqualTo(Constants.POSTED_BY,FirebaseAuthClass().getCurrentUserID())
+                // TODO: 29-04-2021 it should be just open for booking, bcz rest we are showing at other places, and so much posts will be in approved
                 .whereIn(Constants.STATUS, listOf(Constants.SPOT_OPEN_FOR_BOOKING, Constants.SPOT_BOOKED, Constants.SPOT_PLANTED))
                 .get()
                 .addOnSuccessListener { posts ->

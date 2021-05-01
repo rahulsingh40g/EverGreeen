@@ -44,8 +44,6 @@ class FirebaseAuthClass() {
             )
         }
 
-
-
     fun signIn(email: String, password: String, activity : SignInActivity) {
         auth = Firebase.auth
         auth.signInWithEmailAndPassword(email, password)
@@ -65,13 +63,6 @@ class FirebaseAuthClass() {
             }
     }
 
-
-
-
-
-
-
-
     fun signOut(activity : Activity){
         auth = Firebase.auth
         auth.signOut()
@@ -85,6 +76,7 @@ class FirebaseAuthClass() {
         }
         return ""
     }
+
     fun getCurrentUserMailId():String{
         auth = Firebase.auth
         var user = auth.currentUser

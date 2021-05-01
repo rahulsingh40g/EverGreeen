@@ -38,7 +38,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private lateinit var mAdmin : Admin
     private lateinit var mUser : User
-     val TAG  = "admin"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,6 +157,43 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return super.onOptionsItemSelected(item)
     }
 
+    private fun toggleDrawer() {
+
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+        } else {
+            drawer_layout.openDrawer(GravityCompat.START)
+        }
+    }
+
+    fun updateNavigationUserDetails(user: User) {
+        hideProgressDialog()
+        // The instance of the header view of the navigation view.
+        val headerView = nav_view.getHeaderView(0)
+
+        // The instance of the user image of the navigation view.
+        val navUserImage = headerView.findViewById<ImageView>(R.id.iv_user_image)
+
+        // Load the user image in the ImageView.
+        try {
+            Glide
+                    .with(this@MainActivity)
+                    .load(user.image) // URL of the image
+                    .centerCrop() // Scale type of the image.
+                    .placeholder(R.drawable.ic_user_place_holder) // A default place holder
+                    .into(navUserImage) // the view in which the image will be loaded.
+            Log.i("main", " done with glide in nav with ${user.image}")
+        }catch (e: IOException){
+            Log.e("exc", "${e.printStackTrace()}")
+        }
+
+        // The instance of the user name TextView of the navigation view.
+        val navUsername = headerView.findViewById<TextView>(R.id.tv_username)
+        // Set the user name
+        navUsername.text = user.name
+        getPosts(user.city)
+    }
+
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_my_profile -> {
@@ -191,7 +227,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             else FirestoreClass().getPostsFromLocality(this, locality, isState, Constants.SPOT_OPEN_FOR_BOOKING)
     }
 
-    fun updatePostDetails(postsList: ArrayList<Post>, creators: ArrayList<String>) {
+    fun displayPostsInUI(postsList: ArrayList<Post>, creators: ArrayList<String>) {
         hideProgressDialog()
         if (postsList.size > 0) {
             rv_posts_list.visibility = View.VISIBLE
@@ -251,7 +287,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(
                 this, R.style.CustomAlertDialog)
 
-        // set alert_dialog.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView)
         val userInput = promptsView.findViewById<View>(R.id.etUserInputDonation) as EditText
 
@@ -290,42 +325,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         Toast.makeText(this, "Thanks for donating, We really appreciate this :)", Toast.LENGTH_LONG).show()
     }
 
-
-    private fun toggleDrawer() {
-
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            drawer_layout.openDrawer(GravityCompat.START)
-        }
-    }
-
-    fun updateNavigationUserDetails(user: User) {
-        hideProgressDialog()
-        // The instance of the header view of the navigation view.
-        val headerView = nav_view.getHeaderView(0)
-
-        // The instance of the user image of the navigation view.
-        val navUserImage = headerView.findViewById<ImageView>(R.id.iv_user_image)
-
-        // Load the user image in the ImageView.
-        try {
-            Glide
-                    .with(this@MainActivity)
-                    .load(user.image) // URL of the image
-                    .centerCrop() // Scale type of the image.
-                    .placeholder(R.drawable.ic_user_place_holder) // A default place holder
-                    .into(navUserImage) // the view in which the image will be loaded.
-            Log.i("main", " done with glide in nav with ${user.image}")
-        }catch (e: IOException){
-            Log.e("exc", "${e.printStackTrace()}")
-        }
-
-        // The instance of the user name TextView of the navigation view.
-        val navUsername = headerView.findViewById<TextView>(R.id.tv_username)
-        // Set the user name
-        navUsername.text = user.name
-        getPosts(user.city)
+    fun getDonateSuccess(amount: String) {
+        AlertDialog.Builder(this)
+                .setTitle("Donation Amount")
+                .setMessage("Donation amount collected till date is Rs. $amount.")
+                .setPositiveButton("OK"){ dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel"){dialog , _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -360,21 +371,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    fun getDonateSuccess(amount: String) {
-        AlertDialog.Builder(this)
-                .setTitle("Donation Amount")
-                .setMessage("Donation amount collected till date is Rs. $amount.")
-                .setPositiveButton("OK"){ dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setNegativeButton("Cancel"){dialog , _ ->
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
-    }
-
-
     companion object {
         //A unique code for starting the activity for result
         const val EDIT_PROFILE_REQUEST_CODE: Int = 11
@@ -383,5 +379,4 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         const val APPROVE_SPOT_REQUEST_CODE : Int = 14
         const val FREE_SHOP_REQUEST_CODE : Int = 15
     }
-
 }

@@ -17,6 +17,7 @@ import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : BaseActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -52,7 +53,6 @@ class SplashActivity : BaseActivity() {
         Toast.makeText(this, "${loggedInAdmin.email} signed in successfully.", Toast.LENGTH_SHORT).show()
         intent = Intent(this, MainActivity::class.java)
         intent.putExtra(Constants.ADMIN_DETAIL, loggedInAdmin)
-        Log.i("admin","sending to main")
         startActivity(intent)
         this.finish()
     }

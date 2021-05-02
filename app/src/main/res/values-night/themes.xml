@@ -14,10 +14,6 @@
         <!-- Customize your theme here. -->
     </style>
 
-
-    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/white_border_shape_button_rounded</item>
-    </style>
     <!-- from trello-->
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -42,6 +38,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/white_border_shape_button_rounded</item>
+    </style>
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

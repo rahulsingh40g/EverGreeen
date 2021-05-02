@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
-        android:background="@drawable/bg_bubble"
+        android:background="@drawable/ic_background"
         android:orientation="vertical">
 
         <TextView
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
             android:gravity="center_horizontal"
-            android:text="No posts available"/>
+            android:text="No spots available"/>
 
     </LinearLayout>
 

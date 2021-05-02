@@ -85,6 +85,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         nav_view.menu[0].isVisible = false
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.tv_username).text = "ADMIN at ${mAdmin.city}"
 
+        tv_no_posts_available.text = "Currently no spots are available to be reviewed at the specified location." +
+                "Though you can search for bigger locality from the search bar."
         getPosts(mAdmin.city, false)
         fab.visibility = View.GONE
         fab_donate.visibility = View.GONE
@@ -158,6 +160,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        doubleBackToExit()
     }
 
     private fun toggleDrawer() {

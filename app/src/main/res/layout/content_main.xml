@@ -28,7 +28,8 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:layout_marginTop="200dp"
-            android:text="No posts available!!!"
+            android:layout_marginHorizontal="10dp"
+            android:text="Currently no spots are available for plantation at the specified location. Either search in bigger locality or start by posting one."
             android:textColor="@color/secondary_text_color"
             android:textStyle="bold"
             android:textSize="@dimen/no_boards_available_text_size" />

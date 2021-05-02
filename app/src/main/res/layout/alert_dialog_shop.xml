@@ -3,14 +3,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_gravity="center"
     android:padding="50dp"
-    android:background="@drawable/white_border_shape_button_rounded"
+    android:background="@color/alert_dialog_bg"
     android:layout_height="match_parent">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:gravity="center"
-        android:text="You can shop 5 more plants than you planted at zero cost."
+        android:text="You can order 5 more plants than you planted at zero cost."
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:gravity="center"
-        android:text="Enter the number of plants to shop : "
+        android:text="Enter the number of plants to order : "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 

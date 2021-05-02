@@ -3,7 +3,6 @@ package com.example.evergreen.activities
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,7 @@ import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.activity_free_shop.*
-import kotlinx.android.synthetic.main.alert_dialog_shop.*
+
 
 class FreeShopActivity : BaseActivity() {
     private lateinit var mUser : User
@@ -50,7 +49,8 @@ class FreeShopActivity : BaseActivity() {
         val li = LayoutInflater.from(this)
         val promptsView: View = li.inflate(R.layout.alert_dialog_shop, null)
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(
-            this, R.style.CustomAlertDialog)
+            this, R.style.CustomAlertDialog
+        )
 
         // set alert_dialog.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView)
@@ -60,34 +60,37 @@ class FreeShopActivity : BaseActivity() {
         // set dialog message
         alertDialogBuilder
             .setCancelable(false)
-            .setPositiveButton("Order", DialogInterface.OnClickListener { dialog, id -> // get user input and set it to result
-                // edit text
-                if(userInput != null) {
-                    val input = userInput.text.toString()
-                    if (input.isNotEmpty()) {
-                        Log.i("shop", "$input")
-                        plants = input.toInt()
-                        Log.i("shop", " plants are $plants")
-                        if (plants < min || plants > max) {
-                            showErrorSnackBar(
-                                "We can't give you these much number of plants, " +
-                                        "Kindly post your queries in feedback section."
-                            )
+            .setPositiveButton(
+                "Order",
+                DialogInterface.OnClickListener { dialog, id -> // get user input and set it to result
+                    // edit text
+                    if (userInput != null) {
+                        val input = userInput.text.toString()
+                        if (input.isNotEmpty()) {
+                            Log.i("shop", "$input")
+                            plants = input.toInt()
+                            Log.i("shop", " plants are $plants")
+                            if (plants < min || plants > max) {
+                                showErrorSnackBar(
+                                    "We can't give you these much number of plants, " +
+                                            "Kindly post your queries in feedback section."
+                                )
+                            } else {
+                                val userHashMap = HashMap<String, Any>()
+                                userHashMap[Constants.PLANTS_BOUGHT] = mUser.plantsBought + plants
+                                showProgressDialog(resources.getString(R.string.please_wait))
+                                FirestoreClass().updateUserPlantsData(this, userHashMap)
+                            }
                         } else {
-                            val userHashMap = HashMap<String, Any>()
-                            userHashMap[Constants.PLANTS_BOUGHT] = mUser.plantsBought + plants
-                            showProgressDialog(resources.getString(R.string.please_wait))
-                            FirestoreClass().updateUserPlantsData(this, userHashMap)
+                            showErrorSnackBar("Please enter some number of plants")
                         }
                     } else {
-                        showErrorSnackBar("Please enter some number of plants")
+                        Log.e("shop", "null")
                     }
-                }else{
-                    Log.e("shop","null")
-                }
-            })
+                })
             .setNegativeButton("Cancel",
                 DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+
 
         // create alert dialog
         val alertDialog: AlertDialog = alertDialogBuilder.create()

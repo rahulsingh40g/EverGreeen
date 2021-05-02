@@ -60,7 +60,7 @@ class FreeShopActivity : BaseActivity() {
         // set dialog message
         alertDialogBuilder
             .setCancelable(false)
-            .setPositiveButton("Oder", DialogInterface.OnClickListener { dialog, id -> // get user input and set it to result
+            .setPositiveButton("Order", DialogInterface.OnClickListener { dialog, id -> // get user input and set it to result
                 // edit text
                 if(userInput != null) {
                     val input = userInput.text.toString()

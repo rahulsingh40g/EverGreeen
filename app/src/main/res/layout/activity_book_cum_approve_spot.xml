@@ -20,137 +20,142 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tv_posted_by_bookspot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:padding="5dp"
-        android:text="Posted By"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold"/>
-
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_place_image_bookspot"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="15dp"
-        android:background="@drawable/shape_image_view_border"
-        android:padding="@dimen/add_screen_place_image_padding"
-        android:scaleType="centerCrop"
-        android:src="@drawable/add_screen_image_placeholder"
-        />
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="@dimen/add_screen_text_add_image_padding"
-        android:orientation="horizontal"
-        >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_location_on_blue_24"
-            />
-        <TextView
-            android:id="@+id/tv_location_bookspot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Location"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/add_screen_text_add_image_textSize"
-            android:textStyle="bold"
-            />
-    </LinearLayout>
+        android:background="@drawable/ic_background">
 
-    <TextView
-        android:id="@+id/tv_description_byCreator_bookspot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="@dimen/add_screen_text_add_image_padding"
-        android:text="Description of spot"
-        android:textSize="16sp"
-        />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/add_screen_til_marginTop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_date">
-    <EditText
-            android:id="@+id/et_description_byPlanter_cum_admin_bookspot"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description (Optional)"
-            android:inputType="text"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/primary_text_color"
-            android:textColorHint="@color/secondary_text_color"
-            android:textSize="16sp"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-    <LinearLayout
-        android:id="@+id/ll_btns_for_approve"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/add_screen_btn_save_marginTop">
-        <Button
-            android:id="@+id/btn_reject_this_spot"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/shape_button_rounded_red"
-            android:gravity="center"
-            android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
-            android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-            android:text="REJECT"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/btn_text_size"/>
-        <Button
-            android:id="@+id/btn_approve_this_spot"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/shape_button_rounded_green"
-            android:gravity="center"
-            android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
-            android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-            android:text="APPROVE"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/btn_text_size"/>
+            android:orientation="vertical"
+            android:layout_margin="15dp">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_posted_by_bookspot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Posted By"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"/>
 
 
-    <Button
-        android:id="@+id/btn_book_this_spot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
-        android:background="@drawable/shape_button_rounded_green"
-        android:gravity="center"
-        android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
-        android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-        android:text="BOOK THIS SPOT"
-        tools:visibility="gone"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/btn_text_size"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_place_image_bookspot"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_image_view_border"
+                android:scaleType="centerCrop"
+                android:src="@drawable/add_screen_image_placeholder"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="@dimen/add_screen_text_add_image_padding"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_location_on_blue_24"
+                    />
+                <TextView
+                    android:id="@+id/tv_location_bookspot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Location"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/add_screen_text_add_image_textSize"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_description_byCreator_bookspot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Description of spot"
+                android:textSize="16sp"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/add_screen_til_marginTop">
+
+                <EditText
+                    android:id="@+id/et_description_byPlanter_cum_admin_bookspot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description (Optional)"
+                    android:inputType="text"
+                    android:textColor="@color/primary_text_color"
+                    android:textColorHint="@color/secondary_text_color"
+                    android:textSize="16sp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:id="@+id/ll_btns_for_approve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
+                android:layout_marginBottom="20dp">
+                <Button
+                    android:id="@+id/btn_reject_this_spot"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_button_rounded_red"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+                    android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+                    android:text="REJECT"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/btn_text_size"/>
+                <Button
+                    android:id="@+id/btn_approve_this_spot"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_button_rounded_green"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+                    android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+                    android:text="APPROVE"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/btn_text_size"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_book_this_spot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
+                android:background="@drawable/shape_button_rounded_green"
+                android:gravity="center"
+                android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:text="BOOK THIS SPOT"
+                tools:visibility="gone"
+                android:textColor="@color/white"
+                android:textSize="@dimen/btn_text_size"
+                android:layout_marginBottom="20dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

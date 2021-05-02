@@ -250,7 +250,6 @@ class FirestoreClass {
                             posts.add(post)
                         }
                         Log.i("posts",posts.toString())
-                        if(attr == Constants.STATE)
                         getNameFromUids(activity, posts)
                     }
                     .addOnFailureListener{
@@ -274,6 +273,7 @@ class FirestoreClass {
                 }
             }
         }
+        else
         for(post in posts){
             mFireStore.collection(Constants.USERS)
                     .whereEqualTo(Constants.UID, post.postedBy)

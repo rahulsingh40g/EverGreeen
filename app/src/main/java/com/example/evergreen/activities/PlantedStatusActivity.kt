@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.evergreen.R
 import com.example.evergreen.adapters.ApprovedPostsAdapter
@@ -29,14 +30,17 @@ class PlantedStatusActivity : BaseActivity() {
         bottomNavigationView_planted_status.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.bn_open_for_booking->{
+                    tv_above_open_for_booking.isVisible=true
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_OPEN_FOR_BOOKING,this)
                 }
                 R.id.bn_booked->{
+                    tv_above_open_for_booking.isVisible=false
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_BOOKED,this)
                 }
                 R.id.bn_planted->{
+                    tv_above_open_for_booking.isVisible=false
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_PLANTED,this)
                 }

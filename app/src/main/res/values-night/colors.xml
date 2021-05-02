@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- from trello-->
+    <color name="colorPrimary">#0ac92b</color>
+    <color name="colorPrimaryDark">#39f55a</color>
+    <color name="colorAccent">#1E1818</color>
+
+    <color name="greenlight">#6EDD56</color>
+    <color name="greendark">#0AAC0D</color>
+
+    <color name="use_my_cur_loc_col">#3360DA1E</color>
+
+    <color name="primary_text_color">#363A43</color>
+    <color name="secondary_text_color">#7A8089</color>
+
+    <color name="snackbar_error_color">#F72400</color>
+
     <color name="redlight">#D63232</color>
     <color name="reddark">#FB0404</color>
+    <color name="divider_color">#62D166</color>
+
 </resources>

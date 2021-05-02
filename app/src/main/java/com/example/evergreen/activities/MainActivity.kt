@@ -1,5 +1,6 @@
 package com.example.evergreen.activities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.SearchManager
@@ -64,14 +65,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 setForUser()
             }
             Intent.ACTION_SEARCH == intent.action -> {
-                val query = intent.getStringExtra(SearchManager.QUERY)
-                //use the query to search your data somehow
-                Log.i("search", query!!)
-                getPosts(query!!, true)
+                var query = intent.getStringExtra(SearchManager.QUERY)
+                if(query != null) {
+                    query = query.capitalize()
+                    getPosts(query, true)
+                }
             }
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private fun setForAdmin(){
         setSupportActionBar(toolbar_main_activity)
         toolbar_main_activity.setNavigationIcon(R.drawable.ic_action_navigation_menu)

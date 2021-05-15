@@ -44,8 +44,9 @@
             android:id="@+id/tv_createPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#BCEF6A"
             android:visibility="gone"
+            style="bold"
+            android:textColor="@color/black"
             android:layout_marginTop="30dp"
             android:text="Add Place"/>
 
@@ -72,7 +73,8 @@
             android:id="@+id/tv_dashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#BCEF6A"
+            style="bold"
+            android:textColor="@color/black"
             android:visibility="gone"
             android:layout_marginTop="30dp"
             android:text="Dashboard"/>
@@ -100,7 +102,8 @@
             android:id="@+id/tv_shop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#BCEF6A"
+            style="bold"
+            android:textColor="@color/black"
             android:visibility="gone"
             android:layout_marginTop="30dp"
             android:text="Shop"/>
@@ -121,6 +124,8 @@
         android:id="@+id/ll_donate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="bold"
+        android:textColor="@color/black"
         android:orientation="horizontal"
         android:layout_gravity="bottom|end">
 
@@ -128,7 +133,8 @@
             android:id="@+id/tv_donate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#BCEF6A"
+            style="bold"
+            android:textColor="@color/black"
             android:visibility="gone"
             android:layout_marginTop="30dp"
             android:text="Donate"/>
@@ -141,9 +147,10 @@
             android:layout_margin="@dimen/fab_margin"
             app:borderWidth="0dp"
             android:backgroundTint="#BCEF6A"
-            android:src="@drawable/ic_donate"
+            android:src="@drawable/ic_donate_hand"
             />
 
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

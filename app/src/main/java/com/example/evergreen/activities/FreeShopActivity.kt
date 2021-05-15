@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_free_shop.*
 class FreeShopActivity : BaseActivity() {
     private lateinit var mUser : User
     var plants : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_free_shop)

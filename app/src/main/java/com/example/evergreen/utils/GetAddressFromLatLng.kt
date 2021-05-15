@@ -8,7 +8,7 @@ import android.util.Log
 import java.io.IOException
 import java.util.*
 
-// TODO(Step 1: Create a AsyncTask class fot getting an address from the latitude and longitude from the location provider.)
+// (Step 1: Create a AsyncTask class fot getting an address from the latitude and longitude from the location provider.)
 // START
 /**
  * A AsyncTask class to get the address from latitude and longitude.

@@ -9,12 +9,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.*
 import androidx.core.view.GravityCompat
+import androidx.core.view.children
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -30,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.io.IOException
+import java.util.*
 
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -39,6 +38,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private lateinit var mAdmin : Admin
     private lateinit var mUser : User
+    private var mState : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +66,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
             Intent.ACTION_SEARCH == intent.action -> {
                 var query = intent.getStringExtra(SearchManager.QUERY)
-                if(query != null) {
-                    query = query.capitalize()
+                if (query != null) {
+                    query = query.toLowerCase(Locale.ROOT)
+                    query = query.capitalize(Locale.ROOT)
+                    mState = query
                     getPosts(query, true)
                 }
             }
@@ -108,12 +110,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         nav_view.setNavigationItemSelectedListener(this)
         nav_view.menu[1].isVisible = false
 
+
         //FAB listener
         fab.setOnClickListener {
             if(!isFABOpen){
-                showFABMenu();
+                showFABMenu()
             }else{
-                closeFABMenu();
+                closeFABMenu()
             }
         }
 
@@ -133,11 +136,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
         fab_donate.setOnClickListener{
             alertDialogDonation()
+            closeFABMenu()
         }
         fab_shop.setOnClickListener{
             val intent = Intent(this@MainActivity, FreeShopActivity::class.java)
             intent.putExtra(Constants.USER_DETAIL, mUser)
             startActivityForResult(intent, FREE_SHOP_REQUEST_CODE)
+            closeFABMenu()
         }
     }
 
@@ -154,6 +159,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.refresh -> {
+                mState = ""
                 if (isAdminHere) getPosts(mAdmin.city)
                 else getPosts(mUser.city)
                 return true
@@ -177,6 +183,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     fun updateNavigationUserDetails(user: User) {
         hideProgressDialog()
+        mUser = user
         // The instance of the header view of the navigation view.
         val headerView = nav_view.getHeaderView(0)
 
@@ -230,8 +237,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    private fun getPosts(locality: String, isState: Boolean = false){
+    private fun getPosts(locality_parm: String, isState_parm: Boolean = false){
         showProgressDialog(resources.getString(R.string.please_wait))
+        var locality = locality_parm
+        var isState = isState_parm
+        if(mState.isNotEmpty()){
+            locality = mState
+            isState = true
+        }
         if(isAdminHere) FirestoreClass().getPostsFromLocality(this, locality, isState, Constants.SPOT_UNDER_REVIEW)
             else FirestoreClass().getPostsFromLocality(this, locality, isState, Constants.SPOT_OPEN_FOR_BOOKING)
     }
@@ -264,8 +277,21 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
+    fun View.isUserInteractionEnabled(enabled: Boolean) {
+        isEnabled = enabled
+        if (this is ViewGroup && this.childCount > 0) {
+            this.children.forEach {
+                it.isUserInteractionEnabled(enabled)
+            }
+        }
+    }
+
     private fun showFABMenu() {
         isFABOpen = true
+        ll_content_main.alpha = .1F
+        ll_content_main.isUserInteractionEnabled(false)
+//        ll_content_main.isEnabled = false
+
         ll_createPost.animate().translationY(-resources.getDimension(R.dimen.standard_55))
         ll_dashboard.animate().translationY(-resources.getDimension(R.dimen.standard_105))
         ll_donate.animate().translationY(-resources.getDimension(R.dimen.standard_155))
@@ -279,6 +305,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun closeFABMenu() {
         isFABOpen = false
+        ll_content_main.alpha = 1F
+        ll_content_main.isUserInteractionEnabled(true)
+
+//        ll_content_main.isEnabled = true
+
         ll_createPost.animate().translationY(0F)
         ll_dashboard.animate().translationY(0F)
         ll_donate.animate().translationY(0F)
@@ -365,6 +396,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 getPosts(mUser.city)
         } else if(resultCode == Activity.RESULT_OK
             && requestCode == BOOK_SPOT_REQUEST_CODE){
+                Log.i("book","came after result and city is ${mUser.city}")
             getPosts(mUser.city)
         }else if(resultCode == Activity.RESULT_OK &&
                 requestCode == APPROVE_SPOT_REQUEST_CODE){

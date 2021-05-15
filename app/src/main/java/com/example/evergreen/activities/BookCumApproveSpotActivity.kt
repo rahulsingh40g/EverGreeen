@@ -69,7 +69,7 @@ class BookCumApproveSpotActivity : BaseActivity() {
         }else{
             btn_book_this_spot.visibility = View.VISIBLE
             ll_btns_for_approve.visibility = View.GONE
-            et_description_byPlanter_cum_admin_bookspot.hint = "Description (Optional)"
+            //et_description_byPlanter_cum_admin_bookspot.hint = "Description (Optional)"
             if(actionBar != null){
                 actionBar.title = "Spot Booking"
             }

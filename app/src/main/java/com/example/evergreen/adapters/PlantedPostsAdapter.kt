@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.evergreen.R
@@ -14,7 +15,9 @@ import kotlinx.android.synthetic.main.item_post_approved.view.*
 import kotlinx.android.synthetic.main.item_post_planted.view.*
 
 class PlantedPostsAdapter(private val context: Context,
-                          private var list: ArrayList<Post>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+                          private var list: ArrayList<Post>,
+                          private var creatorsList : ArrayList<String>,
+                          private var planterList : ArrayList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
             LayoutInflater.from(context).inflate(
@@ -43,7 +46,11 @@ class PlantedPostsAdapter(private val context: Context,
             else
                 holder.itemView.tv_description_planted.text = Constants.NO_DESCRIPTION_AVAILABLE
 
+            holder.itemView.tv_posted_by_planted.text = creatorsList[position]
+            model.postedBy = creatorsList[position]
+            model.bookedBy = planterList[position]
             holder.itemView.tag = model
+
         }
     }
 
@@ -55,6 +62,8 @@ class PlantedPostsAdapter(private val context: Context,
 
         var btn_switch_image =itemView.findViewById(R.id.btn_switch_image_planted) as Button
         var context =itemView.context
+        var switch_postedBy = itemView.findViewById(R.id.tv_posted_by_planted) as TextView
+
 
         constructor(itemView: View) : super(itemView) {
            btn_switch_image.setOnClickListener(this)
@@ -63,8 +72,7 @@ class PlantedPostsAdapter(private val context: Context,
 
         override fun onClick(v: View?) {
             val model= itemView.tag as Post
-            // TODO: 29-04-2021 instead of 0 1, try to user proper names :)
-            if(itemView.isCurrentImage.text.toString() == "0"){
+            if(btn_switch_image.text == "SEE CURRENT IMAGE"){
                 Glide
                         .with(context)
                         .load(model.imageAfter)
@@ -79,7 +87,9 @@ class PlantedPostsAdapter(private val context: Context,
 
                 btn_switch_image.text = "SEE PREVIOUS IMAGE"
 
-                itemView.isCurrentImage.text = "1"
+                switch_postedBy.text = model.bookedBy
+
+
             }
             else{
                 Glide
@@ -96,7 +106,7 @@ class PlantedPostsAdapter(private val context: Context,
 
                 btn_switch_image.text = "SEE CURRENT IMAGE"
 
-                itemView.isCurrentImage.text = "0"
+                switch_postedBy.text = model.postedBy
 
             }
         }

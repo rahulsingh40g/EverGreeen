@@ -1,16 +1,20 @@
 package com.example.evergreen.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.evergreen.R
 import com.example.evergreen.adapters.BookedSpotsAdapter
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_booked_spots.*
 
 class BookedSpotsActivity : BaseActivity() {
@@ -87,8 +91,24 @@ class BookedSpotsActivity : BaseActivity() {
         FirestoreClass().loadUserData(this)
     }
 
-    fun onYesAlert(){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK
+            && requestCode == UPLOAD_IMAGE_AFTER_CODE
+        ) {
+            val snackBar = Snackbar.make(findViewById(android.R.id.content), "You did a great job !!. Keep up the good work :)", Snackbar.LENGTH_LONG)
+            val snackBarView = snackBar.view
+            snackBarView.setBackgroundColor(ContextCompat.getColor(this@BookedSpotsActivity, R.color.greenlight))
+            snackBar.show()
+            showProgressDialog(resources.getString(R.string.please_wait))
+            Log.i("main", "call for load")
+            FirestoreClass().loadUserData(this@BookedSpotsActivity)
+        }
 
     }
 
+    companion object{
+        const val UPLOAD_IMAGE_AFTER_CODE: Int = 202
+    }
 }

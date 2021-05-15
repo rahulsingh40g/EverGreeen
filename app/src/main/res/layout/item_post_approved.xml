@@ -10,23 +10,32 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         android:layout_margin="5dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_posted_by_approved"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Posted By"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_post_image_before_approved"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_margin="15dp"
                 android:background="@drawable/shape_image_view_border"
-                android:padding="@dimen/add_screen_place_image_padding"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_post_image_150"
                 android:layout_marginTop="5dp" />
@@ -35,7 +44,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:padding="@dimen/add_screen_text_add_image_padding"
                 android:orientation="horizontal"
                 >
                 <ImageView
@@ -56,19 +64,79 @@
             </LinearLayout>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description :"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
                 android:id="@+id/tv_description_approved"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No description availab;e"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:text="No description available"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginTop="5dp"
                 android:textSize="18sp"/>
 
-            <View
+            <LinearLayout
+                android:id="@+id/ll_description_by_admin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/item_board_divider_height"
-                android:layout_marginTop="@dimen/item_board_divider_marginTop"
-                android:background="@color/divider_color" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rejection reason :"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_description_rejected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No description available"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginTop="5dp"
+                android:textSize="18sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_booked_by"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="Booked by :"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_booked_by"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="booker"
+                    android:layout_marginTop="5dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
 
         </LinearLayout>
 

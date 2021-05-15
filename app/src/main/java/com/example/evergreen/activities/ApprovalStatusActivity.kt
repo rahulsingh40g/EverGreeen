@@ -12,14 +12,19 @@ import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
 import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.activity_approval_status.*
+import kotlinx.android.synthetic.main.item_post_approved.*
 
 class ApprovalStatusActivity : BaseActivity() {
+
+    lateinit var status :String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("1posts","hello")
         setContentView(R.layout.activity_approval_status)
 
         setupActionBar()
+        status = Constants.SPOT_UNDER_REVIEW
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().getPostsFromStatusValue(Constants.SPOT_UNDER_REVIEW,this)
         //Log.i("1posts","displaying post before but serial thing + ${posts.size} ")
@@ -30,14 +35,17 @@ class ApprovalStatusActivity : BaseActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.bn_under_review->{
+                    status = Constants.SPOT_UNDER_REVIEW
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_UNDER_REVIEW,this)
                 }
                 R.id.bn_approved->{
+                    status = Constants.SPOT_OPEN_FOR_BOOKING
                     showProgressDialog(resources.getString(R.string.please_wait))
-                    FirestoreClass().getApprovedPosts(this)
+                    FirestoreClass().getPostsFromStatusValue(Constants.SPOT_OPEN_FOR_BOOKING,this)
                 }
                 R.id.bn_rejected->{
+                    status = Constants.SPOT_REJECTED
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_REJECTED,this)
                 }
@@ -55,6 +63,7 @@ class ApprovalStatusActivity : BaseActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            actionBar.title = "APPROVAL STATUS"
         }
 
         toolbar_approval_status_activity.setNavigationOnClickListener { onBackPressed() }
@@ -71,14 +80,17 @@ class ApprovalStatusActivity : BaseActivity() {
                 val selectedItem = bottomNavigationView.menu.findItem(bottomNavigationView.selectedItemId)
                 when(selectedItem.itemId){
                     R.id.bn_under_review->{
+                        status = Constants.SPOT_UNDER_REVIEW
                         showProgressDialog(resources.getString(R.string.please_wait))
                         FirestoreClass().getPostsFromStatusValue(Constants.SPOT_UNDER_REVIEW,this)
                     }
                     R.id.bn_approved->{
+                        status = Constants.SPOT_OPEN_FOR_BOOKING
                         showProgressDialog(resources.getString(R.string.please_wait))
-                        FirestoreClass().getApprovedPosts(this)
+                        FirestoreClass().getPostsFromStatusValue(Constants.SPOT_OPEN_FOR_BOOKING,this)
                     }
                     R.id.bn_rejected->{
+                        status = Constants.SPOT_REJECTED
                         showProgressDialog(resources.getString(R.string.please_wait))
                         FirestoreClass().getPostsFromStatusValue(Constants.SPOT_REJECTED,this)
                     }
@@ -89,8 +101,7 @@ class ApprovalStatusActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
-    fun populateRV(postsList: ArrayList<Post>) {
+    fun populateRV(postsList: ArrayList<Post>,creators : ArrayList<String>, planters : ArrayList<String>) {
         hideProgressDialog()
         Log.i("1posts_Populate","displaying post before but serial thing + ${postsList.size} ")
         if (postsList.size > 0) {
@@ -101,7 +112,7 @@ class ApprovalStatusActivity : BaseActivity() {
             rv_approved_posts_list.layoutManager = LinearLayoutManager(this@ApprovalStatusActivity)
             rv_approved_posts_list.setHasFixedSize(true)
 
-            val adapter = ApprovedPostsAdapter(this, postsList)
+            val adapter = ApprovedPostsAdapter(this, postsList,creators,planters,status)
             rv_approved_posts_list.adapter = adapter
         } else {
             rv_approved_posts_list.visibility = View.GONE

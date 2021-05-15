@@ -14,7 +14,8 @@ data class User (
     var myPostIds : ArrayList<String> = ArrayList(),
     var bookedPostIds : ArrayList<String> = ArrayList(),
     var plantsBought : Int =0,
-    var amountDonated : Long = 0
+    var amountDonated : Long = 0,
+    var planted_count : Int =0
 ) :Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,

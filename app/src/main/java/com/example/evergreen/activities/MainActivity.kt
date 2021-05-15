@@ -7,6 +7,8 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -160,6 +162,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun toggleDrawer() {
 
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
@@ -259,6 +262,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun showFABMenu() {
+        ll_content_main.alpha = 0.1f
         isFABOpen = true
         ll_createPost.animate().translationY(-resources.getDimension(R.dimen.standard_55))
         ll_dashboard.animate().translationY(-resources.getDimension(R.dimen.standard_105))
@@ -272,6 +276,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun closeFABMenu() {
+        ll_content_main.alpha=1f
         isFABOpen = false
         ll_createPost.animate().translationY(0F)
         ll_dashboard.animate().translationY(0F)

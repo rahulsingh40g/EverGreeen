@@ -18,23 +18,24 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="5dp">
 
             <TextView
                 android:id="@+id/tv_posted_by"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Posted By"
-                android:textColor="@color/primary_text_color"
-                android:textSize="16sp"/>
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_post_image_before"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_margin="15dp"
                 android:background="@drawable/shape_image_view_border"
-                android:padding="@dimen/add_screen_place_image_padding"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_post_image_150"
                 android:layout_marginTop="5dp" />
@@ -43,9 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:padding="@dimen/add_screen_text_add_image_padding"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

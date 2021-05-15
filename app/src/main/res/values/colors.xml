@@ -13,6 +13,7 @@
     <color name="colorPrimaryDark">#39f55a</color>
     <color name="colorAccent">#1E1818</color>
 
+
     <color name="greenlight">#6EDD56</color>
     <color name="greendark">#0AAC0D</color>
 
@@ -26,5 +27,9 @@
     <color name="redlight">#D63232</color>
     <color name="reddark">#FB0404</color>
     <color name="divider_color">#62D166</color>
+
+    <color name="alert_dialog_bg">#EEFBE7</color>
+
+    <color name="blur_white">#F2FFFFFF</color>
 
 </resources>

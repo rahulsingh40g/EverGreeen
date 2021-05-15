@@ -8,8 +8,7 @@ import android.webkit.MimeTypeMap
 
 object Constants {
 
-
-
+    const val PLANTED_COUNT : String = "planted_count"
     const val AMOUNT: String = "amount"
     const val DONATION_DOC: String = "donations_doc"
     const val DONATION: String = "donations"

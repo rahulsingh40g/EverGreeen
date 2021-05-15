@@ -56,12 +56,6 @@ class BookedSpotsAdapter(private val context: Context,
             holder.itemView.tv_posted_by_booked_spot.text = creatorsList[position]
             holder.itemView.tag = model
 
-//            holder.itemView.setOnClickListener {
-//                if (onClickListener != null) {
-//                    onClickListener!!.onClick(position, model)
-//                }
-//            }
-
         }
     }
 
@@ -86,7 +80,8 @@ class BookedSpotsAdapter(private val context: Context,
                 R.id.btn_upload_image_after ->{
                     val intent = Intent(v.context, UploadImageAfterActivity::class.java)
                     intent.putExtra(Constants.POST_DETAIL, post)
-                    v.context.startActivity(intent)
+                    var act = v.context as Activity
+                    act.startActivityForResult(intent,UPLOAD_IMAGE_AFTER_CODE)
                 }
                 R.id.btn_unbook_spot ->{
                     AlertDialog.Builder(context)
@@ -107,4 +102,7 @@ class BookedSpotsAdapter(private val context: Context,
         }
     }
 
+    companion object{
+        const val UPLOAD_IMAGE_AFTER_CODE: Int = 202
+    }
 }

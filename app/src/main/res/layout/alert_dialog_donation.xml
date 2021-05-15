@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_gravity="center"
     android:padding="50dp"
-    android:background="@drawable/white_border_shape_button_rounded"
+    android:background="@color/alert_dialog_bg"
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/textView1"

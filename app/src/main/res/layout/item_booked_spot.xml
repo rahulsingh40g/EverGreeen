@@ -9,35 +9,33 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_posted_by_booked_spot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:padding="5dp"
-        android:text="Posted By"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold"/>
-
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         android:layout_margin="5dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_posted_by_booked_spot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Posted By"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_post_image_booked_spot"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_margin="15dp"
                 android:background="@drawable/shape_image_view_border"
-                android:padding="@dimen/add_screen_place_image_padding"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_post_image_150"
                 android:layout_marginTop="5dp" />
@@ -46,7 +44,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:padding="@dimen/add_screen_text_add_image_padding"
                 android:orientation="horizontal"
                 >
                 <ImageView
@@ -67,34 +64,53 @@
             </LinearLayout>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description :"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+            <TextView
                 android:id="@+id/tv_description_booked_spot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:text="Description"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:layout_marginTop="5dp"
                 android:textSize="18sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_upload_image_after"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/shape_button_rounded_green"
                 android:gravity="center"
                 android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
                 android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-                android:text="Upload the current image."
+                android:text="Update status"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/white"
-                android:textSize="@dimen/btn_text_size"/>
+                android:textSize="17sp"/>
 
             <Button
                 android:id="@+id/btn_unbook_spot"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/shape_button_rounded_green"
@@ -106,13 +122,10 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/white"
-                android:textSize="@dimen/btn_text_size"/>
+                android:textSize="17sp"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/item_board_divider_height"
-                android:layout_marginTop="@dimen/item_board_divider_marginTop"
-                android:background="@color/divider_color" />
+            </LinearLayout>
+
 
         </LinearLayout>
 

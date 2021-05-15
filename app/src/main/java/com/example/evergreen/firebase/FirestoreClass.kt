@@ -13,6 +13,7 @@ import com.google.firebase.firestore.SetOptions
 class FirestoreClass {
 
     private val mFireStore = FirebaseFirestore.getInstance()
+    lateinit var statusVal : String
 
     fun registerUser(activity : SignUpActivity, userInfo: User) {
         mFireStore.collection(Constants.USERS)
@@ -77,6 +78,9 @@ class FirestoreClass {
                          }
                          getPostFromIdArray(myPostsList,activity,Constants.SPOT_BOOKED)
                      }
+                     is DashboardActivity ->{
+                         activity.updateCount(loggedInUser)
+                     }
                 }
                 
             }
@@ -127,7 +131,7 @@ class FirestoreClass {
 
         if(idArray.isEmpty()){
             if(activity is PlantedMyMeActivity){
-                activity.populateRV(ArrayList())
+                getNameFromUids(activity, ArrayList())
             }
             if(activity is BookedSpotsActivity){
                 getNameFromUids(activity,ArrayList())
@@ -152,7 +156,7 @@ class FirestoreClass {
                     Log.i("myPosts","${curPost.toString()}")
                 }
                 if(activity is PlantedMyMeActivity){
-                    activity.populateRV(postsList)
+                    getNameFromUids(activity,postsList)
                 }
                 if(activity is BookedSpotsActivity){
                     getNameFromUids(activity,postsList)
@@ -261,6 +265,61 @@ class FirestoreClass {
         return posts
     }
 
+    private fun getPlanterNameFromUids(activity: Activity, posts : ArrayList<Post>, creators : ArrayList<String>){
+        val planters = ArrayList<String>()
+        if(posts.isEmpty()){
+            when(activity){
+                is PlantedMyMeActivity ->{
+                    activity.populateRV(posts,creators,planters)
+                }
+                is PlantedStatusActivity ->{
+                    Log.i("TAG","aa gyi yha 4")
+                    if(statusVal == Constants.SPOT_PLANTED)
+                        activity.populateRvPlanted(posts,creators,planters)
+                    else activity.populateRV(posts,creators,planters)
+                }
+            }
+        }
+        else
+            for(post in posts){
+                mFireStore.collection(Constants.USERS)
+                    .whereEqualTo(Constants.UID, post.bookedBy)
+                    .get()
+                    .addOnSuccessListener { users ->
+                        Log.i("TAG","aa gyi yha 5 ${users.size()}")
+                        for (user in users){
+                            Log.i("TAG","aa gyi yha 6")
+                            Log.i("posts","user is ${user.toObject(User::class.java).name}")
+                            planters.add(user.toObject(User::class.java).name)
+                            if(planters.size == posts.size){
+                                when(activity){
+                                    is PlantedMyMeActivity ->{
+                                        activity.populateRV(posts,creators,planters)
+                                    }
+                                    is PlantedStatusActivity ->{
+                                        Log.i("TAG","aa gyi yha ")
+                                        if(statusVal == Constants.SPOT_PLANTED)
+                                            activity.populateRvPlanted(posts,creators,planters)
+                                        else activity.populateRV(posts,creators,planters)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .addOnFailureListener{
+                        Log.e("posts","error in getting user + ${it.message!!}")
+                        when(activity){
+                            is PlantedMyMeActivity ->{
+                                activity.populateRV(posts,creators,planters)
+                            }
+                            is PlantedStatusActivity ->{
+                                activity.populateRvPlanted(posts,creators,planters)
+                            }
+                        }
+                    }
+            }
+    }
+
     private fun getNameFromUids(activity: Activity, posts : ArrayList<Post>){
         val creators = ArrayList<String>()
         if(posts.isEmpty()){
@@ -271,6 +330,19 @@ class FirestoreClass {
                 is BookedSpotsActivity ->{
                     activity.populateRV(posts,creators)
                 }
+                is PlantedMyMeActivity ->{
+                    activity.populateRV(posts,creators,ArrayList())
+                }
+                is PlantedStatusActivity ->{
+                    Log.i("TAG","aa gyi yha 2")
+                    if(statusVal == Constants.SPOT_PLANTED)
+                    activity.populateRvPlanted(posts,creators, ArrayList())
+                    else activity.populateRV(posts,creators,ArrayList())
+                }
+                is ApprovalStatusActivity ->{
+                    activity.populateRV(posts,creators, ArrayList())
+                }
+
             }
         }
         else
@@ -290,6 +362,23 @@ class FirestoreClass {
                                     is BookedSpotsActivity ->{
                                         activity.populateRV(posts,creators)
                                     }
+                                    is PlantedMyMeActivity ->{
+                                        getPlanterNameFromUids(activity,posts,creators)
+                                    }
+                                    is PlantedStatusActivity ->{
+                                        Log.i("TAG","aa gyi yha 3")
+                                        var plantersDummy = ArrayList<String>(creators.size)
+                                        if(statusVal==Constants.SPOT_OPEN_FOR_BOOKING)
+                                            activity.populateRV(posts,creators,plantersDummy)
+                                        else getPlanterNameFromUids(activity,posts,creators)
+//                                        if(statusVal == Constants.SPOT_PLANTED)
+//
+//                                        else activity.populateRV(posts,creators,ArrayList())
+                                    }
+                                    is ApprovalStatusActivity ->{
+                                        var plantersDummy = ArrayList<String>(creators.size)
+                                        activity.populateRV(posts,creators,plantersDummy)
+                                    }
                                 }
                             }
                         }
@@ -302,6 +391,12 @@ class FirestoreClass {
                             }
                             is BookedSpotsActivity ->{
                                 activity.populateRV(posts,creators)
+                            }
+                            is PlantedMyMeActivity ->{
+                                getPlanterNameFromUids(activity,posts,creators)
+                            }
+                            is PlantedStatusActivity ->{
+                                getPlanterNameFromUids(activity,posts,creators)
                             }
                         }
                     }
@@ -339,7 +434,9 @@ class FirestoreClass {
                             activity.onUpdateSuccess()
                         }
                     }
-                    is UploadImageAfterActivity -> activity.uploadImageSuccess()
+                    is UploadImageAfterActivity -> {
+                        updateUserDetails(activity,FirebaseAuthClass().getCurrentUserID())
+                    }
                 }
             }
             .addOnFailureListener {
@@ -351,24 +448,21 @@ class FirestoreClass {
             }
     }
 
-    //renamed the fun from approve to Approve
-    fun getApprovedPosts(activity: ApprovalStatusActivity){
-        var postList : ArrayList<Post> = ArrayList()
-        Log.i("1posts","hwy")
-        mFireStore.collection(Constants.POSTS)
-                .whereEqualTo(Constants.POSTED_BY,FirebaseAuthClass().getCurrentUserID())
-                // TODO: 29-04-2021 it should be just open for booking, bcz rest we are showing at other places, and so much posts will be in approved
-                .whereIn(Constants.STATUS, listOf(Constants.SPOT_OPEN_FOR_BOOKING, Constants.SPOT_BOOKED, Constants.SPOT_PLANTED))
-                .get()
-                .addOnSuccessListener { posts ->
-                    for (post in posts){
-                        Log.i("1posts","${post.toObject(Post::class.java)}")
-                        postList.add(post.toObject(Post::class.java))
+    fun updateUserDetails(activity: Activity, UserId: String) {
+        mFireStore.collection(Constants.USERS)
+                .document(UserId)
+                .update(Constants.PLANTED_COUNT,FieldValue.increment(1))
+                .addOnSuccessListener {
+                    Log.i("update", "user updated successfully")
+                    when (activity) {
+                        is UploadImageAfterActivity -> activity.uploadImageSuccess()
                     }
-                    activity.populateRV(postList)
                 }
-                .addOnFailureListener{
-                    Log.e("1posts","error in getting post + ${it.message!!}")
+                .addOnFailureListener {
+                    when (activity) {
+                        is UploadImageAfterActivity -> activity.hideProgressDialog()
+                    }
+                    Log.e("update", it.message!!)
                 }
     }
 
@@ -385,15 +479,18 @@ class FirestoreClass {
                         }
                         when(activity){
                             is ApprovalStatusActivity -> {
-                                activity.populateRV(postList)
+                                getNameFromUids(activity,postList)
                             }
                             is PlantedStatusActivity->{
-                                if(statusValue == Constants.SPOT_PLANTED){
-                                    activity.populateRvPlanted(postList)
-                                }
-                                else{
-                                    activity.populateRV(postList)
-                                }
+                                statusVal = statusValue
+                                Log.i("TAG","aa gyi yha 1")
+                                getNameFromUids(activity,postList)
+//                                if(statusValue == Constants.SPOT_PLANTED || statusValue == Constants.SPOT_BOOKED){
+//                                    getNameFromUids(activity,postList)
+//                                }
+//                                else{
+//                                    activity.populateRV(postList)
+//                                }
                             }
                         }
                     }

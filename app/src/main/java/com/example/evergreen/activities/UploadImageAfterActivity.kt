@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.evergreen.R
+import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
 import com.example.evergreen.utils.Constants
@@ -53,7 +54,7 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = resources.getString(R.string.create_post)
+            actionBar.title = "Plantation"
         }
 
         toolbar_upload_image_after_activity.setNavigationOnClickListener { onBackPressed() }
@@ -146,13 +147,8 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
 
     fun uploadImageSuccess(){
         hideProgressDialog()
-        val snackBar = Snackbar.make(findViewById(android.R.id.content), "You did a great job !!. Keep up the good work.", Snackbar.LENGTH_LONG)
-        val snackBarView = snackBar.view
-        snackBarView.setBackgroundColor(ContextCompat.getColor(this@UploadImageAfterActivity, R.color.greenlight))
-        snackBar.show()
-        // TODO: 29-04-2021 should return with result.ok , and change prev ui accordingly
-
-        btn_save_upload_image_after.text = " UPDATE POST"
+        setResult(RESULT_OK)
+        finish()
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

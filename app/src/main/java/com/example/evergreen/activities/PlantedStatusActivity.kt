@@ -14,13 +14,17 @@ import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
 import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.activity_planted_status.*
+import kotlinx.android.synthetic.main.item_post_approved.*
 
 class PlantedStatusActivity : BaseActivity() {
+    lateinit var status :String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planted_status)
 
         setupActionBar()
+        status = Constants.SPOT_OPEN_FOR_BOOKING
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().getPostsFromStatusValue(Constants.SPOT_OPEN_FOR_BOOKING,this)
         //Log.i("1posts","displaying post before but serial thing + ${posts.size} ")
@@ -30,17 +34,17 @@ class PlantedStatusActivity : BaseActivity() {
         bottomNavigationView_planted_status.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.bn_open_for_booking->{
-                    tv_above_open_for_booking.isVisible=true
+                    status = Constants.SPOT_OPEN_FOR_BOOKING
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_OPEN_FOR_BOOKING,this)
                 }
                 R.id.bn_booked->{
-                    tv_above_open_for_booking.isVisible=false
+                    status = Constants.SPOT_BOOKED
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_BOOKED,this)
                 }
                 R.id.bn_planted->{
-                    tv_above_open_for_booking.isVisible=false
+                    status = Constants.SPOT_PLANTED
                     showProgressDialog(resources.getString(R.string.please_wait))
                     FirestoreClass().getPostsFromStatusValue(Constants.SPOT_PLANTED,this)
                 }
@@ -58,6 +62,7 @@ class PlantedStatusActivity : BaseActivity() {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            actionBar.title = "PLANTED STATUS"
         }
 
         toolbar_planted_status_activity.setNavigationOnClickListener { onBackPressed() }
@@ -74,14 +79,17 @@ class PlantedStatusActivity : BaseActivity() {
                 val selectedItem = bottomNavigationView_planted_status.menu.findItem(bottomNavigationView_planted_status.selectedItemId)
                 when(selectedItem.itemId){
                     R.id.bn_open_for_booking->{
+                        status = Constants.SPOT_OPEN_FOR_BOOKING
                         showProgressDialog(resources.getString(R.string.please_wait))
                         FirestoreClass().getPostsFromStatusValue(Constants.SPOT_OPEN_FOR_BOOKING,this)
                     }
                     R.id.bn_booked->{
+                        status = Constants.SPOT_BOOKED
                         showProgressDialog(resources.getString(R.string.please_wait))
                         FirestoreClass().getPostsFromStatusValue(Constants.SPOT_BOOKED,this)
                     }
                     R.id.bn_planted->{
+                        status = Constants.SPOT_PLANTED
                         showProgressDialog(resources.getString(R.string.please_wait))
                         FirestoreClass().getPostsFromStatusValue(Constants.SPOT_PLANTED,this)
                     }
@@ -93,7 +101,7 @@ class PlantedStatusActivity : BaseActivity() {
     }
 
 
-    fun populateRV(postsList: ArrayList<Post>) {
+    fun populateRV(postsList: ArrayList<Post>,creators : ArrayList<String>, planters : ArrayList<String>) {
         hideProgressDialog()
         Log.i("2posts_Populate","displaying post before but serial thing + ${postsList.size} ")
         if (postsList.size > 0) {
@@ -104,7 +112,7 @@ class PlantedStatusActivity : BaseActivity() {
             rv_planted_posts_list.layoutManager = LinearLayoutManager(this@PlantedStatusActivity)
             rv_planted_posts_list.setHasFixedSize(true)
 
-            val adapter = ApprovedPostsAdapter(this, postsList)
+            val adapter = ApprovedPostsAdapter(this, postsList,creators,planters,status)
             rv_planted_posts_list.adapter = adapter
         } else {
             rv_planted_posts_list.visibility = View.GONE
@@ -112,7 +120,7 @@ class PlantedStatusActivity : BaseActivity() {
         }
     }
 
-    fun populateRvPlanted(postsList: ArrayList<Post>) {
+    fun populateRvPlanted(postsList: ArrayList<Post>, creators : ArrayList<String>, planters : ArrayList<String>) {
         hideProgressDialog()
         Log.i("3posts_Populate","displaying post before but serial thing + ${postsList.size} ")
         if (postsList.size > 0) {
@@ -123,7 +131,7 @@ class PlantedStatusActivity : BaseActivity() {
             rv_planted_posts_list.layoutManager = LinearLayoutManager(this@PlantedStatusActivity)
             rv_planted_posts_list.setHasFixedSize(true)
 
-            val adapter = PlantedPostsAdapter(this, postsList)
+            val adapter = PlantedPostsAdapter(this, postsList,creators,planters)
             rv_planted_posts_list.adapter = adapter
         } else {
             rv_planted_posts_list.visibility = View.GONE

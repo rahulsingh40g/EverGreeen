@@ -54,7 +54,7 @@ class PlantedMyMeActivity : BaseActivity() {
 
 
 
-    fun populateRV(postsList: ArrayList<Post>) {
+    fun populateRV(postsList: ArrayList<Post> , creators : ArrayList<String>, planters : ArrayList<String>) {
         hideProgressDialog()
         Log.i("2posts_Populate","displaying post before but serial thing + ${postsList.size} ")
         if (postsList.size > 0) {
@@ -65,7 +65,7 @@ class PlantedMyMeActivity : BaseActivity() {
             rv_planted_by_me_list.layoutManager = LinearLayoutManager(this@PlantedMyMeActivity)
             rv_planted_by_me_list.setHasFixedSize(true)
 
-            val adapter = PlantedPostsAdapter(this,postsList)
+            val adapter = PlantedPostsAdapter(this,postsList,creators,planters)
             rv_planted_by_me_list.adapter = adapter
         } else {
             rv_planted_by_me_list.visibility = View.GONE

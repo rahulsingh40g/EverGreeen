@@ -7,7 +7,6 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.icu.text.CaseMap
 import android.icu.text.SimpleDateFormat
 import android.location.Address
 import android.location.Geocoder
@@ -32,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_create_post.*
@@ -161,24 +161,6 @@ open class BaseActivity : AppCompatActivity() {
         )
     }
 
-    private fun showRationalDialogForPermissions() {
-        AlertDialog.Builder(currentActivity)
-            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-            .setPositiveButton(
-                    "GO TO SETTINGS"
-            ) { _, _ ->
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }.show()
-    }
-
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val mLastLocation: Location = locationResult.lastLocation
@@ -234,7 +216,7 @@ open class BaseActivity : AppCompatActivity() {
                     }
 
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?) {
-                        showRationalDialogForPermissions()
+                        showRationalDialogForPermissions(activity)
                     }
                 }).onSameThread().check()
         }
@@ -291,14 +273,17 @@ open class BaseActivity : AppCompatActivity() {
       }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun dispatchTakePictureIntent(activity: Activity) {
-        Dexter.withActivity(activity)
-                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        // Here after all the permission are granted launch the gallery to select an image.
-                        if (report!!.areAllPermissionsGranted()) {
+    fun dispatchTakePictureIntent(activity: Context) {
+        Dexter.withContext(activity)
+            .withPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA
+            )
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    Log.i("per", "in check funs")
+                    report?.let {
+                        if (report.areAllPermissionsGranted()) {
                             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                                 // Ensure that there's a camera activity to handle the intent
                                 takePictureIntent.resolveActivity(packageManager)?.also {
@@ -306,29 +291,48 @@ open class BaseActivity : AppCompatActivity() {
                                     val photoFile: File? = try {
                                         createImageFile()
                                     } catch (ex: IOException) {
-                                        Log.e("camera",ex.message!!)
+                                        Log.e("camera", ex.message!!)
                                         // Error occurred while creating the File
                                         null
                                     }
                                     // Continue only if the File was successfully created
                                     photoFile?.also {
-                                        val photoURI: Uri = FileProvider.getUriForFile(activity, "com.example.evergreen.fileprovider", it)
-                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                                        val photoURI: Uri = FileProvider.getUriForFile(
+                                            activity,
+                                            "com.example.evergreen.fileprovider",
+                                            it
+                                        )
+                                        takePictureIntent.putExtra(
+                                            MediaStore.EXTRA_OUTPUT,
+                                            photoURI
+                                        )
                                         startActivityForResult(takePictureIntent, CAMERA)
                                     }
                                 }
                             }
-                        }else{
-                            showRationalDialogForPermissions()
+                        } else {
+                            showRationalDialogForPermissions(activity = activity as Activity)
                         }
                     }
+                }
 
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
-                    {
-                        showRationalDialogForPermissions()
-                    }
-                }).onSameThread().check()
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    Log.i("per", "rational")
+                    // Remember to invoke this method when the custom rationale is closed
+                    // or just by default if you don't want to use any custom rationale.
+                    token?.continuePermissionRequest()
+                }
+            })
+            .withErrorListener {
+                Log.i("per", it.name)
+            }
+            .check()
+
     }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     @Throws(IOException::class)
@@ -347,8 +351,8 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 
-    fun choosePhotoFromGallery(activity: Activity) {
-        Dexter.withActivity(activity)
+    fun choosePhotoFromGallery(activity: Context) {
+        Dexter.withContext(activity)
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
@@ -357,18 +361,19 @@ open class BaseActivity : AppCompatActivity() {
                             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                             startActivityForResult(galleryIntent, GALLERY)
                         }else{
-                            showRationalDialogForPermissions(activity)
+                            showRationalDialogForPermissions(activity as Activity)
                         }
                     }
 
                     override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
                     {
-                        showRationalDialogForPermissions(activity)
+                      token?.continuePermissionRequest()
                     }
                 }).onSameThread().check()
     }
 
     private fun showRationalDialogForPermissions(activity: Activity) {
+        Log.i("per","in rationale ")
         AlertDialog.Builder(activity)
                 .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
                 .setPositiveButton("GO TO SETTINGS") { _, _ ->

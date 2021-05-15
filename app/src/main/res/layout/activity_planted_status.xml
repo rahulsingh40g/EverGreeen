@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
             android:gravity="center_horizontal"
-            android:text="No posts available"/>
+            android:text="No spots available"/>
 
     </LinearLayout>
 

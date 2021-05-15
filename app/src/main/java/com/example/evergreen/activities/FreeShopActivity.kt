@@ -15,9 +15,11 @@ import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.activity_free_shop.*
 
+
 class FreeShopActivity : BaseActivity() {
     private lateinit var mUser : User
     var plants : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_free_shop)
@@ -48,7 +50,8 @@ class FreeShopActivity : BaseActivity() {
         val li = LayoutInflater.from(this)
         val promptsView: View = li.inflate(R.layout.alert_dialog_shop, null)
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(
-                this, R.style.CustomAlertDialog)
+            this, R.style.CustomAlertDialog
+        )
 
         // set alert_dialog.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView)
@@ -57,10 +60,12 @@ class FreeShopActivity : BaseActivity() {
 
         // set dialog message
         alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("Order", DialogInterface.OnClickListener { dialog, id -> // get user input and set it to result
+            .setCancelable(false)
+            .setPositiveButton(
+                "Order",
+                DialogInterface.OnClickListener { dialog, id -> // get user input and set it to result
                     // edit text
-                    if(userInput != null) {
+                    if (userInput != null) {
                         val input = userInput.text.toString()
                         if (input.isNotEmpty()) {
                             Log.i("shop", "$input")
@@ -68,8 +73,8 @@ class FreeShopActivity : BaseActivity() {
                             Log.i("shop", " plants are $plants")
                             if (plants < min || plants > max) {
                                 showErrorSnackBar(
-                                        "We can't give you these much number of plants, " +
-                                                "Kindly post your queries in feedback section."
+                                    "We can't give you these much number of plants, " +
+                                            "Kindly post your queries in feedback section."
                                 )
                             } else {
                                 val userHashMap = HashMap<String, Any>()
@@ -80,12 +85,13 @@ class FreeShopActivity : BaseActivity() {
                         } else {
                             showErrorSnackBar("Please enter some number of plants")
                         }
-                    }else{
-                        Log.e("shop","null")
+                    } else {
+                        Log.e("shop", "null")
                     }
                 })
-                .setNegativeButton("Cancel",
-                        DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+            .setNegativeButton("Cancel",
+                DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+
 
         // create alert dialog
         val alertDialog: AlertDialog = alertDialogBuilder.create()

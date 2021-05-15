@@ -50,16 +50,19 @@ class BookCumApproveSpotActivity : BaseActivity() {
             btn_book_this_spot.visibility = View.GONE
             ll_btns_for_approve.visibility = View.VISIBLE
 
-//            hint not over writing , dont know why
-//            et_description_byPlanter_cum_admin_bookspot.hint = ""
-//            et_description_byPlanter_cum_admin_bookspot.hint = "                                            Reasons"
             if(actionBar != null){
                 actionBar.title = "Spot Approval"
             }
             btn_reject_this_spot.setOnClickListener{
-                selectedStatus = Constants.SPOT_REJECTED
-                showAlertDialog( this, "Please consider your choice wisely," +
-                        " Actions can't be undone and this spot will be deleted forever")
+                if(et_description_byPlanter_cum_admin_bookspot.text.toString().isEmpty()){
+                    showErrorSnackBar("Please provide a valid reason for rejection.")
+                }else {
+                    selectedStatus = Constants.SPOT_REJECTED
+                    showAlertDialog(
+                        this, "Please consider your choice wisely," +
+                                " Actions can't be undone and this spot will be deleted forever"
+                    )
+                }
             }
             btn_approve_this_spot.setOnClickListener{
                 selectedStatus = Constants.SPOT_OPEN_FOR_BOOKING
@@ -69,7 +72,7 @@ class BookCumApproveSpotActivity : BaseActivity() {
         }else{
             btn_book_this_spot.visibility = View.VISIBLE
             ll_btns_for_approve.visibility = View.GONE
-            //et_description_byPlanter_cum_admin_bookspot.hint = "Description (Optional)"
+            et_description_byPlanter_cum_admin_bookspot.visibility = View.GONE
             if(actionBar != null){
                 actionBar.title = "Spot Booking"
             }
@@ -86,7 +89,7 @@ class BookCumApproveSpotActivity : BaseActivity() {
         mPostDetails.status = status
         mPostDetails.bookedBy = FirebaseAuthClass().getCurrentUserID()
         if(isApprove)  mPostDetails.descriptionByAdmin = et_description_byPlanter_cum_admin_bookspot.text.toString()
-            else mPostDetails.descriptionByPlanter = et_description_byPlanter_cum_admin_bookspot.text.toString()
+
         showProgressDialog(resources.getString(R.string.please_wait))
         if(isApprove) FirestoreClass().updatePostDetails(this, mPostDetails, true)
             else FirestoreClass().updatePostDetails(this, mPostDetails, false)

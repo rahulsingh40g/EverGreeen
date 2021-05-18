@@ -31,7 +31,7 @@
         app:borderWidth="0dp"
         android:backgroundTint="#BCEF6A"
         android:src="@drawable/ic_fab"
-        app:maxImageSize="56dp"
+        app:maxImageSize="40dp"
          />
 
     <LinearLayout
@@ -59,7 +59,7 @@
             android:layout_margin="@dimen/fab_margin"
             app:borderWidth="0dp"
             android:backgroundTint="#BCEF6A"
-            app:maxImageSize="56dp"
+            app:maxImageSize="40dp"
             app:srcCompat="@drawable/ic_vector_add_24dp" />
 
     </LinearLayout>
@@ -89,7 +89,7 @@
             android:layout_margin="@dimen/fab_margin"
             app:borderWidth="0dp"
             android:backgroundTint="#BCEF6A"
-            app:maxImageSize="46dp"
+            app:maxImageSize="30dp"
             app:srcCompat="@drawable/ic_dashboard" />
 
     </LinearLayout>
@@ -118,7 +118,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             app:borderWidth="0dp"
-            app:maxImageSize="40dp"
+            app:maxImageSize="30dp"
             android:backgroundTint="#BCEF6A"
             app:srcCompat="@drawable/ic_shop" />
 
@@ -152,10 +152,18 @@
             app:borderWidth="0dp"
             android:backgroundTint="#BCEF6A"
             android:src="@drawable/ic_donate_hand"
-            app:maxImageSize="36dp"
+            app:maxImageSize="30dp"
             />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_block_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:alpha="0.9"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -41,6 +41,7 @@ import kotlinx.android.synthetic.main.dialog_progress.*
 import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.system.exitProcess
 
 
 open class BaseActivity : AppCompatActivity() {

@@ -86,6 +86,7 @@ class SignInActivity : BaseActivity() {
         Toast.makeText(this, "${user.name} signed in successfully.", Toast.LENGTH_LONG).show()
         intent = Intent(this, MainActivity::class.java)
         intent.putExtra(Constants.USER_DETAIL, user)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         this.finish()
     }
@@ -95,6 +96,7 @@ class SignInActivity : BaseActivity() {
         Toast.makeText(this, "${loggedInAdmin.email} signed in successfully.", Toast.LENGTH_SHORT).show()
         intent = Intent(this, MainActivity::class.java)
         intent.putExtra(Constants.ADMIN_DETAIL, loggedInAdmin)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         Log.i("admin","sending to main")
         startActivity(intent)
         this.finish()

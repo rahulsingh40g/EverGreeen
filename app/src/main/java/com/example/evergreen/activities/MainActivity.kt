@@ -12,9 +12,9 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.view.GravityCompat
-import androidx.core.view.children
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.evergreen.R
 import com.example.evergreen.adapters.PostItemsAdapter
@@ -30,8 +30,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import java.io.IOException
 import java.util.*
 
-
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener{
 
     private var isFABOpen =false
     private var isAdminHere = false
@@ -44,6 +43,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         handleIntent(intent)
+
+        tv_block_view.setOnClickListener {
+            closeFABMenu()
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -277,20 +280,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    fun View.isUserInteractionEnabled(enabled: Boolean) {
-        isEnabled = enabled
-        if (this is ViewGroup && this.childCount > 0) {
-            this.children.forEach {
-                it.isUserInteractionEnabled(enabled)
-            }
-        }
-    }
-
     private fun showFABMenu() {
         isFABOpen = true
-        ll_content_main.alpha = .1F
-        ll_content_main.isUserInteractionEnabled(false)
-       fab.setImageResource(R.drawable.ic_wrong)
+
+        tv_block_view.visibility = View.VISIBLE
+
+        fab.setImageResource(R.drawable.ic_wrong)
         fab.scaleType = ImageView.ScaleType.FIT_XY
 
         ll_createPost.animate().translationY(-resources.getDimension(R.dimen.standard_55))
@@ -306,8 +301,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun closeFABMenu() {
         isFABOpen = false
-        ll_content_main.alpha = 1F
-        ll_content_main.isUserInteractionEnabled(true)
+
+        tv_block_view.visibility = View.GONE
+
         fab.setImageResource(R.drawable.ic_fab)
         fab.scaleType = ImageView.ScaleType.FIT_XY
 

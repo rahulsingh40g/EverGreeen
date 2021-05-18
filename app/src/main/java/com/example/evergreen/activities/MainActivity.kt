@@ -290,7 +290,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         isFABOpen = true
         ll_content_main.alpha = .1F
         ll_content_main.isUserInteractionEnabled(false)
-//        ll_content_main.isEnabled = false
+       fab.setImageResource(R.drawable.ic_wrong)
+        fab.scaleType = ImageView.ScaleType.FIT_XY
 
         ll_createPost.animate().translationY(-resources.getDimension(R.dimen.standard_55))
         ll_dashboard.animate().translationY(-resources.getDimension(R.dimen.standard_105))
@@ -307,8 +308,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         isFABOpen = false
         ll_content_main.alpha = 1F
         ll_content_main.isUserInteractionEnabled(true)
+        fab.setImageResource(R.drawable.ic_fab)
+        fab.scaleType = ImageView.ScaleType.FIT_XY
 
-//        ll_content_main.isEnabled = true
 
         ll_createPost.animate().translationY(0F)
         ll_dashboard.animate().translationY(0F)

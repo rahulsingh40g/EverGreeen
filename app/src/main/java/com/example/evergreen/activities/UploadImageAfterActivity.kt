@@ -148,6 +148,8 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
     fun uploadImageSuccess(){
         hideProgressDialog()
         setResult(RESULT_OK)
+        val intent = Intent(this@UploadImageAfterActivity, PlantedMyMeActivity ::class.java)
+        startActivity(intent)
         finish()
     }
 

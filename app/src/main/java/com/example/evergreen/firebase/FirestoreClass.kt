@@ -588,9 +588,6 @@ class FirestoreClass {
                 .addOnFailureListener { e ->
                     // Here call a function of base activity for transferring the result to it.
                  when(activity){
-                            is SplashActivity ->{
-                                activity.hideProgressDialog()
-                            }
                             is SignInActivity ->{
                                 activity.hideProgressDialog()                            }
                         }

@@ -15,7 +15,6 @@ import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
 import kotlinx.android.synthetic.main.activity_free_shop.*
 
-
 class FreeShopActivity : BaseActivity() {
     private lateinit var mUser : User
     var plants : Int = 0
@@ -25,6 +24,9 @@ class FreeShopActivity : BaseActivity() {
         setContentView(R.layout.activity_free_shop)
         if(intent.hasExtra(Constants.USER_DETAIL))
             mUser = intent.getParcelableExtra<User>(Constants.USER_DETAIL)!!
+
+        tv_orders_placed.text = "Total orders placed : "+"${mUser.plantsBought}"
+        tv_orders_left.text = "${(mUser.bookedPostIds.size + 5) - mUser.plantsBought}"
         setupActionBar()
     }
 

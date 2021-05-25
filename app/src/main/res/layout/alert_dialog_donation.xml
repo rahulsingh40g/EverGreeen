@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_gravity="center"
     android:padding="50dp"
     android:background="@color/alert_dialog_bg"
     android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:gravity="center"
-        android:text="Enter amount to donate : "
+        android:text="Enter the amount to donate : "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -20,8 +22,36 @@
         android:inputType="number"
         android:layout_marginTop="20dp"
         android:padding="10dp"
-        android:hint="1-10000"
+        android:hint="1-10000 (Rs)"
         android:layout_height="wrap_content" >
         <requestFocus />
     </EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:hint="Cardholder name"
+        android:layout_height="wrap_content" >
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:hint="Card number"
+        android:layout_height="wrap_content" >
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:hint="Expiry date"
+        android:layout_height="wrap_content" >
+        <requestFocus />
+    </EditText>
+
 </LinearLayout>

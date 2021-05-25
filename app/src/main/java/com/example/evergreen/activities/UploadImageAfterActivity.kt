@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.evergreen.R
-import com.example.evergreen.firebase.FirebaseAuthClass
 import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.Post
 import com.example.evergreen.utils.Constants
@@ -148,8 +147,17 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
     fun uploadImageSuccess(){
         hideProgressDialog()
         setResult(RESULT_OK)
-        val intent = Intent(this@UploadImageAfterActivity, PlantedMyMeActivity ::class.java)
-        startActivity(intent)
+        //TODO the intent after this snackbar starts before tha snackbar ends, check it please (onDismissed lgaya h fir bhi nhi hua )
+        val snackBar = Snackbar.make(findViewById(android.R.id.content), "You did a great job !!. Keep up the good work :)", Snackbar.LENGTH_LONG)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(ContextCompat.getColor(this@UploadImageAfterActivity, R.color.greenlight))
+        snackBar.setCallback(object : Snackbar.Callback() {
+            override fun onDismissed(snackbar: Snackbar, event: Int) {
+                super.onDismissed(snackbar, event)
+                startActivity(Intent(this@UploadImageAfterActivity, PlantedMyMeActivity::class.java))
+            }
+        })
+        snackBar.show()
         finish()
     }
 

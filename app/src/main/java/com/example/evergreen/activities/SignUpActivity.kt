@@ -156,7 +156,7 @@ class SignUpActivity : BaseActivity() {
          */
         //adding toast
         Toast.makeText(this,
-                "${FirebaseAuthClass().getCurrentUserMailId()} have successfully registered with EverGreen!",
+                "${FirebaseAuthClass().getCurrentUserMailId()} has successfully registered with EverGreen!",
                  Toast.LENGTH_LONG).show()
         FirebaseAuthClass().signOut(this)
         startActivity(Intent(this,SignInActivity::class.java))

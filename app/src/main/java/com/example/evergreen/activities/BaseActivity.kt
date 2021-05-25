@@ -31,7 +31,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_create_post.*
@@ -41,7 +40,6 @@ import kotlinx.android.synthetic.main.dialog_progress.*
 import java.io.File
 import java.io.IOException
 import java.util.*
-import kotlin.system.exitProcess
 
 
 open class BaseActivity : AppCompatActivity() {
@@ -50,7 +48,7 @@ open class BaseActivity : AppCompatActivity() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient // A fused location client variable which is further user to get the user's current location
     private var mLatitude: Double = 0.0 // A variable which will hold the latitude value.
     private var mLongitude: Double = 0.0 // A variable which will hold the longitude value.
-    private lateinit var currentActivity :Activity
+    lateinit var currentActivity :Activity
     lateinit var mCurrentPhotoPath: String
 
     /**
@@ -147,7 +145,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun requestNewLocationData() {
+    fun requestNewLocationData() {
 
         val mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -196,6 +194,8 @@ open class BaseActivity : AppCompatActivity() {
             addressTask.getAddress()
         }
     }
+
+
 
     fun selectCurrentLocation(activity: Activity){
         currentActivity = activity

@@ -48,8 +48,9 @@
                     android:id="@+id/iv_profile_user_image"
                     android:layout_width="@dimen/my_profile_user_image_size"
                     android:layout_height="@dimen/my_profile_user_image_size"
+                    android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/image_contentDescription"
-                    android:src="@drawable/ic_user_place_holder" />
+                    android:src="@drawable/add_profile_image" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -75,6 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
+                        android:textColor="#989595"
                         android:focusableInTouchMode="false"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
@@ -108,6 +110,7 @@
                         android:id="@+id/tv_select_current_location_editProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
                         android:text="Use my current location"
                         android:textAllCaps="true"/>
                 </LinearLayout>

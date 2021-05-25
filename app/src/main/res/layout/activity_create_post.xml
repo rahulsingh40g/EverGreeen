@@ -87,6 +87,7 @@
                             android:layout_gravity="center"
                             android:textColor="@color/black"
                             android:textStyle="bold"
+                            android:background="?android:attr/selectableItemBackground"
                             android:text="Use my current location"
                             android:textAllCaps="true"/>
                     </LinearLayout>

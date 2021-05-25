@@ -158,7 +158,7 @@ class EditProfileActivity : BaseActivity() {
             .with(this@EditProfileActivity)
             .load(user.image)
             .centerCrop()
-            .placeholder(R.drawable.ic_user_place_holder)
+            .placeholder(R.drawable.add_profile_image)
             .into(iv_profile_user_image)
 
         et_name.setText(user.name)

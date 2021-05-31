@@ -59,7 +59,6 @@ class EditProfileActivity : BaseActivity() {
         }
 
         tv_select_current_location_editProfile.setOnClickListener {
-            showProgressDialog(resources.getString(R.string.please_wait))
             selectCurrentLocation(this)
         }
 

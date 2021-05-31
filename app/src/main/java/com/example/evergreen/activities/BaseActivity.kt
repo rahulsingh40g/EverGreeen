@@ -177,15 +177,12 @@ open class BaseActivity : AppCompatActivity() {
                     when (currentActivity) {
                         is SignUpActivity -> {
                             et_location_signUp.setText(address)
-                            (currentActivity as SignUpActivity).hideProgressDialog()
                         }
                         is EditProfileActivity -> {
                             et_location_editProfile.setText(address) // Address is set to the edittext
-                            (currentActivity as EditProfileActivity).hideProgressDialog()
                         }
                         is CreatePostActivity -> {
                             et_location.setText(address)
-                            (currentActivity as CreatePostActivity).hideProgressDialog()
                         }
                     }
                 }

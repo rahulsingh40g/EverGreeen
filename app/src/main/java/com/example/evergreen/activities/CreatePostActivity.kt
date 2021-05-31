@@ -117,7 +117,6 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
 //            }
 
             R.id.tv_select_current_location_createPost -> {
-                showProgressDialog(resources.getString(R.string.please_wait))
                 selectCurrentLocation(this)
                 mCity = getCityFromBase()
                 mPostDetails.city = mCity

@@ -41,7 +41,6 @@ class SignUpActivity : BaseActivity() {
             registerUser()
         }
         tv_select_current_location_signUp.setOnClickListener {
-            showProgressDialog(resources.getString(R.string.please_wait))
             selectCurrentLocation(this)
         }
 //        et_location_signUp.setOnClickListener{

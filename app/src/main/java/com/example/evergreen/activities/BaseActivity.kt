@@ -155,8 +155,8 @@ open class BaseActivity : AppCompatActivity() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mFusedLocationClient.requestLocationUpdates(
-                mLocationRequest, mLocationCallback,
-                Looper.myLooper()
+            mLocationRequest, mLocationCallback,
+            Looper.myLooper()
         )
     }
 
@@ -177,12 +177,15 @@ open class BaseActivity : AppCompatActivity() {
                     when (currentActivity) {
                         is SignUpActivity -> {
                             et_location_signUp.setText(address)
+                            (currentActivity as SignUpActivity).hideProgressDialog()
                         }
                         is EditProfileActivity -> {
                             et_location_editProfile.setText(address) // Address is set to the edittext
+                            (currentActivity as EditProfileActivity).hideProgressDialog()
                         }
                         is CreatePostActivity -> {
                             et_location.setText(address)
+                            (currentActivity as CreatePostActivity).hideProgressDialog()
                         }
                     }
                 }
@@ -253,9 +256,9 @@ open class BaseActivity : AppCompatActivity() {
             return ""
         }
     }
-      fun setLatLangFromAddress(strAddress : String) : Boolean{
-          val coder = Geocoder(this);
-          val address : List<Address>
+    fun setLatLangFromAddress(strAddress : String) : Boolean{
+        val coder = Geocoder(this);
+        val address : List<Address>
 
         try {
             address = coder.getFromLocationName(strAddress,1);
@@ -271,7 +274,7 @@ open class BaseActivity : AppCompatActivity() {
             ex.printStackTrace()
             return false
         }
-      }
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun dispatchTakePictureIntent(activity: Context) {
@@ -342,9 +345,9 @@ open class BaseActivity : AppCompatActivity() {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
             mCurrentPhotoPath = absolutePath
@@ -354,42 +357,42 @@ open class BaseActivity : AppCompatActivity() {
 
     fun choosePhotoFromGallery(activity: Context) {
         Dexter.withContext(activity)
-                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        // Here after all the permission are granted launch the gallery to select an image.
-                        if (report!!.areAllPermissionsGranted()) {
-                            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                            startActivityForResult(galleryIntent, GALLERY)
-                        }else{
-                            showRationalDialogForPermissions(activity as Activity)
-                        }
+            .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    // Here after all the permission are granted launch the gallery to select an image.
+                    if (report!!.areAllPermissionsGranted()) {
+                        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                        startActivityForResult(galleryIntent, GALLERY)
+                    }else{
+                        showRationalDialogForPermissions(activity as Activity)
                     }
+                }
 
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
-                    {
-                      token?.continuePermissionRequest()
-                    }
-                }).onSameThread().check()
+                override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?)
+                {
+                    token?.continuePermissionRequest()
+                }
+            }).onSameThread().check()
     }
 
     private fun showRationalDialogForPermissions(activity: Activity) {
         Log.i("per","in rationale ")
         AlertDialog.Builder(activity)
-                .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
-                .setPositiveButton("GO TO SETTINGS") { _, _ ->
-                    try {
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        val uri = Uri.fromParts("package", packageName, null)
-                        intent.data = uri
-                        startActivity(intent)
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                    }
+            .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
+            .setPositiveButton("GO TO SETTINGS") { _, _ ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }.show()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 
     companion object {
@@ -400,4 +403,3 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 }
-

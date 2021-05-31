@@ -26,207 +26,207 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_booked_spots"
-        android:layout_width="match_parent"
-        android:layout_height="60sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="5dp"
-        android:backgroundTint="@color/greendark">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="VIEW BOOKED SPOTS"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:layout_gravity="center_vertical"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow_right"
-                android:layout_gravity="center_vertical"/>
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="35dp"
-        android:backgroundTint="#F7F8F7"
-        android:layout_gravity="center"
-        app:cardCornerRadius="10dp">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_planted_count"
-                android:layout_width="match_parent"
-                android:layout_height="45sp"
-                android:text="YOUR ACCOMPLISHMENTS"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/iv_planted_greater_than_zero"
-                android:layout_width="match_parent"
-                android:layout_height="180sp"
-                android:visibility="gone"
-                android:src="@drawable/happy_earth_dashboard"/>
-
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_view_accomplishments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:id="@+id/cv_booked_spots"
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/greendark"
-                android:layout_gravity="center"
-                app:cardCornerRadius="5dp">
+                app:cardCornerRadius="5dp"
+                android:backgroundTint="@color/greendark">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" VIEW YOUR ACCOMPLISHMENTS"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:backgroundTint="@color/greendark"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VIEW BOOKED SPOTS"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/arrow_right"
+                        android:layout_gravity="center_vertical"/>
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_dashboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="35dp"
+                android:backgroundTint="#FFFFFF"
+                android:layout_gravity="center"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_planted_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="45sp"
+                        android:text="YOUR ACCOMPLISHMENTS"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_planted_greater_than_zero"
+                        android:layout_width="match_parent"
+                        android:layout_height="180sp"
+                        android:src="@drawable/sad_earth"/>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_view_accomplishments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="@color/greendark"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=" VIEW YOUR ACCOMPLISHMENTS"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:backgroundTint="@color/greendark"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginBottom="10dp"/>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textSize="20sp"
+                android:textColor="@color/greendark"
+                android:gravity="center"
+                android:text="Locations posted by you "
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_approval_status"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:backgroundTint="@color/greendark"
+                    android:layout_gravity="center_horizontal"
+                    app:cardCornerRadius="5dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="APPROVAL"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="STATUS"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/white"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_plantedStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:backgroundTint="@color/greendark"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_horizontal"
+                    app:cardCornerRadius="5dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PLANTED"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="18sp"
+                            android:textColor="@color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="STATUS"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="18sp"
+                            android:textColor="@color/white"/>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:textSize="20sp"
-        android:textColor="@color/greendark"
-        android:gravity="center"
-        android:text="Locations posted by you "
-        android:textStyle="bold"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:orientation="horizontal">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_approval_status"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"
-            android:backgroundTint="@color/greendark"
-            android:layout_gravity="center_horizontal"
-            app:cardCornerRadius="5dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="APPROVAL"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="STATUS"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"/>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_plantedStatus"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:backgroundTint="@color/greendark"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_horizontal"
-            app:cardCornerRadius="5dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PLANTED"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="STATUS"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="18sp"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
-
-    </LinearLayout>
 
     </ScrollView>
 

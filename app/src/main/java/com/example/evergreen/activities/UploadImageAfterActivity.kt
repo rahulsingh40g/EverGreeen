@@ -43,7 +43,7 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
 
         tv_add_image_upload_image_after.setOnClickListener(this)
         btn_save_upload_image_after.setOnClickListener(this)
-
+        fab_guidelines.setOnClickListener(this)
     }
 
     private fun setupActionBar() {
@@ -89,12 +89,16 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
 //            }
 
             R.id.btn_save_upload_image_after -> {
-                    if(mSelectedImageFileUri == null){
-                        showErrorSnackBar("Please choose an image!!")
-                    }
-                    else{
-                        uploadPostImageAfter()
-                    }
+                if(mSelectedImageFileUri == null){
+                    showErrorSnackBar("Please choose an image!!")
+                }
+                else{
+                    uploadPostImageAfter()
+                }
+            }
+
+            R.id.fab_guidelines ->{
+                startActivity(Intent(this,GuidelinesActivity::class.java))
             }
         }
     }
@@ -106,41 +110,41 @@ class UploadImageAfterActivity : BaseActivity(), View.OnClickListener{
 
             //getting the storage reference
             val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-                    "POST_IMAGE_AFTER" + System.currentTimeMillis() + "."
-                            + Constants.getFileExtension(this, mSelectedImageFileUri)
+                "POST_IMAGE_AFTER" + System.currentTimeMillis() + "."
+                        + Constants.getFileExtension(this, mSelectedImageFileUri)
             )
 
             //adding the file to reference
             sRef.putFile(mSelectedImageFileUri!!)
-                    .addOnSuccessListener { taskSnapshot ->
-                        // The image upload is success
-                        Log.e(
-                                "Firebase Image URL",
-                                taskSnapshot.metadata!!.reference!!.downloadUrl.toString()
-                        )
+                .addOnSuccessListener { taskSnapshot ->
+                    // The image upload is success
+                    Log.e(
+                        "Firebase Image URL",
+                        taskSnapshot.metadata!!.reference!!.downloadUrl.toString()
+                    )
 
-                        // Get the downloadable url from the task snapshot
-                        taskSnapshot.metadata!!.reference!!.downloadUrl
-                                .addOnSuccessListener { uri ->
-                                    Log.e("Downloadable Image URL", uri.toString())
+                    // Get the downloadable url from the task snapshot
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            Log.e("Downloadable Image URL", uri.toString())
 
-                                    // assign the image url to the variable.
-                                    mImageAfterURL = uri.toString()
-                                    mPostDetails.descriptionByPlanter = et_description_upload_image_after.text.toString()
-                                    mPostDetails.imageAfter = mImageAfterURL
-                                    mPostDetails.status = Constants.SPOT_PLANTED
-                                    FirestoreClass().updatePostDetails(this,mPostDetails)
-                                }
-                    }
-                    .addOnFailureListener { exception ->
-                        Toast.makeText(
-                                this,
-                                exception.message,
-                                Toast.LENGTH_LONG
-                        ).show()
+                            // assign the image url to the variable.
+                            mImageAfterURL = uri.toString()
+                            mPostDetails.descriptionByPlanter = et_description_upload_image_after.text.toString()
+                            mPostDetails.imageAfter = mImageAfterURL
+                            mPostDetails.status = Constants.SPOT_PLANTED
+                            FirestoreClass().updatePostDetails(this,mPostDetails)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(
+                        this,
+                        exception.message,
+                        Toast.LENGTH_LONG
+                    ).show()
 
-                        hideProgressDialog()
-                    }
+                    hideProgressDialog()
+                }
         }
     }
 

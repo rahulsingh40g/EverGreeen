@@ -10,13 +10,13 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         android:layout_margin="5dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="5dp">
@@ -62,12 +62,6 @@
                     android:textStyle="bold"
                     />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/item_board_divider_height"
-                android:layout_marginTop="@dimen/item_board_divider_marginTop"
-                android:background="@color/divider_color" />
 
         </LinearLayout>
 

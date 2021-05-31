@@ -117,6 +117,7 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
 //            }
 
             R.id.tv_select_current_location_createPost -> {
+                showProgressDialog(resources.getString(R.string.please_wait))
                 selectCurrentLocation(this)
                 mCity = getCityFromBase()
                 mPostDetails.city = mCity
@@ -167,37 +168,37 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
 
             //getting the storage reference
             val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-                    "POST_IMAGE_BEFORE" + System.currentTimeMillis() + "."
-                            + Constants.getFileExtension(this, mSelectedImageFileUri)
+                "POST_IMAGE_BEFORE" + System.currentTimeMillis() + "."
+                        + Constants.getFileExtension(this, mSelectedImageFileUri)
             )
 
             //adding the file to reference
             sRef.putFile(mSelectedImageFileUri!!)
-                    .addOnSuccessListener { taskSnapshot ->
-                        // The image upload is success
-                        Log.e(
-                                "Firebase Image URL",
-                                taskSnapshot.metadata!!.reference!!.downloadUrl.toString()
-                        )
+                .addOnSuccessListener { taskSnapshot ->
+                    // The image upload is success
+                    Log.e(
+                        "Firebase Image URL",
+                        taskSnapshot.metadata!!.reference!!.downloadUrl.toString()
+                    )
 
-                        // Get the downloadable url from the task snapshot
-                        taskSnapshot.metadata!!.reference!!.downloadUrl
-                                .addOnSuccessListener { uri ->
-                                    Log.e("Downloadable Image URL", uri.toString())
-                                    // assign the image url to the variable.
-                                    mImageBeforeURL = uri.toString()
-                                    fillPostDetails()
-                                }
-                    }
-                    .addOnFailureListener { exception ->
-                        Toast.makeText(
-                                this,
-                                exception.message,
-                                Toast.LENGTH_LONG
-                        ).show()
+                    // Get the downloadable url from the task snapshot
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            Log.e("Downloadable Image URL", uri.toString())
+                            // assign the image url to the variable.
+                            mImageBeforeURL = uri.toString()
+                            fillPostDetails()
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(
+                        this,
+                        exception.message,
+                        Toast.LENGTH_LONG
+                    ).show()
 
-                        hideProgressDialog()
-                    }
+                    hideProgressDialog()
+                }
         }
     }
 
@@ -228,7 +229,7 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
                 iv_place_image.setImageURI(Uri.fromFile(filePath))
                 mSelectedImageFileUri = Uri.fromFile(filePath)
 
-            //                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap // Bitmap from camera
+                //                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap // Bitmap from camera
 //                selectedImage = thumbnail
 //                iv_place_image!!.setImageBitmap(thumbnail) // Set to the imageView.
             }
@@ -244,7 +245,7 @@ class CreatePostActivity : BaseActivity(), View.OnClickListener{
         }
     }
 
-     fun onPostCreatedSuccess(){
+    fun onPostCreatedSuccess(){
         hideProgressDialog()
         setResult(Activity.RESULT_OK)
         Toast.makeText(this, "Post Created Successfully! Other Users will be able to see it in their feed" +

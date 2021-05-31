@@ -32,11 +32,12 @@ class SplashActivity : BaseActivity() {
             val currentUserID = FirebaseAuthClass().getCurrentUserID()
 
             if (currentUserID.isNotEmpty()) {
-                    FirestoreClass().loadAdminOrUserData(this)
+                FirestoreClass().loadAdminOrUserData(this)
             } else {
                 startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+                finish()
             }
-        }, 500) // changed time for testing purpose
+        }, 300) // changed time for testing purpose
     }
 
     fun signInSuccessUser(user: User) {

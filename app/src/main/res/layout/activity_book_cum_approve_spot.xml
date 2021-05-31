@@ -31,66 +31,84 @@
             android:orientation="vertical"
             android:layout_margin="15dp">
 
-            <TextView
-                android:id="@+id/tv_posted_by_bookspot"
-                android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Posted By"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold"/>
+                app:cardCornerRadius="10dp">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_place_image_bookspot"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/shape_image_view_border"
-                android:scaleType="centerCrop"
-                android:src="@drawable/add_screen_image_placeholder"
-                />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_location_on_blue_24"
-                    />
-                <TextView
-                    android:id="@+id/tv_location_bookspot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Location"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/add_screen_text_add_image_textSize"
-                    android:textStyle="bold"
-                    />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:layout_margin="5dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Description :"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginTop="20dp"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
+                    <TextView
+                        android:id="@+id/tv_posted_by_bookspot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:text="Posted By"
+                        android:layout_marginTop="5dp"
+                        android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/tv_description_byCreator_bookspot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="No description available"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginTop="5dp"
-                android:textSize="18sp"/>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_place_image_bookspot"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/shape_image_view_border"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/add_screen_image_placeholder"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_location_on_blue_24"
+                            />
+                        <TextView
+                            android:id="@+id/tv_location_bookspot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Location"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/add_screen_text_add_image_textSize"
+                            android:textStyle="bold"
+                            />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description :"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginTop="20dp"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_description_byCreator_bookspot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No description available"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -114,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="30dp">
                 <Button
                     android:id="@+id/btn_reject_this_spot"
                     android:layout_width="0dp"
@@ -160,7 +178,7 @@
                 tools:visibility="gone"
                 android:textColor="@color/white"
                 android:textSize="@dimen/btn_text_size"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="30dp"/>
 
         </LinearLayout>
 

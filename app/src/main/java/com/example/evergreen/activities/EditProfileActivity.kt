@@ -22,7 +22,7 @@ import java.io.IOException
 
 class EditProfileActivity : BaseActivity() {
 
-     val TAG = "edit profile activity"
+    val TAG = "edit profile activity"
 
     // Add a global variable for URI of a selected image from phone storage.
     private var mSelectedImageFileUri: Uri? = null
@@ -59,6 +59,7 @@ class EditProfileActivity : BaseActivity() {
         }
 
         tv_select_current_location_editProfile.setOnClickListener {
+            showProgressDialog(resources.getString(R.string.please_wait))
             selectCurrentLocation(this)
         }
 

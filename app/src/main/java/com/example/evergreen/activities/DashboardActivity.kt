@@ -2,6 +2,8 @@ package com.example.evergreen.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +16,7 @@ import com.example.evergreen.firebase.FirestoreClass
 import com.example.evergreen.model.User
 import com.example.evergreen.utils.Constants
 import com.google.android.material.snackbar.Snackbar
+import com.google.common.io.Resources
 import kotlinx.android.synthetic.main.activity_create_post.*
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.activity_sign_in.*
@@ -54,16 +57,19 @@ class DashboardActivity : BaseActivity() {
         var accomplishmentString ="You have planted at $countOfPlants spots till date."
         if(countOfPlants == 0){
             cv_view_accomplishments.visibility = View.GONE
-            iv_planted_greater_than_zero.visibility = View.GONE
+            cv_dashboard.setBackgroundColor(Color.parseColor("#FFFFFF"))
+            iv_planted_greater_than_zero.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.sad_earth))
         }
         else if(countOfPlants == 1){
-            iv_planted_greater_than_zero.visibility = View.VISIBLE
+            iv_planted_greater_than_zero.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.happy_earth_dashboard))
+            cv_dashboard.setBackgroundColor(Color.parseColor("#F7F8F7"))
             cv_view_accomplishments.visibility = View.VISIBLE
             accomplishmentString = "You have planted at $countOfPlants spot till date."
             accomplishmentString += " Keep up the good work."
         }
         else{
-            iv_planted_greater_than_zero.visibility = View.VISIBLE
+            iv_planted_greater_than_zero.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.happy_earth_dashboard))
+            cv_dashboard.setBackgroundColor(Color.parseColor("#F7F8F7"))
             cv_view_accomplishments.visibility = View.VISIBLE
             accomplishmentString += " Keep up the good work."
         }

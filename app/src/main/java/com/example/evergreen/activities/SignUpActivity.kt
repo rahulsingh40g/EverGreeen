@@ -41,6 +41,7 @@ class SignUpActivity : BaseActivity() {
             registerUser()
         }
         tv_select_current_location_signUp.setOnClickListener {
+            showProgressDialog(resources.getString(R.string.please_wait))
             selectCurrentLocation(this)
         }
 //        et_location_signUp.setOnClickListener{
@@ -156,8 +157,8 @@ class SignUpActivity : BaseActivity() {
          */
         //adding toast
         Toast.makeText(this,
-                "${FirebaseAuthClass().getCurrentUserMailId()} has successfully registered with EverGreen!",
-                 Toast.LENGTH_LONG).show()
+            "${FirebaseAuthClass().getCurrentUserMailId()} has successfully registered with EverGreen!",
+            Toast.LENGTH_LONG).show()
         FirebaseAuthClass().signOut(this)
         startActivity(Intent(this,SignInActivity::class.java))
         // Finish the Sign-Up Screen

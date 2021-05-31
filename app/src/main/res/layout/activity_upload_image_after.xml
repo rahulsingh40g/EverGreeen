@@ -21,67 +21,91 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="15dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_place_image_upload_image_after"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="@drawable/shape_image_view_border"
-            android:scaleType="centerCrop"
-            android:src="@drawable/add_screen_image_placeholder"
-            />
-
-        <Button
-            android:id="@+id/tv_add_image_upload_image_after"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="#DCD8D8"
-            android:layout_gravity="center"
-            android:padding="@dimen/add_screen_text_add_image_padding"
-            android:text="Choose Image"
-            android:textColor="@color/black"
-            android:textSize="@dimen/add_screen_text_add_image_textSize"
-            />
-
-
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_margin="15dp"
+            android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/et_description_upload_image_after"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description (Optional)"
-                android:inputType="text"
-                android:textColor="@color/primary_text_color"
-                android:textColorHint="@color/secondary_text_color"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:text="Please read the guidlelines first before planting."/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/fab_guidelines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_button_rounded_yellow"
+                android:gravity="center"
+                android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:text="GUIDELINES"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/btn_text_size"/>
 
-        <Button
-            android:id="@+id/btn_save_upload_image_after"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
-            android:background="@drawable/shape_button_rounded_green"
-            android:gravity="center"
-            android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
-            android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
-            android:text="UPLOAD"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/btn_text_size"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_place_image_upload_image_after"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/shape_image_view_border"
+                android:scaleType="centerCrop"
+                android:src="@drawable/add_screen_image_placeholder" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/tv_add_image_upload_image_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#DCD8D8"
+                android:layout_gravity="center"
+                android:padding="@dimen/add_screen_text_add_image_padding"
+                android:text="Choose Image"
+                android:textColor="@color/black"
+                android:textSize="@dimen/add_screen_text_add_image_textSize" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_description_upload_image_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description (Optional)"
+                    android:inputType="text"
+                    android:textColor="@color/primary_text_color"
+                    android:textColorHint="@color/secondary_text_color"
+                    android:textSize="20sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_save_upload_image_after"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/add_screen_btn_save_marginTop"
+                android:background="@drawable/shape_button_rounded_green"
+                android:gravity="center"
+                android:paddingTop="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:paddingBottom="@dimen/add_screen_btn_save_paddingTopBottom"
+                android:text="UPLOAD"
+                android:layout_marginBottom="30dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/btn_text_size"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

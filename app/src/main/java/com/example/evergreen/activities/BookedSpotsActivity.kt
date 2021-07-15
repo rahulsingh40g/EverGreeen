@@ -60,9 +60,7 @@ class BookedSpotsActivity : BaseActivity() {
 
     fun populateRV(postsList: ArrayList<Post>, creators : ArrayList<String>) {
         hideProgressDialog()
-        Log.i("2posts_Populate","displaying post before but serial thing + ${postsList.size} ")
         if (postsList.size > 0) {
-            Log.i("2posts","displaying posts for rv approved ")
             rv_booked_spots_list.visibility = View.VISIBLE
             tv_no_posts_available_booked_spots.visibility = View.GONE
 

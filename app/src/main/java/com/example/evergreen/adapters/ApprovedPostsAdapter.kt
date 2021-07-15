@@ -19,6 +19,7 @@ class ApprovedPostsAdapter(private val context: Context,
                            private var creatorsList : ArrayList<String>,
                            private var planterList : ArrayList<String>,
                            private var status : String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
             LayoutInflater.from(context).inflate(

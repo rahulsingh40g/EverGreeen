@@ -73,6 +73,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     query = query.toLowerCase(Locale.ROOT)
                     query = query.capitalize(Locale.ROOT)
                     mState = query
+                    Log.i("1tag","$query")
                     getPosts(query, true)
                 }
             }
@@ -210,6 +211,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val navUsername = headerView.findViewById<TextView>(R.id.tv_username)
         // Set the user name
         navUsername.text = user.name
+        Log.i("1tag","${user.city}")
         getPosts(user.city)
     }
 

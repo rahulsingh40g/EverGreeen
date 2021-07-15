@@ -50,7 +50,7 @@ class BookedSpotsAdapter(private val context: Context,
 
             holder.itemView.tv_location_booked_spot.text = model.location
             if(model.descriptionByCreator.isNotEmpty())
-            holder.itemView.tv_description_booked_spot.text = model.descriptionByCreator
+                holder.itemView.tv_description_booked_spot.text = model.descriptionByCreator
             else holder.itemView.tv_description_booked_spot.text = Constants.NO_DESCRIPTION_AVAILABLE
 
             holder.itemView.tv_posted_by_booked_spot.text = creatorsList[position]

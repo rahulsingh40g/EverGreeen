@@ -131,10 +131,10 @@ class FirestoreClass {
 
         if(idArray.isEmpty()){
             if(activity is PlantedMyMeActivity){
-                getNameFromUids(activity, ArrayList())
+                getNameFromUids(activity, ArrayList(),0, ArrayList())
             }
             if(activity is BookedSpotsActivity){
-                getNameFromUids(activity,ArrayList())
+                getNameFromUids(activity,ArrayList(),0, ArrayList())
             }
         }
         else
@@ -156,10 +156,10 @@ class FirestoreClass {
                     Log.i("myPosts","${curPost.toString()}")
                 }
                 if(activity is PlantedMyMeActivity){
-                    getNameFromUids(activity,postsList)
+                    getNameFromUids(activity,postsList,0, ArrayList())
                 }
                 if(activity is BookedSpotsActivity){
-                    getNameFromUids(activity,postsList)
+                    getNameFromUids(activity,postsList,0, ArrayList())
                 }
 
             }
@@ -238,8 +238,8 @@ class FirestoreClass {
 
     fun getPostsFromLocality(activity: Activity, locality: String, isState : Boolean, status : String): ArrayList<Post> {
         val posts = ArrayList<Post>()
-        val attr = if(isState) Constants.STATE
-                    else Constants.CITY
+        //todo : when state functionality will be implemented, uncomment the commented part
+        val attr = if(isState) Constants.STATE else Constants.CITY
 
         when(activity){
             is MainActivity ->{
@@ -254,11 +254,11 @@ class FirestoreClass {
                             posts.add(post)
                         }
                         Log.i("posts",posts.toString())
-                        getNameFromUids(activity, posts)
+                        getNameFromUids(activity, posts,0, ArrayList())
                     }
                     .addOnFailureListener{
                         Log.e("posts",it.message!!)
-                        getNameFromUids(activity, posts)
+                        getNameFromUids(activity, posts,0, ArrayList())
                     }
             }
         }
@@ -273,7 +273,6 @@ class FirestoreClass {
                     activity.populateRV(posts,creators,planters)
                 }
                 is PlantedStatusActivity ->{
-                    Log.i("TAG","aa gyi yha 4")
                     if(statusVal == Constants.SPOT_PLANTED)
                         activity.populateRvPlanted(posts,creators,planters)
                     else activity.populateRV(posts,creators,planters)
@@ -286,9 +285,7 @@ class FirestoreClass {
                     .whereEqualTo(Constants.UID, post.bookedBy)
                     .get()
                     .addOnSuccessListener { users ->
-                        Log.i("TAG","aa gyi yha 5 ${users.size()}")
                         for (user in users){
-                            Log.i("TAG","aa gyi yha 6")
                             Log.i("posts","user is ${user.toObject(User::class.java).name}")
                             planters.add(user.toObject(User::class.java).name)
                             if(planters.size == posts.size){
@@ -297,7 +294,6 @@ class FirestoreClass {
                                         activity.populateRV(posts,creators,planters)
                                     }
                                     is PlantedStatusActivity ->{
-                                        Log.i("TAG","aa gyi yha ")
                                         if(statusVal == Constants.SPOT_PLANTED)
                                             activity.populateRvPlanted(posts,creators,planters)
                                         else activity.populateRV(posts,creators,planters)
@@ -320,8 +316,7 @@ class FirestoreClass {
             }
     }
 
-    private fun getNameFromUids(activity: Activity, posts : ArrayList<Post>){
-        val creators = ArrayList<String>()
+    private fun getNameFromUids(activity: Activity, posts : ArrayList<Post>,index: Int,creators : ArrayList<String>){
         if(posts.isEmpty()){
             when(activity){
                 is MainActivity -> {
@@ -345,43 +340,43 @@ class FirestoreClass {
 
             }
         }
-        else
-        for(post in posts){
-            mFireStore.collection(Constants.USERS)
-                    .whereEqualTo(Constants.UID, post.postedBy)
-                    .get()
-                    .addOnSuccessListener { users ->
-                        for (user in users){
-                            Log.i("posts","user is ${user.toObject(User::class.java).name}")
-                            creators.add(user.toObject(User::class.java).name)
-                            if(creators.size == posts.size){
-                                when(activity){
-                                    is MainActivity -> {
-                                        activity.displayPostsInUI(posts, creators)
-                                    }
-                                    is BookedSpotsActivity ->{
-                                        activity.populateRV(posts,creators)
-                                    }
-                                    is PlantedMyMeActivity ->{
-                                        getPlanterNameFromUids(activity,posts,creators)
-                                    }
-                                    is PlantedStatusActivity ->{
-                                        Log.i("TAG","aa gyi yha 3")
-                                        var plantersDummy = ArrayList<String>(creators.size)
-                                        if(statusVal==Constants.SPOT_OPEN_FOR_BOOKING)
-                                            activity.populateRV(posts,creators,plantersDummy)
-                                        else getPlanterNameFromUids(activity,posts,creators)
+        else if(index==posts.size){
+            when(activity){
+                is MainActivity -> {
+                    activity.displayPostsInUI(posts, creators)
+                }
+                is BookedSpotsActivity ->{
+                    activity.populateRV(posts,creators)
+                }
+                is PlantedMyMeActivity ->{
+                    getPlanterNameFromUids(activity,posts,creators)
+                }
+                is PlantedStatusActivity ->{
+                    Log.i("TAG","aa gyi yha 3")
+                    var plantersDummy = ArrayList<String>(creators.size)
+                    if(statusVal==Constants.SPOT_OPEN_FOR_BOOKING)
+                        activity.populateRV(posts,creators,plantersDummy)
+                    else getPlanterNameFromUids(activity,posts,creators)
 //                                        if(statusVal == Constants.SPOT_PLANTED)
 //
 //                                        else activity.populateRV(posts,creators,ArrayList())
-                                    }
-                                    is ApprovalStatusActivity ->{
-                                        var plantersDummy = ArrayList<String>(creators.size)
-                                        activity.populateRV(posts,creators,plantersDummy)
-                                    }
-                                }
-                            }
+                }
+                is ApprovalStatusActivity ->{
+                    var plantersDummy = ArrayList<String>(creators.size)
+                    activity.populateRV(posts,creators,plantersDummy)
+                }
+            }
+        }
+        else
+            mFireStore.collection(Constants.USERS)
+                    .whereEqualTo(Constants.UID, posts[index].postedBy)
+                    .get()
+                    .addOnSuccessListener { users ->
+                        for (user in users){
+                            creators.add(creators.size,user.toObject(User::class.java).name)
                         }
+                        getNameFromUids(activity,posts,index+1,creators)
+
                     }
                     .addOnFailureListener{
                         Log.e("posts","error in getting user + ${it.message!!}")
@@ -400,7 +395,6 @@ class FirestoreClass {
                             }
                         }
                     }
-        }
     }
 
     fun updatePostDetails(activity: Activity, mPostDetails: Post, byAdmin : Boolean = false) {
@@ -479,12 +473,12 @@ class FirestoreClass {
                         }
                         when(activity){
                             is ApprovalStatusActivity -> {
-                                getNameFromUids(activity,postList)
+                                getNameFromUids(activity,postList,0,ArrayList())
                             }
                             is PlantedStatusActivity->{
                                 statusVal = statusValue
                                 Log.i("TAG","aa gyi yha 1")
-                                getNameFromUids(activity,postList)
+                                getNameFromUids(activity,postList,0, ArrayList())
 //                                if(statusValue == Constants.SPOT_PLANTED || statusValue == Constants.SPOT_BOOKED){
 //                                    getNameFromUids(activity,postList)
 //                                }

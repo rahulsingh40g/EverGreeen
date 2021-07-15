@@ -238,7 +238,6 @@ class FirestoreClass {
 
     fun getPostsFromLocality(activity: Activity, locality: String, isState : Boolean, status : String): ArrayList<Post> {
         val posts = ArrayList<Post>()
-        //todo : when state functionality will be implemented, uncomment the commented part
         val attr = if(isState) Constants.STATE else Constants.CITY
 
         when(activity){
